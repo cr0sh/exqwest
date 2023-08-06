@@ -726,3 +726,388 @@ fn sign_upbit(req: &mut Request) -> Result<(), Error> {
 
     Ok(())
 }
+
+#[macro_export]
+macro_rules! serializable {
+    (
+    $key1:ident: $value1:expr
+    $(,)?
+    ) => {{
+        #[derive(::serde::Serialize)]
+        struct Serializable<T1> {
+            $key1: T1,
+        }
+
+        Serializable { $key1: $value1 }
+    }};
+    (
+    $key1:ident: $value1:expr
+    ,$key2:ident: $value2:expr
+    $(,)?
+    ) => {{
+        #[derive(::serde::Serialize)]
+        struct Serializable<T1, T2> {
+            $key1: T1,
+            $key2: T2,
+        }
+
+        Serializable {
+            $key1: $value1,
+            $key2: $value2,
+        }
+    }};
+    (
+    $key1:ident: $value1:expr
+    ,$key2:ident: $value2:expr
+    ,$key3:ident: $value3:expr
+    $(,)?
+    ) => {{
+        #[derive(::serde::Serialize)]
+        struct Serializable<T1, T2, T3> {
+            $key1: T1,
+            $key2: T2,
+            $key3: T3,
+        }
+
+        Serializable {
+            $key1: $value1,
+            $key2: $value2,
+            $key3: $value3,
+        }
+    }};
+    (
+    $key1:ident: $value1:expr
+    ,$key2:ident: $value2:expr
+    ,$key3:ident: $value3:expr
+    ,$key4:ident: $value4:expr
+    $(,)?
+    ) => {{
+        #[derive(::serde::Serialize)]
+        struct Serializable<T1, T2, T3, T4> {
+            $key1: T1,
+            $key2: T2,
+            $key3: T3,
+            $key4: T4,
+        }
+
+        Serializable {
+            $key1: $value1,
+            $key2: $value2,
+            $key3: $value3,
+            $key4: $value4,
+        }
+    }};
+    (
+    $key1:ident: $value1:expr
+    ,$key2:ident: $value2:expr
+    ,$key3:ident: $value3:expr
+    ,$key4:ident: $value4:expr
+    ,$key5:ident: $value5:expr
+    $(,)?
+    ) => {{
+        #[derive(::serde::Serialize)]
+        struct Serializable<T1, T2, T3, T4, T5> {
+            $key1: T1,
+            $key2: T2,
+            $key3: T3,
+            $key4: T4,
+            $key5: T5,
+        }
+
+        Serializable {
+            $key1: $value1,
+            $key2: $value2,
+            $key3: $value3,
+            $key4: $value4,
+            $key5: $value5,
+        }
+    }};
+    (
+    $key1:ident: $value1:expr
+    ,$key2:ident: $value2:expr
+    ,$key3:ident: $value3:expr
+    ,$key4:ident: $value4:expr
+    ,$key5:ident: $value5:expr
+    ,$key6:ident: $value6:expr
+    $(,)?
+    ) => {{
+        #[derive(::serde::Serialize)]
+        struct Serializable<T1, T2, T3, T4, T5, T6> {
+            $key1: T1,
+            $key2: T2,
+            $key3: T3,
+            $key4: T4,
+            $key5: T5,
+            $key6: T6,
+        }
+
+        Serializable {
+            $key1: $value1,
+            $key2: $value2,
+            $key3: $value3,
+            $key4: $value4,
+            $key5: $value5,
+            $key6: $value6,
+        }
+    }};
+    (
+    $key1:ident: $value1:expr
+    ,$key2:ident: $value2:expr
+    ,$key3:ident: $value3:expr
+    ,$key4:ident: $value4:expr
+    ,$key5:ident: $value5:expr
+    ,$key6:ident: $value6:expr
+    ,$key7:ident: $value7:expr
+    $(,)?
+    ) => {{
+        #[derive(::serde::Serialize)]
+        struct Serializable<T1, T2, T3, T4, T5, T6, T7> {
+            $key1: T1,
+            $key2: T2,
+            $key3: T3,
+            $key4: T4,
+            $key5: T5,
+            $key6: T6,
+            $key7: T7,
+        }
+
+        Serializable {
+            $key1: $value1,
+            $key2: $value2,
+            $key3: $value3,
+            $key4: $value4,
+            $key5: $value5,
+            $key6: $value6,
+            $key7: $value7,
+        }
+    }};
+    (
+    $key1:ident: $value1:expr
+    ,$key2:ident: $value2:expr
+    ,$key3:ident: $value3:expr
+    ,$key4:ident: $value4:expr
+    ,$key5:ident: $value5:expr
+    ,$key6:ident: $value6:expr
+    ,$key7:ident: $value7:expr
+    ,$key8:ident: $value8:expr
+    $(,)?
+    ) => {{
+        #[derive(::serde::Serialize)]
+        struct Serializable<T1, T2, T3, T4, T5, T6, T7, T8> {
+            $key1: T1,
+            $key2: T2,
+            $key3: T3,
+            $key4: T4,
+            $key5: T5,
+            $key6: T6,
+            $key7: T7,
+            $key8: T8,
+        }
+
+        Serializable {
+            $key1: $value1,
+            $key2: $value2,
+            $key3: $value3,
+            $key4: $value4,
+            $key5: $value5,
+            $key6: $value6,
+            $key7: $value7,
+            $key8: $value8,
+        }
+    }};
+    (
+    $key1:ident: $value1:expr
+    ,$key2:ident: $value2:expr
+    ,$key3:ident: $value3:expr
+    ,$key4:ident: $value4:expr
+    ,$key5:ident: $value5:expr
+    ,$key6:ident: $value6:expr
+    ,$key7:ident: $value7:expr
+    ,$key8:ident: $value8:expr
+    ,$key9:ident: $value9:expr
+    $(,)?
+    ) => {{
+        #[derive(::serde::Serialize)]
+        struct Serializable<T1, T2, T3, T4, T5, T6, T7, T8, T9> {
+            $key1: T1,
+            $key2: T2,
+            $key3: T3,
+            $key4: T4,
+            $key5: T5,
+            $key6: T6,
+            $key7: T7,
+            $key8: T8,
+            $key9: T9,
+        }
+
+        Serializable {
+            $key1: $value1,
+            $key2: $value2,
+            $key3: $value3,
+            $key4: $value4,
+            $key5: $value5,
+            $key6: $value6,
+            $key7: $value7,
+            $key8: $value8,
+            $key9: $value9,
+        }
+    }};
+    (
+    $key1:ident: $value1:expr
+    ,$key2:ident: $value2:expr
+    ,$key3:ident: $value3:expr
+    ,$key4:ident: $value4:expr
+    ,$key5:ident: $value5:expr
+    ,$key6:ident: $value6:expr
+    ,$key7:ident: $value7:expr
+    ,$key8:ident: $value8:expr
+    ,$key9:ident: $value9:expr
+    ,$key10:ident: $value10:expr
+    $(,)?
+    ) => {{
+        #[derive(::serde::Serialize)]
+        struct Serializable<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> {
+            $key1: T1,
+            $key2: T2,
+            $key3: T3,
+            $key4: T4,
+            $key5: T5,
+            $key6: T6,
+            $key7: T7,
+            $key8: T8,
+            $key9: T9,
+            $key10: T10,
+        }
+
+        Serializable {
+            $key1: $value1,
+            $key2: $value2,
+            $key3: $value3,
+            $key4: $value4,
+            $key5: $value5,
+            $key6: $value6,
+            $key7: $value7,
+            $key8: $value8,
+            $key9: $value9,
+            $key10: $value10,
+        }
+    }};
+    (
+    $key1:ident: $value1:expr
+    ,$key2:ident: $value2:expr
+    ,$key3:ident: $value3:expr
+    ,$key4:ident: $value4:expr
+    ,$key5:ident: $value5:expr
+    ,$key6:ident: $value6:expr
+    ,$key7:ident: $value7:expr
+    ,$key8:ident: $value8:expr
+    ,$key9:ident: $value9:expr
+    ,$key10:ident: $value10:expr
+    ,$key11:ident: $value11:expr
+    $(,)?
+    ) => {{
+        #[derive(::serde::Serialize)]
+        struct Serializable<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> {
+            $key1: T1,
+            $key2: T2,
+            $key3: T3,
+            $key4: T4,
+            $key5: T5,
+            $key6: T6,
+            $key7: T7,
+            $key8: T8,
+            $key9: T9,
+            $key10: T10,
+            $key11: T11,
+        }
+
+        Serializable {
+            $key1: $value1,
+            $key2: $value2,
+            $key3: $value3,
+            $key4: $value4,
+            $key5: $value5,
+            $key6: $value6,
+            $key7: $value7,
+            $key8: $value8,
+            $key9: $value9,
+            $key10: $value10,
+            $key11: $value11,
+        }
+    }};
+    (
+    $key1:ident: $value1:expr
+    ,$key2:ident: $value2:expr
+    ,$key3:ident: $value3:expr
+    ,$key4:ident: $value4:expr
+    ,$key5:ident: $value5:expr
+    ,$key6:ident: $value6:expr
+    ,$key7:ident: $value7:expr
+    ,$key8:ident: $value8:expr
+    ,$key9:ident: $value9:expr
+    ,$key10:ident: $value10:expr
+    ,$key11:ident: $value11:expr
+    ,$key12:ident: $value12:expr
+    $(,)?
+    ) => {{
+        #[derive(::serde::Serialize)]
+        struct Serializable<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> {
+            $key1: T1,
+            $key2: T2,
+            $key3: T3,
+            $key4: T4,
+            $key5: T5,
+            $key6: T6,
+            $key7: T7,
+            $key8: T8,
+            $key9: T9,
+            $key10: T10,
+            $key11: T11,
+            $key12: T12,
+        }
+
+        Serializable {
+            $key1: $value1,
+            $key2: $value2,
+            $key3: $value3,
+            $key4: $value4,
+            $key5: $value5,
+            $key6: $value6,
+            $key7: $value7,
+            $key8: $value8,
+            $key9: $value9,
+            $key10: $value10,
+            $key11: $value11,
+            $key12: $value12,
+        }
+    }};
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_serializable() {
+        let x = serializable! {
+            foo: "bar",
+            baz: 42,
+            field0: 0,
+            field1: 1,
+            field2: 2,
+            field3: 3,
+            field4: 4,
+            field5: 5,
+            field6: 6,
+            field7: 7,
+            field8: 8,
+            field9: 9,
+        };
+
+        let s = serde_json::to_string(&x).unwrap();
+        assert_eq!(
+            s,
+            r#"{"foo":"bar","baz":42,"field0":0,"field1":1,"field2":2,"field3":3,"field4":4,"field5":5,"field6":6,"field7":7,"field8":8,"field9":9}"#
+        );
+    }
+}
