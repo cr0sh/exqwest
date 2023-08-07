@@ -1102,14 +1102,14 @@ macro_rules! serializable {
 pub trait ResponseExt {
     fn json_value(
         self,
-    ) -> Box<dyn Future<Output = Result<Value, reqwest::Error>> + Send + Sync + 'static>;
+    ) -> Pin<Box<dyn Future<Output = Result<Value, reqwest::Error>> + Send + Sync + 'static>>;
 }
 
 impl ResponseExt for Response {
     fn json_value(
         self,
-    ) -> Box<dyn Future<Output = Result<Value, reqwest::Error>> + Send + Sync + 'static> {
-        Box::new(self.json())
+    ) -> Pin<Box<dyn Future<Output = Result<Value, reqwest::Error>> + Send + Sync + 'static>> {
+        Box::pin(self.json())
     }
 }
 
