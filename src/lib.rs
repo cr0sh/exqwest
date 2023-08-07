@@ -7,7 +7,7 @@ use async_trait::async_trait;
 use base64::Engine;
 use hmac::{digest::Digest, Hmac, Mac};
 use jwt::SignWithKey;
-use reqwest::{header::AUTHORIZATION, Client, IntoUrl, Method, Request};
+use reqwest::{header::AUTHORIZATION, Client, IntoUrl, Method, Request, Response};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use sha2::{Sha256, Sha512};
@@ -1080,6 +1080,20 @@ macro_rules! serializable {
             $key12: $value12,
         }
     }};
+}
+
+pub trait ResponseExt {
+    fn json_value(
+        self,
+    ) -> Box<dyn Future<Output = Result<Value, reqwest::Error>> + Send + Sync + 'static>;
+}
+
+impl ResponseExt for Response {
+    fn json_value(
+        self,
+    ) -> Box<dyn Future<Output = Result<Value, reqwest::Error>> + Send + Sync + 'static> {
+        Box::new(self.json())
+    }
 }
 
 pub trait ValueExt {
