@@ -15,6 +15,11 @@ use thiserror::Error;
 use tracing::error;
 use uuid::Uuid;
 
+#[doc(hidden)]
+pub mod __private {
+    pub use serde;
+}
+
 static CREDENTIALS: OnceLock<HashMap<&'static str, Credential>> = OnceLock::new();
 static OKX_CREDENTIAL: OnceLock<OkxCredential> = OnceLock::new();
 
@@ -732,7 +737,8 @@ macro_rules! serializable {
     $key1:ident: $value1:expr
     $(,)?
     ) => {{
-        #[derive(::serde::Serialize)]
+        use $crate::__private::serde;
+        #[derive(serde::Serialize)]
         struct Serializable<T1> {
             $key1: T1,
         }
@@ -744,7 +750,8 @@ macro_rules! serializable {
     ,$key2:ident: $value2:expr
     $(,)?
     ) => {{
-        #[derive(::serde::Serialize)]
+        use $crate::__private::serde;
+        #[derive(serde::Serialize)]
         struct Serializable<T1, T2> {
             $key1: T1,
             $key2: T2,
@@ -761,7 +768,8 @@ macro_rules! serializable {
     ,$key3:ident: $value3:expr
     $(,)?
     ) => {{
-        #[derive(::serde::Serialize)]
+        use $crate::__private::serde;
+        #[derive(serde::Serialize)]
         struct Serializable<T1, T2, T3> {
             $key1: T1,
             $key2: T2,
@@ -781,7 +789,8 @@ macro_rules! serializable {
     ,$key4:ident: $value4:expr
     $(,)?
     ) => {{
-        #[derive(::serde::Serialize)]
+        use $crate::__private::serde;
+        #[derive(serde::Serialize)]
         struct Serializable<T1, T2, T3, T4> {
             $key1: T1,
             $key2: T2,
@@ -804,7 +813,8 @@ macro_rules! serializable {
     ,$key5:ident: $value5:expr
     $(,)?
     ) => {{
-        #[derive(::serde::Serialize)]
+        use $crate::__private::serde;
+        #[derive(serde::Serialize)]
         struct Serializable<T1, T2, T3, T4, T5> {
             $key1: T1,
             $key2: T2,
@@ -830,7 +840,8 @@ macro_rules! serializable {
     ,$key6:ident: $value6:expr
     $(,)?
     ) => {{
-        #[derive(::serde::Serialize)]
+        use $crate::__private::serde;
+        #[derive(serde::Serialize)]
         struct Serializable<T1, T2, T3, T4, T5, T6> {
             $key1: T1,
             $key2: T2,
@@ -859,7 +870,8 @@ macro_rules! serializable {
     ,$key7:ident: $value7:expr
     $(,)?
     ) => {{
-        #[derive(::serde::Serialize)]
+        use $crate::__private::serde;
+        #[derive(serde::Serialize)]
         struct Serializable<T1, T2, T3, T4, T5, T6, T7> {
             $key1: T1,
             $key2: T2,
@@ -891,7 +903,8 @@ macro_rules! serializable {
     ,$key8:ident: $value8:expr
     $(,)?
     ) => {{
-        #[derive(::serde::Serialize)]
+        use $crate::__private::serde;
+        #[derive(serde::Serialize)]
         struct Serializable<T1, T2, T3, T4, T5, T6, T7, T8> {
             $key1: T1,
             $key2: T2,
@@ -926,7 +939,8 @@ macro_rules! serializable {
     ,$key9:ident: $value9:expr
     $(,)?
     ) => {{
-        #[derive(::serde::Serialize)]
+        use $crate::__private::serde;
+        #[derive(serde::Serialize)]
         struct Serializable<T1, T2, T3, T4, T5, T6, T7, T8, T9> {
             $key1: T1,
             $key2: T2,
@@ -964,7 +978,8 @@ macro_rules! serializable {
     ,$key10:ident: $value10:expr
     $(,)?
     ) => {{
-        #[derive(::serde::Serialize)]
+        use $crate::__private::serde;
+        #[derive(serde::Serialize)]
         struct Serializable<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> {
             $key1: T1,
             $key2: T2,
@@ -1005,7 +1020,8 @@ macro_rules! serializable {
     ,$key11:ident: $value11:expr
     $(,)?
     ) => {{
-        #[derive(::serde::Serialize)]
+        use $crate::__private::serde;
+        #[derive(serde::Serialize)]
         struct Serializable<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> {
             $key1: T1,
             $key2: T2,
@@ -1049,7 +1065,8 @@ macro_rules! serializable {
     ,$key12:ident: $value12:expr
     $(,)?
     ) => {{
-        #[derive(::serde::Serialize)]
+        use $crate::__private::serde;
+        #[derive(serde::Serialize)]
         struct Serializable<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> {
             $key1: T1,
             $key2: T2,
