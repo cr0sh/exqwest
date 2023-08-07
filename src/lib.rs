@@ -652,10 +652,8 @@ fn sign_okx(req: &mut Request) -> Result<(), Error> {
         .insert("OK-ACCESS-KEY", credential.key.parse().unwrap());
     req.headers_mut()
         .insert("OK-ACCESS-SIGN", encoded.parse().unwrap());
-    req.headers_mut().insert(
-        "OK-ACCESS-TIMESTAMP",
-        timestamp.to_string().parse().unwrap(),
-    );
+    req.headers_mut()
+        .insert("OK-ACCESS-TIMESTAMP", timestamp.parse().unwrap());
     req.headers_mut().insert(
         "OK-ACCESS-PASSPHRASE",
         credential.passphrase.parse().unwrap(),
