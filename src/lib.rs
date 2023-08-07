@@ -1,6 +1,6 @@
 use std::{
-    cell::Cell, collections::HashMap, env::var, fmt::Debug, future::Future, pin::Pin,
-    sync::OnceLock,
+    cell::Cell, collections::HashMap, env::var, fmt::Debug, future::Future, num::ParseIntError,
+    pin::Pin, sync::OnceLock,
 };
 
 use async_trait::async_trait;
@@ -8,7 +8,8 @@ use base64::Engine;
 use hmac::{digest::Digest, Hmac, Mac};
 use jwt::SignWithKey;
 use reqwest::{header::AUTHORIZATION, Client, IntoUrl, Method, Request};
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
+use serde_json::Value;
 use sha2::{Sha256, Sha512};
 use thiserror::Error;
 use tracing::error;
@@ -1079,6 +1080,100 @@ macro_rules! serializable {
             $key12: $value12,
         }
     }};
+}
+
+pub trait ValueExt {
+    /// Extract a value with given query.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// # use serde_json::json;
+    /// # use exqwest::ValueExt;
+    /// let value = json!({ "name": "John Doe", "age": 43, "phones": ["+44 1234567", "+44 2345678"] });
+    /// assert_eq!(value.query::<String>("name").unwrap(), "John Doe");
+    /// assert_eq!(value.query::<u64>("age").unwrap(), 43);
+    /// assert_eq!(value.query::<&str>("phones.0").unwrap(), "+44 1234567");
+    /// ```
+    fn query<'a, T>(&'a self, query: &str) -> Result<T, ValueQueryError>
+    where
+        T: Deserialize<'a>;
+}
+
+impl ValueExt for Value {
+    fn query<'a, T>(&'a self, query: &str) -> Result<T, ValueQueryError>
+    where
+        T: Deserialize<'a>,
+    {
+        let mut query = query;
+        let mut this = self;
+        while !query.is_empty() {
+            if let Some((q, rest)) = query.split_once('.') {
+                if q.starts_with(|x: char| x.is_ascii_digit()) {
+                    let index = q
+                        .parse::<usize>()
+                        .map_err(ValueQueryError::InvalidArrayIndex)?;
+                    if let Some(x) = this.as_array() {
+                        this = x.get(index).ok_or(ValueQueryError::ArrayOutOfBounds {
+                            index,
+                            len: x.len(),
+                        })?;
+                        query = rest;
+                        continue;
+                    } else {
+                        return Err(ValueQueryError::ExpectedArray);
+                    }
+                }
+                this = match this.get(q) {
+                    Some(x) => x,
+                    None => return Err(ValueQueryError::Index(q.to_string())),
+                };
+                query = rest;
+            } else {
+                if query.starts_with(|x: char| x.is_ascii_digit()) {
+                    let index = query
+                        .parse::<usize>()
+                        .map_err(ValueQueryError::InvalidArrayIndex)?;
+                    if let Some(x) = this.as_array() {
+                        this = x.get(index).ok_or(ValueQueryError::ArrayOutOfBounds {
+                            index,
+                            len: x.len(),
+                        })?;
+                        break;
+                    } else {
+                        return Err(ValueQueryError::ExpectedArray);
+                    }
+                }
+                this = match this.get(query) {
+                    Some(x) => x,
+                    None => return Err(ValueQueryError::Index(query.to_string())),
+                };
+                break;
+            }
+        }
+
+        T::deserialize(this).map_err(|e| ValueQueryError::Deserialize {
+            query: query.to_string(),
+            source: e,
+        })
+    }
+}
+
+#[derive(Debug, Error)]
+pub enum ValueQueryError {
+    #[error("cannot deserialize field with query {query}")]
+    Deserialize {
+        query: String,
+        source: serde_json::Error,
+    },
+    #[error("invalid array index")]
+    InvalidArrayIndex(#[source] ParseIntError),
+    #[error("expected an array")]
+    ExpectedArray,
+    #[error("array out of bounds: index is {index} but len is {len}")]
+    ArrayOutOfBounds { index: usize, len: usize },
+    #[error("field {0} not found")]
+    Index(String),
 }
 
 #[cfg(test)]
