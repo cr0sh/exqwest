@@ -1157,7 +1157,12 @@ impl ValueExt for Value {
                 }
                 this = match this.get(q) {
                     Some(x) => x,
-                    None => return Err(ValueQueryError::Index(q.to_string())),
+                    None => {
+                        return Err(ValueQueryError::Index {
+                            field: q.to_string(),
+                            value: this.clone(),
+                        })
+                    }
                 };
                 query = rest;
             } else {
@@ -1177,7 +1182,12 @@ impl ValueExt for Value {
                 }
                 this = match this.get(query) {
                     Some(x) => x,
-                    None => return Err(ValueQueryError::Index(query.to_string())),
+                    None => {
+                        return Err(ValueQueryError::Index {
+                            field: query.to_string(),
+                            value: this.clone(),
+                        })
+                    }
                 };
                 break;
             }
@@ -1203,8 +1213,8 @@ pub enum ValueQueryError {
     ExpectedArray,
     #[error("array out of bounds: index is {index} but len is {len}")]
     ArrayOutOfBounds { index: usize, len: usize },
-    #[error("field {0} not found")]
-    Index(String),
+    #[error("field {field} not found, value: {value}")]
+    Index { field: String, value: Value },
 }
 
 #[cfg(test)]
