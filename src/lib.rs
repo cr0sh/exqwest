@@ -733,6 +733,13 @@ fn sign_upbit(req: &mut Request) -> Result<(), Error> {
 
 #[macro_export]
 macro_rules! serializable {
+    () => {{
+        use $crate::__private::serde;
+        #[derive(serde::Serialize)]
+        struct Serializable {}
+
+        Serializable {}
+    }};
     (
     $key1:ident: $value1:expr
     $(,)?
