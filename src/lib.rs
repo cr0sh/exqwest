@@ -100,61 +100,61 @@ pub trait ClientExt {
         &self,
         url: impl IntoUrl + Send,
         query: impl Serialize + Send + Sync,
-        payload: String,
+        payload: impl AsRef<str> + Send + Sync,
     ) -> reqwest::Result<serde_json::Value>;
     async fn post_public(
         &self,
         url: impl IntoUrl + Send,
         query: impl Serialize + Send + Sync,
-        payload: String,
+        payload: impl AsRef<str> + Send + Sync,
     ) -> reqwest::Result<serde_json::Value>;
     async fn put_public(
         &self,
         url: impl IntoUrl + Send,
         query: impl Serialize + Send + Sync,
-        payload: String,
+        payload: impl AsRef<str> + Send + Sync,
     ) -> reqwest::Result<serde_json::Value>;
     async fn delete_public(
         &self,
         url: impl IntoUrl + Send,
         query: impl Serialize + Send + Sync,
-        payload: String,
+        payload: impl AsRef<str> + Send + Sync,
     ) -> reqwest::Result<serde_json::Value>;
     async fn patch_public(
         &self,
         url: impl IntoUrl + Send,
         query: impl Serialize + Send + Sync,
-        payload: String,
+        payload: impl AsRef<str> + Send + Sync,
     ) -> reqwest::Result<serde_json::Value>;
     async fn get_private(
         &self,
         url: impl IntoUrl + Send,
         query: impl Serialize + Send + Sync,
-        payload: String,
+        payload: impl AsRef<str> + Send + Sync,
     ) -> Result<serde_json::Value, Error>;
     async fn post_private(
         &self,
         url: impl IntoUrl + Send,
         query: impl Serialize + Send + Sync,
-        payload: String,
+        payload: impl AsRef<str> + Send + Sync,
     ) -> Result<serde_json::Value, Error>;
     async fn put_private(
         &self,
         url: impl IntoUrl + Send,
         query: impl Serialize + Send + Sync,
-        payload: String,
+        payload: impl AsRef<str> + Send + Sync,
     ) -> Result<serde_json::Value, Error>;
     async fn delete_private(
         &self,
         url: impl IntoUrl + Send,
         query: impl Serialize + Send + Sync,
-        payload: String,
+        payload: impl AsRef<str> + Send + Sync,
     ) -> Result<serde_json::Value, Error>;
     async fn patch_private(
         &self,
         url: impl IntoUrl + Send,
         query: impl Serialize + Send + Sync,
-        payload: String,
+        payload: impl AsRef<str> + Send + Sync,
     ) -> Result<serde_json::Value, Error>;
 }
 
@@ -162,7 +162,7 @@ macro_rules! request {
     (@public $this:expr, $method:ident, $url:ident, $query:ident, $payload:ident) => {
         $this
             .$method($url)
-            .body($payload)
+            .body($payload.as_ref().to_string())
             .query(&$query)
             .send()
             .await?
@@ -174,7 +174,7 @@ macro_rules! request {
         let (client, req) = $this
             .$method($url)
             .query(&$query)
-            .body($payload)
+            .body($payload.as_ref().to_string())
             .build_split();
         let mut req = req?;
         if let Err(e) = sign_request(&mut req) {
@@ -192,7 +192,7 @@ impl ClientExt for Client {
         &self,
         url: impl IntoUrl + Send,
         query: impl Serialize + Send + Sync,
-        payload: String,
+        payload: impl AsRef<str> + Send + Sync,
     ) -> reqwest::Result<serde_json::Value> {
         request!(@public self, get, url, query, payload)
     }
@@ -200,7 +200,7 @@ impl ClientExt for Client {
         &self,
         url: impl IntoUrl + Send,
         query: impl Serialize + Send + Sync,
-        payload: String,
+        payload: impl AsRef<str> + Send + Sync,
     ) -> reqwest::Result<serde_json::Value> {
         request!(@public self, post, url, query, payload)
     }
@@ -208,7 +208,7 @@ impl ClientExt for Client {
         &self,
         url: impl IntoUrl + Send,
         query: impl Serialize + Send + Sync,
-        payload: String,
+        payload: impl AsRef<str> + Send + Sync,
     ) -> reqwest::Result<serde_json::Value> {
         request!(@public self, put, url, query, payload)
     }
@@ -216,7 +216,7 @@ impl ClientExt for Client {
         &self,
         url: impl IntoUrl + Send,
         query: impl Serialize + Send + Sync,
-        payload: String,
+        payload: impl AsRef<str> + Send + Sync,
     ) -> reqwest::Result<serde_json::Value> {
         request!(@public self, delete, url, query, payload)
     }
@@ -224,7 +224,7 @@ impl ClientExt for Client {
         &self,
         url: impl IntoUrl + Send,
         query: impl Serialize + Send + Sync,
-        payload: String,
+        payload: impl AsRef<str> + Send + Sync,
     ) -> reqwest::Result<serde_json::Value> {
         request!(@public self, patch, url, query, payload)
     }
@@ -232,7 +232,7 @@ impl ClientExt for Client {
         &self,
         url: impl IntoUrl + Send,
         query: impl Serialize + Send + Sync,
-        payload: String,
+        payload: impl AsRef<str> + Send + Sync,
     ) -> Result<serde_json::Value, Error> {
         request!(@private self, get, url, query, payload)
     }
@@ -240,7 +240,7 @@ impl ClientExt for Client {
         &self,
         url: impl IntoUrl + Send,
         query: impl Serialize + Send + Sync,
-        payload: String,
+        payload: impl AsRef<str> + Send + Sync,
     ) -> Result<serde_json::Value, Error> {
         request!(@private self, post, url, query, payload)
     }
@@ -248,7 +248,7 @@ impl ClientExt for Client {
         &self,
         url: impl IntoUrl + Send,
         query: impl Serialize + Send + Sync,
-        payload: String,
+        payload: impl AsRef<str> + Send + Sync,
     ) -> Result<serde_json::Value, Error> {
         request!(@private self, put, url, query, payload)
     }
@@ -256,7 +256,7 @@ impl ClientExt for Client {
         &self,
         url: impl IntoUrl + Send,
         query: impl Serialize + Send + Sync,
-        payload: String,
+        payload: impl AsRef<str> + Send + Sync,
     ) -> Result<serde_json::Value, Error> {
         request!(@private self, delete, url, query, payload)
     }
@@ -264,7 +264,7 @@ impl ClientExt for Client {
         &self,
         url: impl IntoUrl + Send,
         query: impl Serialize + Send + Sync,
-        payload: String,
+        payload: impl AsRef<str> + Send + Sync,
     ) -> Result<serde_json::Value, Error> {
         request!(@private self, patch, url, query, payload)
     }
@@ -299,7 +299,7 @@ impl ClientExt for Clients {
         &'this self,
         url: impl 'async_trait + IntoUrl + Send,
         query: impl 'async_trait + Serialize + Send + Sync,
-        payload: String,
+        payload: impl AsRef<str> + Send + Sync + 'async_trait,
     ) -> Pin<Box<dyn Future<Output = reqwest::Result<serde_json::Value>> + Send + 'async_trait>>
     where
         'this: 'async_trait,
@@ -312,7 +312,7 @@ impl ClientExt for Clients {
         &'this self,
         url: impl 'async_trait + IntoUrl + Send,
         query: impl 'async_trait + Serialize + Send + Sync,
-        payload: String,
+        payload: impl AsRef<str> + Send + Sync + 'async_trait,
     ) -> Pin<Box<dyn Future<Output = reqwest::Result<serde_json::Value>> + Send + 'async_trait>>
     where
         'this: 'async_trait,
@@ -325,7 +325,7 @@ impl ClientExt for Clients {
         &'this self,
         url: impl 'async_trait + IntoUrl + Send,
         query: impl 'async_trait + Serialize + Send + Sync,
-        payload: String,
+        payload: impl AsRef<str> + Send + Sync + 'async_trait,
     ) -> Pin<Box<dyn Future<Output = reqwest::Result<serde_json::Value>> + Send + 'async_trait>>
     where
         'this: 'async_trait,
@@ -338,7 +338,7 @@ impl ClientExt for Clients {
         &'this self,
         url: impl 'async_trait + IntoUrl + Send,
         query: impl 'async_trait + Serialize + Send + Sync,
-        payload: String,
+        payload: impl AsRef<str> + Send + Sync + 'async_trait,
     ) -> Pin<Box<dyn Future<Output = reqwest::Result<serde_json::Value>> + Send + 'async_trait>>
     where
         'this: 'async_trait,
@@ -351,7 +351,7 @@ impl ClientExt for Clients {
         &'this self,
         url: impl 'async_trait + IntoUrl + Send,
         query: impl 'async_trait + Serialize + Send + Sync,
-        payload: String,
+        payload: impl AsRef<str> + Send + Sync + 'async_trait,
     ) -> Pin<Box<dyn Future<Output = reqwest::Result<serde_json::Value>> + Send + 'async_trait>>
     where
         'this: 'async_trait,
@@ -364,7 +364,7 @@ impl ClientExt for Clients {
         &'this self,
         url: impl 'async_trait + IntoUrl + Send,
         query: impl 'async_trait + Serialize + Send + Sync,
-        payload: String,
+        payload: impl AsRef<str> + Send + Sync + 'async_trait,
     ) -> Pin<Box<dyn Future<Output = Result<serde_json::Value, Error>> + Send + 'async_trait>>
     where
         'this: 'async_trait,
@@ -377,7 +377,7 @@ impl ClientExt for Clients {
         &'this self,
         url: impl 'async_trait + IntoUrl + Send,
         query: impl 'async_trait + Serialize + Send + Sync,
-        payload: String,
+        payload: impl AsRef<str> + Send + Sync + 'async_trait,
     ) -> Pin<Box<dyn Future<Output = Result<serde_json::Value, Error>> + Send + 'async_trait>>
     where
         'this: 'async_trait,
@@ -390,7 +390,7 @@ impl ClientExt for Clients {
         &'this self,
         url: impl 'async_trait + IntoUrl + Send,
         query: impl 'async_trait + Serialize + Send + Sync,
-        payload: String,
+        payload: impl AsRef<str> + Send + Sync + 'async_trait,
     ) -> Pin<Box<dyn Future<Output = Result<serde_json::Value, Error>> + Send + 'async_trait>>
     where
         'this: 'async_trait,
@@ -403,7 +403,7 @@ impl ClientExt for Clients {
         &'this self,
         url: impl 'async_trait + IntoUrl + Send,
         query: impl 'async_trait + Serialize + Send + Sync,
-        payload: String,
+        payload: impl AsRef<str> + Send + Sync + 'async_trait,
     ) -> Pin<Box<dyn Future<Output = Result<serde_json::Value, Error>> + Send + 'async_trait>>
     where
         'this: 'async_trait,
@@ -416,7 +416,7 @@ impl ClientExt for Clients {
         &'this self,
         url: impl 'async_trait + IntoUrl + Send,
         query: impl 'async_trait + Serialize + Send + Sync,
-        payload: String,
+        payload: impl AsRef<str> + Send + Sync + 'async_trait,
     ) -> Pin<Box<dyn Future<Output = Result<serde_json::Value, Error>> + Send + 'async_trait>>
     where
         'this: 'async_trait,
