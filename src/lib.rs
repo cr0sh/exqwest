@@ -745,6 +745,7 @@ macro_rules! serializable {
     () => {{
         use $crate::__private::serde;
         #[derive(serde::Serialize)]
+        #[allow(non_snake_case)]
         struct Serializable {}
 
         Serializable {}
@@ -755,6 +756,7 @@ macro_rules! serializable {
     ) => {{
         use $crate::__private::serde;
         #[derive(serde::Serialize)]
+        #[allow(non_snake_case)]
         struct Serializable<T1> {
             $key1: T1,
         }
@@ -768,6 +770,7 @@ macro_rules! serializable {
     ) => {{
         use $crate::__private::serde;
         #[derive(serde::Serialize)]
+        #[allow(non_snake_case)]
         struct Serializable<T1, T2> {
             $key1: T1,
             $key2: T2,
@@ -786,6 +789,7 @@ macro_rules! serializable {
     ) => {{
         use $crate::__private::serde;
         #[derive(serde::Serialize)]
+        #[allow(non_snake_case)]
         struct Serializable<T1, T2, T3> {
             $key1: T1,
             $key2: T2,
@@ -807,6 +811,7 @@ macro_rules! serializable {
     ) => {{
         use $crate::__private::serde;
         #[derive(serde::Serialize)]
+        #[allow(non_snake_case)]
         struct Serializable<T1, T2, T3, T4> {
             $key1: T1,
             $key2: T2,
@@ -831,6 +836,7 @@ macro_rules! serializable {
     ) => {{
         use $crate::__private::serde;
         #[derive(serde::Serialize)]
+        #[allow(non_snake_case)]
         struct Serializable<T1, T2, T3, T4, T5> {
             $key1: T1,
             $key2: T2,
@@ -858,6 +864,7 @@ macro_rules! serializable {
     ) => {{
         use $crate::__private::serde;
         #[derive(serde::Serialize)]
+        #[allow(non_snake_case)]
         struct Serializable<T1, T2, T3, T4, T5, T6> {
             $key1: T1,
             $key2: T2,
@@ -888,6 +895,7 @@ macro_rules! serializable {
     ) => {{
         use $crate::__private::serde;
         #[derive(serde::Serialize)]
+        #[allow(non_snake_case)]
         struct Serializable<T1, T2, T3, T4, T5, T6, T7> {
             $key1: T1,
             $key2: T2,
@@ -921,6 +929,7 @@ macro_rules! serializable {
     ) => {{
         use $crate::__private::serde;
         #[derive(serde::Serialize)]
+        #[allow(non_snake_case)]
         struct Serializable<T1, T2, T3, T4, T5, T6, T7, T8> {
             $key1: T1,
             $key2: T2,
@@ -957,6 +966,7 @@ macro_rules! serializable {
     ) => {{
         use $crate::__private::serde;
         #[derive(serde::Serialize)]
+        #[allow(non_snake_case)]
         struct Serializable<T1, T2, T3, T4, T5, T6, T7, T8, T9> {
             $key1: T1,
             $key2: T2,
@@ -996,6 +1006,7 @@ macro_rules! serializable {
     ) => {{
         use $crate::__private::serde;
         #[derive(serde::Serialize)]
+        #[allow(non_snake_case)]
         struct Serializable<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> {
             $key1: T1,
             $key2: T2,
@@ -1038,6 +1049,7 @@ macro_rules! serializable {
     ) => {{
         use $crate::__private::serde;
         #[derive(serde::Serialize)]
+        #[allow(non_snake_case)]
         struct Serializable<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> {
             $key1: T1,
             $key2: T2,
@@ -1083,6 +1095,7 @@ macro_rules! serializable {
     ) => {{
         use $crate::__private::serde;
         #[derive(serde::Serialize)]
+        #[allow(non_snake_case)]
         struct Serializable<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> {
             $key1: T1,
             $key2: T2,
