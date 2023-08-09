@@ -18,6 +18,8 @@ use uuid::Uuid;
 #[doc(hidden)]
 pub mod __private {
     pub use serde;
+    pub use serde_json;
+    pub use serde_urlencoded;
 }
 
 static CREDENTIALS: OnceLock<HashMap<&'static str, Credential>> = OnceLock::new();
@@ -1111,6 +1113,46 @@ macro_rules! serializable {
             $key12: $value12,
         }
     }};
+}
+
+/// # Examples
+/// ```
+/// # use exqwest::json;
+/// let s = json! {
+///     foo: "bar",
+/// }.unwrap();
+/// assert_eq!(&s, r#"{"foo":"bar"}"#);
+/// ````
+#[macro_export]
+macro_rules! json {
+    ($($key:ident: $value:expr)? $(,$keys:ident: $values:expr)* $(,)?) => {
+        {
+            use $crate::__private::serde_json;
+            serde_json::to_string(&$crate::serializable! {
+                $($key: $value)? $(,$keys: $values)*
+            })
+        }
+    };
+}
+
+/// # Examples
+/// ```
+/// # use exqwest::urlencoded;
+/// let s = urlencoded! {
+///     foo: "bar",
+/// }.unwrap();
+/// assert_eq!(&s, "foo=bar");
+/// ````
+#[macro_export]
+macro_rules! urlencoded {
+    ($($key:ident: $value:expr)? $(,$keys:ident: $values:expr)* $(,)?) => {
+        {
+            use $crate::__private::serde_urlencoded;
+            serde_urlencoded::to_string(&$crate::serializable! {
+                $($key: $value)? $(,$keys: $values)*
+            })
+        }
+    };
 }
 
 pub trait ResponseExt {
