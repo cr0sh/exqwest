@@ -274,10 +274,10 @@ pub struct Clients {
 }
 
 impl Clients {
-    pub fn new(clients: impl Iterator<Item = Client>) -> Self {
+    pub fn new(clients: impl IntoIterator<Item = Client>) -> Self {
         Self {
             index: Cell::new(0),
-            clients: clients.collect(),
+            clients: clients.into_iter().collect(),
         }
     }
 
