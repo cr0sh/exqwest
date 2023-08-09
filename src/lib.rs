@@ -9,11 +9,12 @@ use hmac::{digest::Digest, Hmac, Mac};
 use jwt::SignWithKey;
 use reqwest::{header::AUTHORIZATION, Client, IntoUrl, Method, Request, Response};
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
 use sha2::{Sha256, Sha512};
 use thiserror::Error;
 use tracing::error;
 use uuid::Uuid;
+
+pub use serde_json::Value;
 
 #[doc(hidden)]
 pub mod __private {
