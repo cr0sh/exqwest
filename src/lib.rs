@@ -731,6 +731,13 @@ fn sign_upbit(req: &mut Request) -> Result<(), Error> {
     Ok(())
 }
 
+/// # Examples
+/// ```
+/// # use exqwest::serializable;
+/// let _ = serializable! {
+///     foo: "bar",
+/// };
+/// ````
 #[macro_export]
 macro_rules! serializable {
     () => {{
