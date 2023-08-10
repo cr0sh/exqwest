@@ -1,6 +1,15 @@
 use std::{
-    cell::Cell, collections::HashMap, env::var, fmt::Debug, future::Future, num::ParseIntError,
-    pin::Pin, sync::OnceLock,
+    cell::Cell,
+    collections::HashMap,
+    env::var,
+    fmt::Debug,
+    future::Future,
+    num::ParseIntError,
+    pin::Pin,
+    sync::{
+        atomic::{AtomicUsize, Ordering},
+        OnceLock,
+    },
 };
 
 use async_trait::async_trait;
@@ -13,8 +22,6 @@ use sha2::{Sha256, Sha512};
 use thiserror::Error;
 use tracing::error;
 use uuid::Uuid;
-
-mod macros;
 
 pub use serde_json::Value;
 
@@ -274,28 +281,20 @@ impl ClientExt for Client {
 }
 
 pub struct Clients {
+    index: AtomicUsize,
     clients: Vec<Client>,
 }
 
 impl Clients {
-    thread_local! {
-        static INDEX: Cell<usize> = Cell::new(0);
-    }
-
     pub fn new(clients: impl IntoIterator<Item = Client>) -> Self {
         Self {
+            index: AtomicUsize::new(0),
             clients: clients.into_iter().collect(),
         }
     }
 
     pub fn get_client(&self) -> &Client {
-        let current = Self::INDEX.with(|x| {
-            let current = x.get();
-            x.set(current + 1);
-            current
-        });
-
-        &self.clients[current]
+        &self.clients[self.index.fetch_add(1, Ordering::Relaxed)]
     }
 
     pub fn clients(&self) -> &[Client] {
@@ -740,6 +739,401 @@ fn sign_upbit(req: &mut Request) -> Result<(), Error> {
         .insert(AUTHORIZATION, format!("Bearer {auth}").parse().unwrap());
 
     Ok(())
+}
+
+/// # Examples
+/// ```
+/// # use exqwest::serializable;
+/// let _ = serializable! {
+///     foo: "bar",
+/// };
+/// ````
+#[macro_export]
+macro_rules! serializable {
+    () => {{
+        use $crate::__private::serde;
+        #[derive(serde::Serialize)]
+        #[allow(non_snake_case)]
+        struct Serializable {}
+
+        Serializable {}
+    }};
+    (
+    $key1:ident: $value1:expr
+    $(,)?
+    ) => {{
+        use $crate::__private::serde;
+        #[derive(serde::Serialize)]
+        #[allow(non_snake_case)]
+        struct Serializable<T1> {
+            $key1: T1,
+        }
+
+        Serializable { $key1: $value1 }
+    }};
+    (
+    $key1:ident: $value1:expr
+    ,$key2:ident: $value2:expr
+    $(,)?
+    ) => {{
+        use $crate::__private::serde;
+        #[derive(serde::Serialize)]
+        #[allow(non_snake_case)]
+        struct Serializable<T1, T2> {
+            $key1: T1,
+            $key2: T2,
+        }
+
+        Serializable {
+            $key1: $value1,
+            $key2: $value2,
+        }
+    }};
+    (
+    $key1:ident: $value1:expr
+    ,$key2:ident: $value2:expr
+    ,$key3:ident: $value3:expr
+    $(,)?
+    ) => {{
+        use $crate::__private::serde;
+        #[derive(serde::Serialize)]
+        #[allow(non_snake_case)]
+        struct Serializable<T1, T2, T3> {
+            $key1: T1,
+            $key2: T2,
+            $key3: T3,
+        }
+
+        Serializable {
+            $key1: $value1,
+            $key2: $value2,
+            $key3: $value3,
+        }
+    }};
+    (
+    $key1:ident: $value1:expr
+    ,$key2:ident: $value2:expr
+    ,$key3:ident: $value3:expr
+    ,$key4:ident: $value4:expr
+    $(,)?
+    ) => {{
+        use $crate::__private::serde;
+        #[derive(serde::Serialize)]
+        #[allow(non_snake_case)]
+        struct Serializable<T1, T2, T3, T4> {
+            $key1: T1,
+            $key2: T2,
+            $key3: T3,
+            $key4: T4,
+        }
+
+        Serializable {
+            $key1: $value1,
+            $key2: $value2,
+            $key3: $value3,
+            $key4: $value4,
+        }
+    }};
+    (
+    $key1:ident: $value1:expr
+    ,$key2:ident: $value2:expr
+    ,$key3:ident: $value3:expr
+    ,$key4:ident: $value4:expr
+    ,$key5:ident: $value5:expr
+    $(,)?
+    ) => {{
+        use $crate::__private::serde;
+        #[derive(serde::Serialize)]
+        #[allow(non_snake_case)]
+        struct Serializable<T1, T2, T3, T4, T5> {
+            $key1: T1,
+            $key2: T2,
+            $key3: T3,
+            $key4: T4,
+            $key5: T5,
+        }
+
+        Serializable {
+            $key1: $value1,
+            $key2: $value2,
+            $key3: $value3,
+            $key4: $value4,
+            $key5: $value5,
+        }
+    }};
+    (
+    $key1:ident: $value1:expr
+    ,$key2:ident: $value2:expr
+    ,$key3:ident: $value3:expr
+    ,$key4:ident: $value4:expr
+    ,$key5:ident: $value5:expr
+    ,$key6:ident: $value6:expr
+    $(,)?
+    ) => {{
+        use $crate::__private::serde;
+        #[derive(serde::Serialize)]
+        #[allow(non_snake_case)]
+        struct Serializable<T1, T2, T3, T4, T5, T6> {
+            $key1: T1,
+            $key2: T2,
+            $key3: T3,
+            $key4: T4,
+            $key5: T5,
+            $key6: T6,
+        }
+
+        Serializable {
+            $key1: $value1,
+            $key2: $value2,
+            $key3: $value3,
+            $key4: $value4,
+            $key5: $value5,
+            $key6: $value6,
+        }
+    }};
+    (
+    $key1:ident: $value1:expr
+    ,$key2:ident: $value2:expr
+    ,$key3:ident: $value3:expr
+    ,$key4:ident: $value4:expr
+    ,$key5:ident: $value5:expr
+    ,$key6:ident: $value6:expr
+    ,$key7:ident: $value7:expr
+    $(,)?
+    ) => {{
+        use $crate::__private::serde;
+        #[derive(serde::Serialize)]
+        #[allow(non_snake_case)]
+        struct Serializable<T1, T2, T3, T4, T5, T6, T7> {
+            $key1: T1,
+            $key2: T2,
+            $key3: T3,
+            $key4: T4,
+            $key5: T5,
+            $key6: T6,
+            $key7: T7,
+        }
+
+        Serializable {
+            $key1: $value1,
+            $key2: $value2,
+            $key3: $value3,
+            $key4: $value4,
+            $key5: $value5,
+            $key6: $value6,
+            $key7: $value7,
+        }
+    }};
+    (
+    $key1:ident: $value1:expr
+    ,$key2:ident: $value2:expr
+    ,$key3:ident: $value3:expr
+    ,$key4:ident: $value4:expr
+    ,$key5:ident: $value5:expr
+    ,$key6:ident: $value6:expr
+    ,$key7:ident: $value7:expr
+    ,$key8:ident: $value8:expr
+    $(,)?
+    ) => {{
+        use $crate::__private::serde;
+        #[derive(serde::Serialize)]
+        #[allow(non_snake_case)]
+        struct Serializable<T1, T2, T3, T4, T5, T6, T7, T8> {
+            $key1: T1,
+            $key2: T2,
+            $key3: T3,
+            $key4: T4,
+            $key5: T5,
+            $key6: T6,
+            $key7: T7,
+            $key8: T8,
+        }
+
+        Serializable {
+            $key1: $value1,
+            $key2: $value2,
+            $key3: $value3,
+            $key4: $value4,
+            $key5: $value5,
+            $key6: $value6,
+            $key7: $value7,
+            $key8: $value8,
+        }
+    }};
+    (
+    $key1:ident: $value1:expr
+    ,$key2:ident: $value2:expr
+    ,$key3:ident: $value3:expr
+    ,$key4:ident: $value4:expr
+    ,$key5:ident: $value5:expr
+    ,$key6:ident: $value6:expr
+    ,$key7:ident: $value7:expr
+    ,$key8:ident: $value8:expr
+    ,$key9:ident: $value9:expr
+    $(,)?
+    ) => {{
+        use $crate::__private::serde;
+        #[derive(serde::Serialize)]
+        #[allow(non_snake_case)]
+        struct Serializable<T1, T2, T3, T4, T5, T6, T7, T8, T9> {
+            $key1: T1,
+            $key2: T2,
+            $key3: T3,
+            $key4: T4,
+            $key5: T5,
+            $key6: T6,
+            $key7: T7,
+            $key8: T8,
+            $key9: T9,
+        }
+
+        Serializable {
+            $key1: $value1,
+            $key2: $value2,
+            $key3: $value3,
+            $key4: $value4,
+            $key5: $value5,
+            $key6: $value6,
+            $key7: $value7,
+            $key8: $value8,
+            $key9: $value9,
+        }
+    }};
+    (
+    $key1:ident: $value1:expr
+    ,$key2:ident: $value2:expr
+    ,$key3:ident: $value3:expr
+    ,$key4:ident: $value4:expr
+    ,$key5:ident: $value5:expr
+    ,$key6:ident: $value6:expr
+    ,$key7:ident: $value7:expr
+    ,$key8:ident: $value8:expr
+    ,$key9:ident: $value9:expr
+    ,$key10:ident: $value10:expr
+    $(,)?
+    ) => {{
+        use $crate::__private::serde;
+        #[derive(serde::Serialize)]
+        #[allow(non_snake_case)]
+        struct Serializable<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> {
+            $key1: T1,
+            $key2: T2,
+            $key3: T3,
+            $key4: T4,
+            $key5: T5,
+            $key6: T6,
+            $key7: T7,
+            $key8: T8,
+            $key9: T9,
+            $key10: T10,
+        }
+
+        Serializable {
+            $key1: $value1,
+            $key2: $value2,
+            $key3: $value3,
+            $key4: $value4,
+            $key5: $value5,
+            $key6: $value6,
+            $key7: $value7,
+            $key8: $value8,
+            $key9: $value9,
+            $key10: $value10,
+        }
+    }};
+    (
+    $key1:ident: $value1:expr
+    ,$key2:ident: $value2:expr
+    ,$key3:ident: $value3:expr
+    ,$key4:ident: $value4:expr
+    ,$key5:ident: $value5:expr
+    ,$key6:ident: $value6:expr
+    ,$key7:ident: $value7:expr
+    ,$key8:ident: $value8:expr
+    ,$key9:ident: $value9:expr
+    ,$key10:ident: $value10:expr
+    ,$key11:ident: $value11:expr
+    $(,)?
+    ) => {{
+        use $crate::__private::serde;
+        #[derive(serde::Serialize)]
+        #[allow(non_snake_case)]
+        struct Serializable<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> {
+            $key1: T1,
+            $key2: T2,
+            $key3: T3,
+            $key4: T4,
+            $key5: T5,
+            $key6: T6,
+            $key7: T7,
+            $key8: T8,
+            $key9: T9,
+            $key10: T10,
+            $key11: T11,
+        }
+
+        Serializable {
+            $key1: $value1,
+            $key2: $value2,
+            $key3: $value3,
+            $key4: $value4,
+            $key5: $value5,
+            $key6: $value6,
+            $key7: $value7,
+            $key8: $value8,
+            $key9: $value9,
+            $key10: $value10,
+            $key11: $value11,
+        }
+    }};
+    (
+    $key1:ident: $value1:expr
+    ,$key2:ident: $value2:expr
+    ,$key3:ident: $value3:expr
+    ,$key4:ident: $value4:expr
+    ,$key5:ident: $value5:expr
+    ,$key6:ident: $value6:expr
+    ,$key7:ident: $value7:expr
+    ,$key8:ident: $value8:expr
+    ,$key9:ident: $value9:expr
+    ,$key10:ident: $value10:expr
+    ,$key11:ident: $value11:expr
+    ,$key12:ident: $value12:expr
+    $(,)?
+    ) => {{
+        use $crate::__private::serde;
+        #[derive(serde::Serialize)]
+        #[allow(non_snake_case)]
+        struct Serializable<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> {
+            $key1: T1,
+            $key2: T2,
+            $key3: T3,
+            $key4: T4,
+            $key5: T5,
+            $key6: T6,
+            $key7: T7,
+            $key8: T8,
+            $key9: T9,
+            $key10: T10,
+            $key11: T11,
+            $key12: T12,
+        }
+
+        Serializable {
+            $key1: $value1,
+            $key2: $value2,
+            $key3: $value3,
+            $key4: $value4,
+            $key5: $value5,
+            $key6: $value6,
+            $key7: $value7,
+            $key8: $value8,
+            $key9: $value9,
+            $key10: $value10,
+            $key11: $value11,
+            $key12: $value12,
+        }
+    }};
 }
 
 /// # Examples
