@@ -294,7 +294,7 @@ impl Clients {
     }
 
     pub fn get_client(&self) -> &Client {
-        &self.clients[self.index.fetch_add(1, Ordering::Relaxed)]
+        &self.clients[self.index.fetch_add(1, Ordering::Relaxed) % self.clients.len()]
     }
 
     pub fn clients(&self) -> &[Client] {
