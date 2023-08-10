@@ -4,9 +4,9 @@ for i in range(33):
 
     for j in range(1, i + 1):
         if j == 1:
-            inner += f"        $(#[$meta{j}:meta])?\n"
+            inner += f"        $(#[$meta{j}:meta])*\n"
         else:
-            inner += f"        ,$(#[$meta{j}:meta])?\n"
+            inner += f"        ,$(#[$meta{j}:meta])*\n"
         inner += f"        $key{j}:ident: $value{j}:expr\n"
 
     if i != 0:
@@ -25,7 +25,7 @@ for i in range(33):
     inner += f"        struct Serializable{typarams}{{\n"
 
     for j in range(1, i + 1):
-        inner += f"            $(#[$meta{j}])?\n"
+        inner += f"            $(#[$meta{j}])*\n"
         inner += f"            $key{j}: T{j},\n"
 
     inner += "        }\n"
