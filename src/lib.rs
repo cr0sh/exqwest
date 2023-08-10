@@ -274,22 +274,28 @@ impl ClientExt for Client {
 }
 
 pub struct Clients {
-    index: Cell<usize>,
     clients: Vec<Client>,
 }
 
 impl Clients {
+    thread_local! {
+        static INDEX: Cell<usize> = Cell::new(0);
+    }
+
     pub fn new(clients: impl IntoIterator<Item = Client>) -> Self {
         Self {
-            index: Cell::new(0),
             clients: clients.into_iter().collect(),
         }
     }
 
     pub fn get_client(&self) -> &Client {
-        let client = &self.clients[self.index.get()];
-        self.index.set((self.index.get() + 1) % self.clients.len());
-        client
+        let current = Self::INDEX.with(|x| {
+            let current = x.get();
+            x.set(current + 1);
+            current
+        });
+
+        &self.clients[current]
     }
 
     pub fn clients(&self) -> &[Client] {
