@@ -19,7 +19,7 @@ use reqwest::{header::AUTHORIZATION, Client, IntoUrl, Method, Request, Response}
 use serde::{Deserialize, Serialize};
 use sha2::{Sha256, Sha512};
 use thiserror::Error;
-use tracing::error;
+use tracing::{error, warn};
 use uuid::Uuid;
 
 mod macros;
@@ -200,10 +200,13 @@ macro_rules! request {
             error!(error, "cannot sign request");
             panic!("cannot sign request: {error}");
         }
-        let v = client
+        let resp = client
             .execute(req)
-            .await?
-            .json::<MaybeValue>()
+            .await?;
+        if !resp.status().is_success() {
+            warn!(status = %resp.status(), "request is not successful");
+        }
+        let v = resp.json::<MaybeValue>()
             .await
             .map_err(Error::from)?;
         match v {
