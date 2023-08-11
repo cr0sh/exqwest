@@ -169,6 +169,13 @@ pub trait ClientExt {
     ) -> Result<serde_json::Value, Error>;
 }
 
+#[derive(Debug, Deserialize)]
+#[serde(untagged)]
+enum MaybeValue {
+    Value(Value),
+    Fail(String),
+}
+
 macro_rules! request {
     (@public $this:expr, $method:ident, $url:ident, $query:ident, $payload:ident) => {
         $this
@@ -193,7 +200,16 @@ macro_rules! request {
             error!(error, "cannot sign request");
             panic!("cannot sign request: {error}");
         }
-        client.execute(req).await?.json().await.map_err(Into::into)
+        let v = client
+            .execute(req)
+            .await?
+            .json::<MaybeValue>()
+            .await
+            .map_err(Error::from)?;
+        match v {
+            MaybeValue::Value(v) => Ok(v),
+            MaybeValue::Fail(s) => Err(Error::InvalidJson(s)),
+        }
     }};
 }
 
@@ -439,6 +455,8 @@ impl ClientExt for Clients {
 pub enum Error {
     #[error(transparent)]
     Reqwest(#[from] reqwest::Error),
+    #[error("invalid JSON payload: {0}")]
+    InvalidJson(String),
     #[error("signing mechanism not implemented")]
     NotImplemented,
 }
