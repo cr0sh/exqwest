@@ -15,7 +15,10 @@ use async_trait::async_trait;
 use base64::Engine;
 use hmac::{digest::Digest, Hmac, Mac};
 use jwt::SignWithKey;
-use reqwest::{header::AUTHORIZATION, Client, IntoUrl, Method, Request, Response};
+use reqwest::{
+    header::{AUTHORIZATION, CONTENT_LENGTH},
+    Client, IntoUrl, Method, Request, Response,
+};
 use serde::{Deserialize, Serialize};
 use sha2::{Sha256, Sha512};
 use thiserror::Error;
@@ -195,6 +198,9 @@ macro_rules! request {
             .body($payload.as_ref().to_string())
             .build_split();
         let mut req = req?;
+        if $payload.as_ref().is_empty() {
+            req.headers_mut().insert(CONTENT_LENGTH, "0".parse().unwrap());
+        }
         if let Err(e) = sign_request(&mut req) {
             let error = Box::new(e) as Box<dyn std::error::Error + Send + Sync + 'static>;
             error!(error, "cannot sign request");
