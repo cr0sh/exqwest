@@ -22,6 +22,8 @@ use thiserror::Error;
 use tracing::error;
 use uuid::Uuid;
 
+mod macros;
+
 pub use serde_json::Value;
 
 #[doc(hidden)]
