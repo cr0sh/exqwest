@@ -864,6 +864,10 @@ pub trait ValueExt {
     fn query<'a, T>(&'a self, query: &str) -> Result<T, ValueQueryError>
     where
         T: Deserialize<'a>;
+
+    fn from_str(s: &str) -> Result<Self, serde_json::Error>
+    where
+        Self: Sized;
 }
 
 impl ValueExt for Value {
@@ -932,6 +936,13 @@ impl ValueExt for Value {
             query: query.to_string(),
             source: e,
         })
+    }
+
+    fn from_str(s: &str) -> Result<Self, serde_json::Error>
+    where
+        Self: Sized,
+    {
+        serde_json::from_str(s)
     }
 }
 
