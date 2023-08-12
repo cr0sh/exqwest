@@ -487,6 +487,8 @@ pub enum Error {
     NonOkResponse { status: StatusCode, body: String },
     #[error(transparent)]
     ValueQuery(#[from] ValueQueryError),
+    #[error(transparent)]
+    JsonParse(#[from] serde_json::Error),
 }
 
 fn sign_request(req: &mut Request) -> Result<(), Error> {
