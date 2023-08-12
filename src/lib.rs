@@ -1,7 +1,7 @@
 use std::{
     collections::HashMap,
     env::var,
-    fmt::Debug,
+    fmt::{Debug, Display},
     future::Future,
     num::ParseIntError,
     pin::Pin,
@@ -17,12 +17,12 @@ use hmac::{digest::Digest, Hmac, Mac};
 use jwt::SignWithKey;
 use reqwest::{
     header::{ACCEPT, AUTHORIZATION, CONTENT_LENGTH, CONTENT_TYPE},
-    Client, IntoUrl, Method, Request, Response,
+    Client, IntoUrl, Method, Request, Response, StatusCode,
 };
 use serde::{Deserialize, Serialize};
 use sha2::{Sha256, Sha512};
 use thiserror::Error;
-use tracing::{error, warn};
+use tracing::error;
 use uuid::Uuid;
 
 mod macros;
@@ -115,61 +115,61 @@ pub trait ClientExt {
         url: impl IntoUrl + Send,
         query: impl Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync,
-    ) -> reqwest::Result<serde_json::Value>;
+    ) -> Result<Value, Error>;
     async fn post_public(
         &self,
         url: impl IntoUrl + Send,
         query: impl Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync,
-    ) -> reqwest::Result<serde_json::Value>;
+    ) -> Result<Value, Error>;
     async fn put_public(
         &self,
         url: impl IntoUrl + Send,
         query: impl Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync,
-    ) -> reqwest::Result<serde_json::Value>;
+    ) -> Result<Value, Error>;
     async fn delete_public(
         &self,
         url: impl IntoUrl + Send,
         query: impl Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync,
-    ) -> reqwest::Result<serde_json::Value>;
+    ) -> Result<Value, Error>;
     async fn patch_public(
         &self,
         url: impl IntoUrl + Send,
         query: impl Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync,
-    ) -> reqwest::Result<serde_json::Value>;
+    ) -> Result<Value, Error>;
     async fn get_private(
         &self,
         url: impl IntoUrl + Send,
         query: impl Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync,
-    ) -> Result<serde_json::Value, Error>;
+    ) -> Result<Value, Error>;
     async fn post_private(
         &self,
         url: impl IntoUrl + Send,
         query: impl Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync,
-    ) -> Result<serde_json::Value, Error>;
+    ) -> Result<Value, Error>;
     async fn put_private(
         &self,
         url: impl IntoUrl + Send,
         query: impl Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync,
-    ) -> Result<serde_json::Value, Error>;
+    ) -> Result<Value, Error>;
     async fn delete_private(
         &self,
         url: impl IntoUrl + Send,
         query: impl Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync,
-    ) -> Result<serde_json::Value, Error>;
+    ) -> Result<Value, Error>;
     async fn patch_private(
         &self,
         url: impl IntoUrl + Send,
         query: impl Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync,
-    ) -> Result<serde_json::Value, Error>;
+    ) -> Result<Value, Error>;
 }
 
 #[derive(Debug, Deserialize)]
@@ -179,17 +179,32 @@ enum MaybeValue {
     Fail(String),
 }
 
+impl Display for MaybeValue {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            MaybeValue::Value(x) => std::fmt::Display::fmt(&x, f),
+            MaybeValue::Fail(s) => std::fmt::Display::fmt(&s, f),
+        }
+    }
+}
+
 macro_rules! request {
-    (@public $this:expr, $method:ident, $url:ident, $query:ident, $payload:ident) => {
-        $this
+    (@public $this:expr, $method:ident, $url:ident, $query:ident, $payload:ident) => {{
+        let resp = $this
             .$method($url)
             .body($payload.as_ref().to_string())
             .query(&$query)
             .send()
-            .await?
-            .json()
-            .await
-    };
+            .await?;
+        if !resp.status().is_success() {
+            Err(Error::NonOkResponse {
+                status: resp.status(),
+                body: resp.text().await?,
+            })
+        } else {
+            resp.json().await.map_err(Into::into)
+        }
+    }};
 
     (@private $this:expr, $method:ident, $url:ident, $query:ident, $payload:ident) => {{
         let (client, req) = $this
@@ -199,22 +214,22 @@ macro_rules! request {
             .build_split();
         let mut req = req?;
         if $payload.as_ref().is_empty() {
-            req.headers_mut().insert(CONTENT_LENGTH, "0".parse().unwrap());
+            req.headers_mut()
+                .insert(CONTENT_LENGTH, "0".parse().unwrap());
         }
         if let Err(e) = sign_request(&mut req) {
             let error = Box::new(e) as Box<dyn std::error::Error + Send + Sync + 'static>;
             error!(error, "cannot sign request");
             panic!("cannot sign request: {error}");
         }
-        let resp = client
-            .execute(req)
-            .await?;
+        let resp = client.execute(req).await?;
         if !resp.status().is_success() {
-            warn!(status = %resp.status(), "request is not successful");
+            return Err(Error::NonOkResponse {
+                status: resp.status(),
+                body: resp.text().await?,
+            });
         }
-        let v = resp.json::<MaybeValue>()
-            .await
-            .map_err(Error::from)?;
+        let v = resp.json::<MaybeValue>().await.map_err(Error::from)?;
         match v {
             MaybeValue::Value(v) => Ok(v),
             MaybeValue::Fail(s) => Err(Error::InvalidJson(s)),
@@ -229,7 +244,7 @@ impl ClientExt for Client {
         url: impl IntoUrl + Send,
         query: impl Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync,
-    ) -> reqwest::Result<serde_json::Value> {
+    ) -> Result<Value, Error> {
         request!(@public self, get, url, query, payload)
     }
     async fn post_public(
@@ -237,7 +252,7 @@ impl ClientExt for Client {
         url: impl IntoUrl + Send,
         query: impl Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync,
-    ) -> reqwest::Result<serde_json::Value> {
+    ) -> Result<Value, Error> {
         request!(@public self, post, url, query, payload)
     }
     async fn put_public(
@@ -245,7 +260,7 @@ impl ClientExt for Client {
         url: impl IntoUrl + Send,
         query: impl Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync,
-    ) -> reqwest::Result<serde_json::Value> {
+    ) -> Result<Value, Error> {
         request!(@public self, put, url, query, payload)
     }
     async fn delete_public(
@@ -253,7 +268,7 @@ impl ClientExt for Client {
         url: impl IntoUrl + Send,
         query: impl Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync,
-    ) -> reqwest::Result<serde_json::Value> {
+    ) -> Result<Value, Error> {
         request!(@public self, delete, url, query, payload)
     }
     async fn patch_public(
@@ -261,7 +276,7 @@ impl ClientExt for Client {
         url: impl IntoUrl + Send,
         query: impl Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync,
-    ) -> reqwest::Result<serde_json::Value> {
+    ) -> Result<Value, Error> {
         request!(@public self, patch, url, query, payload)
     }
     async fn get_private(
@@ -269,7 +284,7 @@ impl ClientExt for Client {
         url: impl IntoUrl + Send,
         query: impl Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync,
-    ) -> Result<serde_json::Value, Error> {
+    ) -> Result<Value, Error> {
         request!(@private self, get, url, query, payload)
     }
     async fn post_private(
@@ -277,7 +292,7 @@ impl ClientExt for Client {
         url: impl IntoUrl + Send,
         query: impl Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync,
-    ) -> Result<serde_json::Value, Error> {
+    ) -> Result<Value, Error> {
         request!(@private self, post, url, query, payload)
     }
     async fn put_private(
@@ -285,7 +300,7 @@ impl ClientExt for Client {
         url: impl IntoUrl + Send,
         query: impl Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync,
-    ) -> Result<serde_json::Value, Error> {
+    ) -> Result<Value, Error> {
         request!(@private self, put, url, query, payload)
     }
     async fn delete_private(
@@ -293,7 +308,7 @@ impl ClientExt for Client {
         url: impl IntoUrl + Send,
         query: impl Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync,
-    ) -> Result<serde_json::Value, Error> {
+    ) -> Result<Value, Error> {
         request!(@private self, delete, url, query, payload)
     }
     async fn patch_private(
@@ -301,7 +316,7 @@ impl ClientExt for Client {
         url: impl IntoUrl + Send,
         query: impl Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync,
-    ) -> Result<serde_json::Value, Error> {
+    ) -> Result<Value, Error> {
         request!(@private self, patch, url, query, payload)
     }
 }
@@ -334,7 +349,7 @@ impl ClientExt for Clients {
         url: impl 'async_trait + IntoUrl + Send,
         query: impl 'async_trait + Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync + 'async_trait,
-    ) -> Pin<Box<dyn Future<Output = reqwest::Result<serde_json::Value>> + Send + 'async_trait>>
+    ) -> Pin<Box<dyn Future<Output = Result<Value, Error>> + Send + 'async_trait>>
     where
         'this: 'async_trait,
         Self: 'async_trait,
@@ -347,7 +362,7 @@ impl ClientExt for Clients {
         url: impl 'async_trait + IntoUrl + Send,
         query: impl 'async_trait + Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync + 'async_trait,
-    ) -> Pin<Box<dyn Future<Output = reqwest::Result<serde_json::Value>> + Send + 'async_trait>>
+    ) -> Pin<Box<dyn Future<Output = Result<Value, Error>> + Send + 'async_trait>>
     where
         'this: 'async_trait,
         Self: 'async_trait,
@@ -360,7 +375,7 @@ impl ClientExt for Clients {
         url: impl 'async_trait + IntoUrl + Send,
         query: impl 'async_trait + Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync + 'async_trait,
-    ) -> Pin<Box<dyn Future<Output = reqwest::Result<serde_json::Value>> + Send + 'async_trait>>
+    ) -> Pin<Box<dyn Future<Output = Result<Value, Error>> + Send + 'async_trait>>
     where
         'this: 'async_trait,
         Self: 'async_trait,
@@ -373,7 +388,7 @@ impl ClientExt for Clients {
         url: impl 'async_trait + IntoUrl + Send,
         query: impl 'async_trait + Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync + 'async_trait,
-    ) -> Pin<Box<dyn Future<Output = reqwest::Result<serde_json::Value>> + Send + 'async_trait>>
+    ) -> Pin<Box<dyn Future<Output = Result<Value, Error>> + Send + 'async_trait>>
     where
         'this: 'async_trait,
         Self: 'async_trait,
@@ -386,7 +401,7 @@ impl ClientExt for Clients {
         url: impl 'async_trait + IntoUrl + Send,
         query: impl 'async_trait + Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync + 'async_trait,
-    ) -> Pin<Box<dyn Future<Output = reqwest::Result<serde_json::Value>> + Send + 'async_trait>>
+    ) -> Pin<Box<dyn Future<Output = Result<Value, Error>> + Send + 'async_trait>>
     where
         'this: 'async_trait,
         Self: 'async_trait,
@@ -399,7 +414,7 @@ impl ClientExt for Clients {
         url: impl 'async_trait + IntoUrl + Send,
         query: impl 'async_trait + Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync + 'async_trait,
-    ) -> Pin<Box<dyn Future<Output = Result<serde_json::Value, Error>> + Send + 'async_trait>>
+    ) -> Pin<Box<dyn Future<Output = Result<Value, Error>> + Send + 'async_trait>>
     where
         'this: 'async_trait,
         Self: 'async_trait,
@@ -412,7 +427,7 @@ impl ClientExt for Clients {
         url: impl 'async_trait + IntoUrl + Send,
         query: impl 'async_trait + Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync + 'async_trait,
-    ) -> Pin<Box<dyn Future<Output = Result<serde_json::Value, Error>> + Send + 'async_trait>>
+    ) -> Pin<Box<dyn Future<Output = Result<Value, Error>> + Send + 'async_trait>>
     where
         'this: 'async_trait,
         Self: 'async_trait,
@@ -425,7 +440,7 @@ impl ClientExt for Clients {
         url: impl 'async_trait + IntoUrl + Send,
         query: impl 'async_trait + Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync + 'async_trait,
-    ) -> Pin<Box<dyn Future<Output = Result<serde_json::Value, Error>> + Send + 'async_trait>>
+    ) -> Pin<Box<dyn Future<Output = Result<Value, Error>> + Send + 'async_trait>>
     where
         'this: 'async_trait,
         Self: 'async_trait,
@@ -438,7 +453,7 @@ impl ClientExt for Clients {
         url: impl 'async_trait + IntoUrl + Send,
         query: impl 'async_trait + Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync + 'async_trait,
-    ) -> Pin<Box<dyn Future<Output = Result<serde_json::Value, Error>> + Send + 'async_trait>>
+    ) -> Pin<Box<dyn Future<Output = Result<Value, Error>> + Send + 'async_trait>>
     where
         'this: 'async_trait,
         Self: 'async_trait,
@@ -451,7 +466,7 @@ impl ClientExt for Clients {
         url: impl 'async_trait + IntoUrl + Send,
         query: impl 'async_trait + Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync + 'async_trait,
-    ) -> Pin<Box<dyn Future<Output = Result<serde_json::Value, Error>> + Send + 'async_trait>>
+    ) -> Pin<Box<dyn Future<Output = Result<Value, Error>> + Send + 'async_trait>>
     where
         'this: 'async_trait,
         Self: 'async_trait,
@@ -468,6 +483,8 @@ pub enum Error {
     InvalidJson(String),
     #[error("signing mechanism not implemented")]
     NotImplemented,
+    #[error("server returned non-OK response, status: {status}, body: {body}")]
+    NonOkResponse { status: StatusCode, body: String },
 }
 
 fn sign_request(req: &mut Request) -> Result<(), Error> {
