@@ -731,6 +731,8 @@ fn sign_okx(req: &mut Request) -> Result<(), Error> {
     );
     req.headers_mut()
         .insert("expTime", exp_time.to_string().parse().unwrap());
+    req.headers_mut()
+        .insert(CONTENT_TYPE, "application/json".parse().unwrap());
 
     Ok(())
 }
