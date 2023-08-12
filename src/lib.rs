@@ -16,7 +16,7 @@ use base64::Engine;
 use hmac::{digest::Digest, Hmac, Mac};
 use jwt::SignWithKey;
 use reqwest::{
-    header::{AUTHORIZATION, CONTENT_LENGTH},
+    header::{ACCEPT, AUTHORIZATION, CONTENT_LENGTH, CONTENT_TYPE},
     Client, IntoUrl, Method, Request, Response,
 };
 use serde::{Deserialize, Serialize};
@@ -531,6 +531,12 @@ fn sign_bithumb(req: &mut Request) -> Result<(), Error> {
         .insert("Api-Nonce", nonce.to_string().parse().unwrap());
     req.headers_mut()
         .insert("Api-Sign", base64.parse().unwrap());
+    req.headers_mut().insert(
+        CONTENT_TYPE,
+        "application/x-www-form-urlencoded".parse().unwrap(),
+    );
+    req.headers_mut()
+        .insert(ACCEPT, "application/json".parse().unwrap());
 
     Ok(())
 }
