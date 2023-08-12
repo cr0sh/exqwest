@@ -485,6 +485,8 @@ pub enum Error {
     NotImplemented,
     #[error("server returned non-OK response, status: {status}, body: {body}")]
     NonOkResponse { status: StatusCode, body: String },
+    #[error(transparent)]
+    ValueQuery(#[from] ValueQueryError),
 }
 
 fn sign_request(req: &mut Request) -> Result<(), Error> {
