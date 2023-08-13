@@ -112,61 +112,61 @@ pub fn initialize_credentials() {
 pub trait ClientExt {
     async fn get_public(
         &self,
-        url: impl IntoUrl + Send,
+        url: impl IntoUrl + Clone + Send,
         query: impl Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync,
     ) -> Result<Value, Error>;
     async fn post_public(
         &self,
-        url: impl IntoUrl + Send,
+        url: impl IntoUrl + Clone + Send,
         query: impl Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync,
     ) -> Result<Value, Error>;
     async fn put_public(
         &self,
-        url: impl IntoUrl + Send,
+        url: impl IntoUrl + Clone + Send,
         query: impl Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync,
     ) -> Result<Value, Error>;
     async fn delete_public(
         &self,
-        url: impl IntoUrl + Send,
+        url: impl IntoUrl + Clone + Send,
         query: impl Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync,
     ) -> Result<Value, Error>;
     async fn patch_public(
         &self,
-        url: impl IntoUrl + Send,
+        url: impl IntoUrl + Clone + Send,
         query: impl Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync,
     ) -> Result<Value, Error>;
     async fn get_private(
         &self,
-        url: impl IntoUrl + Send,
+        url: impl IntoUrl + Clone + Send,
         query: impl Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync,
     ) -> Result<Value, Error>;
     async fn post_private(
         &self,
-        url: impl IntoUrl + Send,
+        url: impl IntoUrl + Clone + Send,
         query: impl Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync,
     ) -> Result<Value, Error>;
     async fn put_private(
         &self,
-        url: impl IntoUrl + Send,
+        url: impl IntoUrl + Clone + Send,
         query: impl Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync,
     ) -> Result<Value, Error>;
     async fn delete_private(
         &self,
-        url: impl IntoUrl + Send,
+        url: impl IntoUrl + Clone + Send,
         query: impl Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync,
     ) -> Result<Value, Error>;
     async fn patch_private(
         &self,
-        url: impl IntoUrl + Send,
+        url: impl IntoUrl + Clone + Send,
         query: impl Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync,
     ) -> Result<Value, Error>;
@@ -190,8 +190,11 @@ impl Display for MaybeValue {
 
 macro_rules! request {
     (@public $this:expr, $method:ident, $url:ident, $query:ident, $payload:ident) => {{
+        let url = $url;
+        let method = stringify!($method);
+        ::tracing::trace!(url = %url.clone().into_url().unwrap(), method, "sending an public request");
         let resp = $this
-            .$method($url)
+            .$method(url)
             .body($payload.as_ref().to_string())
             .query(&$query)
             .send()
@@ -207,8 +210,11 @@ macro_rules! request {
     }};
 
     (@private $this:expr, $method:ident, $url:ident, $query:ident, $payload:ident) => {{
+        let url = $url;
+        let method = stringify!($method);
+        ::tracing::trace!(url = %url.clone().into_url().unwrap(), method, "sending an private request");
         let (client, req) = $this
-            .$method($url)
+            .$method(url)
             .query(&$query)
             .body($payload.as_ref().to_string())
             .build_split();
@@ -241,7 +247,7 @@ macro_rules! request {
 impl ClientExt for Client {
     async fn get_public(
         &self,
-        url: impl IntoUrl + Send,
+        url: impl IntoUrl + Clone + Send,
         query: impl Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync,
     ) -> Result<Value, Error> {
@@ -249,7 +255,7 @@ impl ClientExt for Client {
     }
     async fn post_public(
         &self,
-        url: impl IntoUrl + Send,
+        url: impl IntoUrl + Clone + Send,
         query: impl Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync,
     ) -> Result<Value, Error> {
@@ -257,7 +263,7 @@ impl ClientExt for Client {
     }
     async fn put_public(
         &self,
-        url: impl IntoUrl + Send,
+        url: impl IntoUrl + Clone + Send,
         query: impl Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync,
     ) -> Result<Value, Error> {
@@ -265,7 +271,7 @@ impl ClientExt for Client {
     }
     async fn delete_public(
         &self,
-        url: impl IntoUrl + Send,
+        url: impl IntoUrl + Clone + Send,
         query: impl Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync,
     ) -> Result<Value, Error> {
@@ -273,7 +279,7 @@ impl ClientExt for Client {
     }
     async fn patch_public(
         &self,
-        url: impl IntoUrl + Send,
+        url: impl IntoUrl + Clone + Send,
         query: impl Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync,
     ) -> Result<Value, Error> {
@@ -281,7 +287,7 @@ impl ClientExt for Client {
     }
     async fn get_private(
         &self,
-        url: impl IntoUrl + Send,
+        url: impl IntoUrl + Clone + Send,
         query: impl Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync,
     ) -> Result<Value, Error> {
@@ -289,7 +295,7 @@ impl ClientExt for Client {
     }
     async fn post_private(
         &self,
-        url: impl IntoUrl + Send,
+        url: impl IntoUrl + Clone + Send,
         query: impl Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync,
     ) -> Result<Value, Error> {
@@ -297,7 +303,7 @@ impl ClientExt for Client {
     }
     async fn put_private(
         &self,
-        url: impl IntoUrl + Send,
+        url: impl IntoUrl + Clone + Send,
         query: impl Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync,
     ) -> Result<Value, Error> {
@@ -305,7 +311,7 @@ impl ClientExt for Client {
     }
     async fn delete_private(
         &self,
-        url: impl IntoUrl + Send,
+        url: impl IntoUrl + Clone + Send,
         query: impl Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync,
     ) -> Result<Value, Error> {
@@ -313,7 +319,7 @@ impl ClientExt for Client {
     }
     async fn patch_private(
         &self,
-        url: impl IntoUrl + Send,
+        url: impl IntoUrl + Clone + Send,
         query: impl Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync,
     ) -> Result<Value, Error> {
@@ -346,7 +352,7 @@ impl Clients {
 impl ClientExt for Clients {
     fn get_public<'this, 'async_trait>(
         &'this self,
-        url: impl 'async_trait + IntoUrl + Send,
+        url: impl 'async_trait + IntoUrl + Clone + Send,
         query: impl 'async_trait + Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync + 'async_trait,
     ) -> Pin<Box<dyn Future<Output = Result<Value, Error>> + Send + 'async_trait>>
@@ -359,7 +365,7 @@ impl ClientExt for Clients {
 
     fn post_public<'this, 'async_trait>(
         &'this self,
-        url: impl 'async_trait + IntoUrl + Send,
+        url: impl 'async_trait + IntoUrl + Clone + Send,
         query: impl 'async_trait + Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync + 'async_trait,
     ) -> Pin<Box<dyn Future<Output = Result<Value, Error>> + Send + 'async_trait>>
@@ -372,7 +378,7 @@ impl ClientExt for Clients {
 
     fn put_public<'this, 'async_trait>(
         &'this self,
-        url: impl 'async_trait + IntoUrl + Send,
+        url: impl 'async_trait + IntoUrl + Clone + Send,
         query: impl 'async_trait + Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync + 'async_trait,
     ) -> Pin<Box<dyn Future<Output = Result<Value, Error>> + Send + 'async_trait>>
@@ -385,7 +391,7 @@ impl ClientExt for Clients {
 
     fn delete_public<'this, 'async_trait>(
         &'this self,
-        url: impl 'async_trait + IntoUrl + Send,
+        url: impl 'async_trait + IntoUrl + Clone + Send,
         query: impl 'async_trait + Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync + 'async_trait,
     ) -> Pin<Box<dyn Future<Output = Result<Value, Error>> + Send + 'async_trait>>
@@ -398,7 +404,7 @@ impl ClientExt for Clients {
 
     fn patch_public<'this, 'async_trait>(
         &'this self,
-        url: impl 'async_trait + IntoUrl + Send,
+        url: impl 'async_trait + IntoUrl + Clone + Send,
         query: impl 'async_trait + Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync + 'async_trait,
     ) -> Pin<Box<dyn Future<Output = Result<Value, Error>> + Send + 'async_trait>>
@@ -411,7 +417,7 @@ impl ClientExt for Clients {
 
     fn get_private<'this, 'async_trait>(
         &'this self,
-        url: impl 'async_trait + IntoUrl + Send,
+        url: impl 'async_trait + IntoUrl + Clone + Send,
         query: impl 'async_trait + Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync + 'async_trait,
     ) -> Pin<Box<dyn Future<Output = Result<Value, Error>> + Send + 'async_trait>>
@@ -424,7 +430,7 @@ impl ClientExt for Clients {
 
     fn post_private<'this, 'async_trait>(
         &'this self,
-        url: impl 'async_trait + IntoUrl + Send,
+        url: impl 'async_trait + IntoUrl + Clone + Send,
         query: impl 'async_trait + Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync + 'async_trait,
     ) -> Pin<Box<dyn Future<Output = Result<Value, Error>> + Send + 'async_trait>>
@@ -437,7 +443,7 @@ impl ClientExt for Clients {
 
     fn put_private<'this, 'async_trait>(
         &'this self,
-        url: impl 'async_trait + IntoUrl + Send,
+        url: impl 'async_trait + IntoUrl + Clone + Send,
         query: impl 'async_trait + Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync + 'async_trait,
     ) -> Pin<Box<dyn Future<Output = Result<Value, Error>> + Send + 'async_trait>>
@@ -450,7 +456,7 @@ impl ClientExt for Clients {
 
     fn delete_private<'this, 'async_trait>(
         &'this self,
-        url: impl 'async_trait + IntoUrl + Send,
+        url: impl 'async_trait + IntoUrl + Clone + Send,
         query: impl 'async_trait + Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync + 'async_trait,
     ) -> Pin<Box<dyn Future<Output = Result<Value, Error>> + Send + 'async_trait>>
@@ -463,7 +469,7 @@ impl ClientExt for Clients {
 
     fn patch_private<'this, 'async_trait>(
         &'this self,
-        url: impl 'async_trait + IntoUrl + Send,
+        url: impl 'async_trait + IntoUrl + Clone + Send,
         query: impl 'async_trait + Serialize + Send + Sync,
         payload: impl AsRef<str> + Send + Sync + 'async_trait,
     ) -> Pin<Box<dyn Future<Output = Result<Value, Error>> + Send + 'async_trait>>
