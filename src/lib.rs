@@ -754,7 +754,7 @@ fn sign_upbit(req: &mut Request) -> Result<(), Error> {
         .get("UPBIT")
         .expect("no credential for UPbit");
 
-    let auth = if req.url().query().is_none() {
+    let auth = if req.method() == Method::GET {
         #[derive(Serialize)]
         struct JwtPayload {
             access_key: String,
@@ -780,7 +780,14 @@ fn sign_upbit(req: &mut Request) -> Result<(), Error> {
             query_hash_alg: &'static str,
         }
         let mut hasher = Sha512::new();
-        hasher.update(req.url().query().unwrap_or_default().as_bytes());
+        hasher.update(
+            serde_urlencoded::to_string(
+                serde_json::from_str::<Value>(req.body().into_str())
+                    .expect("expected a JSON string"),
+            )
+            .expect("cannot url-encode payload")
+            .as_bytes(),
+        );
         let hash = hasher
             .finalize()
             .as_slice()
@@ -803,7 +810,9 @@ fn sign_upbit(req: &mut Request) -> Result<(), Error> {
     };
 
     req.headers_mut()
-        .insert(AUTHORIZATION, format!("Bearer {auth}").parse().unwrap());
+        .insert(AUTHORIZATION, format!("Bearer {}", auth).parse().unwrap());
+    req.headers_mut()
+        .insert(CONTENT_TYPE, "application/json".parse().unwrap());
 
     Ok(())
 }
