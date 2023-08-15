@@ -17,12 +17,12 @@ use hmac::{digest::Digest, Hmac, Mac};
 use jwt::SignWithKey;
 use reqwest::{
     header::{ACCEPT, AUTHORIZATION, CONTENT_LENGTH, CONTENT_TYPE},
-    Client, IntoUrl, Method, Request, Response, StatusCode,
+    Body, Client, IntoUrl, Method, Request, Response, StatusCode,
 };
 use serde::{Deserialize, Serialize};
 use sha2::{Sha256, Sha512};
 use thiserror::Error;
-use tracing::error;
+use tracing::{error, warn};
 use uuid::Uuid;
 
 mod macros;
@@ -70,7 +70,9 @@ impl Debug for OkxCredential {
 }
 
 pub fn initialize_credentials() {
-    const EXCHANGES: [&str; 6] = ["BINANCE", "BITHUMB", "BYBIT", "GATEIO", "OKX", "UPBIT"];
+    const EXCHANGES: [&str; 7] = [
+        "BINANCE", "BITHUMB", "BYBIT", "GATEIO", "OKX", "UPBIT", "KRAKEN",
+    ];
 
     let mut creds = HashMap::new();
 
@@ -219,15 +221,16 @@ macro_rules! request {
             .body($payload.as_ref().to_string())
             .build_split();
         let mut req = req?;
-        if $payload.as_ref().is_empty() {
-            req.headers_mut()
-                .insert(CONTENT_LENGTH, "0".parse().unwrap());
-        }
         if let Err(e) = sign_request(&mut req) {
             let error = Box::new(e) as Box<dyn std::error::Error + Send + Sync + 'static>;
             error!(error, "cannot sign request");
             panic!("cannot sign request: {error}");
         }
+        if req.body().into_str().is_empty() {
+            req.headers_mut()
+                .insert(CONTENT_LENGTH, "0".parse().unwrap());
+        }
+        req.body().into_str();
         let resp = client.execute(req).await?;
         if !resp.status().is_success() {
             return Err(Error::NonOkResponse {
@@ -505,6 +508,7 @@ fn sign_request(req: &mut Request) -> Result<(), Error> {
         "api.gateio.ws" => sign_gateio(req),
         "aws.okx.com" | "www.okx.com" => sign_okx(req),
         "api.upbit.com" => sign_upbit(req),
+        "api.kraken.com" => sign_kraken(req),
         _ => Err(Error::NotImplemented),
     }
 }
@@ -520,7 +524,7 @@ trait OptionBodyExt<'a> {
     fn into_str(self) -> &'a str;
 }
 
-impl<'a> OptionBodyExt<'a> for Option<&'a reqwest::Body> {
+impl<'a> OptionBodyExt<'a> for Option<&'a Body> {
     fn into_str(self) -> &'a str {
         self.map(|x| {
             std::str::from_utf8(x.as_bytes().unwrap_or_default()).expect("non-utf-8 request body")
@@ -800,6 +804,59 @@ fn sign_upbit(req: &mut Request) -> Result<(), Error> {
 
     req.headers_mut()
         .insert(AUTHORIZATION, format!("Bearer {auth}").parse().unwrap());
+
+    Ok(())
+}
+
+fn sign_kraken(req: &mut Request) -> Result<(), Error> {
+    if req.method() != Method::POST {
+        warn!(method = %req.method(), "Kraken requests can only be signed with POST method, ignoring");
+        return Ok(());
+    }
+
+    let credential = CREDENTIALS
+        .get()
+        .expect("credentials not loaded")
+        .get("KRAKEN")
+        .expect("no credential for Kraken");
+    let raw_secret = base64::prelude::BASE64_STANDARD
+        .decode(&credential.secret)
+        .expect("Kraken API secret is not a valid base64 string");
+
+    let nonce = timestamp_millis();
+    if let Some(body) = req.body_mut().as_mut() {
+        if body
+            .as_bytes()
+            .expect("streamed body is not supported")
+            .is_empty()
+        {
+            *body = Body::from(format!("nonce={nonce}"));
+        } else {
+            *body = Body::from(format!("{}&nonce={nonce}", Some(&*body).into_str()));
+        }
+    }
+
+    let postdata = req.body().into_str();
+    let payload = format!("{nonce}{postdata}");
+
+    let mut hasher = Sha256::new();
+    hasher.update(payload.as_bytes());
+    let hash = hasher.finalize();
+
+    let mut mac = Hmac::<Sha512>::new_from_slice(&raw_secret).expect("cannot initialize HMAC");
+    mac.update(req.url().path().as_bytes());
+    mac.update(hash.as_slice());
+    let encrypted = mac.finalize().into_bytes();
+    let sigdigest = base64::prelude::BASE64_STANDARD.encode(encrypted);
+
+    req.headers_mut()
+        .insert("API-Key", credential.key.parse().unwrap());
+    req.headers_mut()
+        .insert("API-Sign", sigdigest.parse().unwrap());
+    req.headers_mut().insert(
+        CONTENT_TYPE,
+        "application/x-www-form-urlencoded".parse().unwrap(),
+    );
 
     Ok(())
 }
