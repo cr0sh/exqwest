@@ -497,7 +497,11 @@ pub enum Error {
     #[error(transparent)]
     ValueQuery(#[from] ValueQueryError),
     #[error(transparent)]
-    JsonParse(#[from] serde_json::Error),
+    Json(#[from] serde_json::Error),
+    #[error(transparent)]
+    SerializeUrlencoded(#[from] serde_urlencoded::ser::Error),
+    #[error(transparent)]
+    DeserializeUrlencoded(#[from] serde_urlencoded::de::Error),
 }
 
 fn sign_request(req: &mut Request) -> Result<(), Error> {
