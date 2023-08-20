@@ -19,7 +19,7 @@ for i in range(33):
         typarams = "<" + ", ".join(map(lambda x: f"T{x}", range(1, i + 1))) + ">"
 
     inner += """        use $crate::__private::serde;
-        #[derive(serde::Serialize)]
+        #[derive(serde::Serialize, ::std::fmt::Debug)]
         #[allow(non_snake_case)]
     """
     inner += f"        struct Serializable{typarams}{{\n"

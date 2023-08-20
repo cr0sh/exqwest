@@ -1,3 +1,4 @@
+
 /// # Examples
 /// ```
 /// # use exqwest::serializable;
@@ -10,7 +11,7 @@ macro_rules! serializable {
     (
     ) => {{
         use $crate::__private::serde;
-        #[derive(serde::Serialize)]
+        #[derive(serde::Serialize, ::std::fmt::Debug)]
         #[allow(non_snake_case)]
             struct Serializable{
         }
@@ -24,7 +25,7 @@ macro_rules! serializable {
         $(,)?
     ) => {{
         use $crate::__private::serde;
-        #[derive(serde::Serialize)]
+        #[derive(serde::Serialize, ::std::fmt::Debug)]
         #[allow(non_snake_case)]
             struct Serializable<T1>{
             $(#[$meta1])*
@@ -43,7 +44,7 @@ macro_rules! serializable {
         $(,)?
     ) => {{
         use $crate::__private::serde;
-        #[derive(serde::Serialize)]
+        #[derive(serde::Serialize, ::std::fmt::Debug)]
         #[allow(non_snake_case)]
             struct Serializable<T1, T2>{
             $(#[$meta1])*
@@ -67,7 +68,7 @@ macro_rules! serializable {
         $(,)?
     ) => {{
         use $crate::__private::serde;
-        #[derive(serde::Serialize)]
+        #[derive(serde::Serialize, ::std::fmt::Debug)]
         #[allow(non_snake_case)]
             struct Serializable<T1, T2, T3>{
             $(#[$meta1])*
@@ -96,7 +97,7 @@ macro_rules! serializable {
         $(,)?
     ) => {{
         use $crate::__private::serde;
-        #[derive(serde::Serialize)]
+        #[derive(serde::Serialize, ::std::fmt::Debug)]
         #[allow(non_snake_case)]
             struct Serializable<T1, T2, T3, T4>{
             $(#[$meta1])*
@@ -130,7 +131,7 @@ macro_rules! serializable {
         $(,)?
     ) => {{
         use $crate::__private::serde;
-        #[derive(serde::Serialize)]
+        #[derive(serde::Serialize, ::std::fmt::Debug)]
         #[allow(non_snake_case)]
             struct Serializable<T1, T2, T3, T4, T5>{
             $(#[$meta1])*
@@ -169,7 +170,7 @@ macro_rules! serializable {
         $(,)?
     ) => {{
         use $crate::__private::serde;
-        #[derive(serde::Serialize)]
+        #[derive(serde::Serialize, ::std::fmt::Debug)]
         #[allow(non_snake_case)]
             struct Serializable<T1, T2, T3, T4, T5, T6>{
             $(#[$meta1])*
@@ -213,7 +214,7 @@ macro_rules! serializable {
         $(,)?
     ) => {{
         use $crate::__private::serde;
-        #[derive(serde::Serialize)]
+        #[derive(serde::Serialize, ::std::fmt::Debug)]
         #[allow(non_snake_case)]
             struct Serializable<T1, T2, T3, T4, T5, T6, T7>{
             $(#[$meta1])*
@@ -262,7 +263,7 @@ macro_rules! serializable {
         $(,)?
     ) => {{
         use $crate::__private::serde;
-        #[derive(serde::Serialize)]
+        #[derive(serde::Serialize, ::std::fmt::Debug)]
         #[allow(non_snake_case)]
             struct Serializable<T1, T2, T3, T4, T5, T6, T7, T8>{
             $(#[$meta1])*
@@ -316,7 +317,7 @@ macro_rules! serializable {
         $(,)?
     ) => {{
         use $crate::__private::serde;
-        #[derive(serde::Serialize)]
+        #[derive(serde::Serialize, ::std::fmt::Debug)]
         #[allow(non_snake_case)]
             struct Serializable<T1, T2, T3, T4, T5, T6, T7, T8, T9>{
             $(#[$meta1])*
@@ -375,7 +376,7 @@ macro_rules! serializable {
         $(,)?
     ) => {{
         use $crate::__private::serde;
-        #[derive(serde::Serialize)]
+        #[derive(serde::Serialize, ::std::fmt::Debug)]
         #[allow(non_snake_case)]
             struct Serializable<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>{
             $(#[$meta1])*
@@ -439,7 +440,7 @@ macro_rules! serializable {
         $(,)?
     ) => {{
         use $crate::__private::serde;
-        #[derive(serde::Serialize)]
+        #[derive(serde::Serialize, ::std::fmt::Debug)]
         #[allow(non_snake_case)]
             struct Serializable<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>{
             $(#[$meta1])*
@@ -508,7 +509,7 @@ macro_rules! serializable {
         $(,)?
     ) => {{
         use $crate::__private::serde;
-        #[derive(serde::Serialize)]
+        #[derive(serde::Serialize, ::std::fmt::Debug)]
         #[allow(non_snake_case)]
             struct Serializable<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>{
             $(#[$meta1])*
@@ -582,7 +583,7 @@ macro_rules! serializable {
         $(,)?
     ) => {{
         use $crate::__private::serde;
-        #[derive(serde::Serialize)]
+        #[derive(serde::Serialize, ::std::fmt::Debug)]
         #[allow(non_snake_case)]
             struct Serializable<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>{
             $(#[$meta1])*
@@ -661,7 +662,7 @@ macro_rules! serializable {
         $(,)?
     ) => {{
         use $crate::__private::serde;
-        #[derive(serde::Serialize)]
+        #[derive(serde::Serialize, ::std::fmt::Debug)]
         #[allow(non_snake_case)]
             struct Serializable<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>{
             $(#[$meta1])*
@@ -745,7 +746,7 @@ macro_rules! serializable {
         $(,)?
     ) => {{
         use $crate::__private::serde;
-        #[derive(serde::Serialize)]
+        #[derive(serde::Serialize, ::std::fmt::Debug)]
         #[allow(non_snake_case)]
             struct Serializable<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>{
             $(#[$meta1])*
@@ -834,7 +835,7 @@ macro_rules! serializable {
         $(,)?
     ) => {{
         use $crate::__private::serde;
-        #[derive(serde::Serialize)]
+        #[derive(serde::Serialize, ::std::fmt::Debug)]
         #[allow(non_snake_case)]
             struct Serializable<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>{
             $(#[$meta1])*
@@ -928,7 +929,7 @@ macro_rules! serializable {
         $(,)?
     ) => {{
         use $crate::__private::serde;
-        #[derive(serde::Serialize)]
+        #[derive(serde::Serialize, ::std::fmt::Debug)]
         #[allow(non_snake_case)]
             struct Serializable<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17>{
             $(#[$meta1])*
@@ -1027,7 +1028,7 @@ macro_rules! serializable {
         $(,)?
     ) => {{
         use $crate::__private::serde;
-        #[derive(serde::Serialize)]
+        #[derive(serde::Serialize, ::std::fmt::Debug)]
         #[allow(non_snake_case)]
             struct Serializable<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18>{
             $(#[$meta1])*
@@ -1131,7 +1132,7 @@ macro_rules! serializable {
         $(,)?
     ) => {{
         use $crate::__private::serde;
-        #[derive(serde::Serialize)]
+        #[derive(serde::Serialize, ::std::fmt::Debug)]
         #[allow(non_snake_case)]
             struct Serializable<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19>{
             $(#[$meta1])*
@@ -1240,7 +1241,7 @@ macro_rules! serializable {
         $(,)?
     ) => {{
         use $crate::__private::serde;
-        #[derive(serde::Serialize)]
+        #[derive(serde::Serialize, ::std::fmt::Debug)]
         #[allow(non_snake_case)]
             struct Serializable<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20>{
             $(#[$meta1])*
@@ -1354,7 +1355,7 @@ macro_rules! serializable {
         $(,)?
     ) => {{
         use $crate::__private::serde;
-        #[derive(serde::Serialize)]
+        #[derive(serde::Serialize, ::std::fmt::Debug)]
         #[allow(non_snake_case)]
             struct Serializable<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21>{
             $(#[$meta1])*
@@ -1473,7 +1474,7 @@ macro_rules! serializable {
         $(,)?
     ) => {{
         use $crate::__private::serde;
-        #[derive(serde::Serialize)]
+        #[derive(serde::Serialize, ::std::fmt::Debug)]
         #[allow(non_snake_case)]
             struct Serializable<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22>{
             $(#[$meta1])*
@@ -1597,7 +1598,7 @@ macro_rules! serializable {
         $(,)?
     ) => {{
         use $crate::__private::serde;
-        #[derive(serde::Serialize)]
+        #[derive(serde::Serialize, ::std::fmt::Debug)]
         #[allow(non_snake_case)]
             struct Serializable<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23>{
             $(#[$meta1])*
@@ -1726,7 +1727,7 @@ macro_rules! serializable {
         $(,)?
     ) => {{
         use $crate::__private::serde;
-        #[derive(serde::Serialize)]
+        #[derive(serde::Serialize, ::std::fmt::Debug)]
         #[allow(non_snake_case)]
             struct Serializable<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24>{
             $(#[$meta1])*
@@ -1860,7 +1861,7 @@ macro_rules! serializable {
         $(,)?
     ) => {{
         use $crate::__private::serde;
-        #[derive(serde::Serialize)]
+        #[derive(serde::Serialize, ::std::fmt::Debug)]
         #[allow(non_snake_case)]
             struct Serializable<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25>{
             $(#[$meta1])*
@@ -1999,7 +2000,7 @@ macro_rules! serializable {
         $(,)?
     ) => {{
         use $crate::__private::serde;
-        #[derive(serde::Serialize)]
+        #[derive(serde::Serialize, ::std::fmt::Debug)]
         #[allow(non_snake_case)]
             struct Serializable<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26>{
             $(#[$meta1])*
@@ -2143,7 +2144,7 @@ macro_rules! serializable {
         $(,)?
     ) => {{
         use $crate::__private::serde;
-        #[derive(serde::Serialize)]
+        #[derive(serde::Serialize, ::std::fmt::Debug)]
         #[allow(non_snake_case)]
             struct Serializable<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27>{
             $(#[$meta1])*
@@ -2292,7 +2293,7 @@ macro_rules! serializable {
         $(,)?
     ) => {{
         use $crate::__private::serde;
-        #[derive(serde::Serialize)]
+        #[derive(serde::Serialize, ::std::fmt::Debug)]
         #[allow(non_snake_case)]
             struct Serializable<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28>{
             $(#[$meta1])*
@@ -2446,7 +2447,7 @@ macro_rules! serializable {
         $(,)?
     ) => {{
         use $crate::__private::serde;
-        #[derive(serde::Serialize)]
+        #[derive(serde::Serialize, ::std::fmt::Debug)]
         #[allow(non_snake_case)]
             struct Serializable<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29>{
             $(#[$meta1])*
@@ -2605,7 +2606,7 @@ macro_rules! serializable {
         $(,)?
     ) => {{
         use $crate::__private::serde;
-        #[derive(serde::Serialize)]
+        #[derive(serde::Serialize, ::std::fmt::Debug)]
         #[allow(non_snake_case)]
             struct Serializable<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30>{
             $(#[$meta1])*
@@ -2769,7 +2770,7 @@ macro_rules! serializable {
         $(,)?
     ) => {{
         use $crate::__private::serde;
-        #[derive(serde::Serialize)]
+        #[derive(serde::Serialize, ::std::fmt::Debug)]
         #[allow(non_snake_case)]
             struct Serializable<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31>{
             $(#[$meta1])*
@@ -2938,7 +2939,7 @@ macro_rules! serializable {
         $(,)?
     ) => {{
         use $crate::__private::serde;
-        #[derive(serde::Serialize)]
+        #[derive(serde::Serialize, ::std::fmt::Debug)]
         #[allow(non_snake_case)]
             struct Serializable<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32>{
             $(#[$meta1])*
