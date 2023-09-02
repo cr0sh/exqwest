@@ -1,4 +1,3 @@
-
 /// # Examples
 /// ```
 /// # use exqwest::serializable;
@@ -15,6 +14,7 @@ macro_rules! serializable {
         #[allow(non_snake_case)]
             struct Serializable{
         }
+        #[allow(clippy::redundant_field_names)]
         Serializable {
         }
     }};
@@ -31,6 +31,7 @@ macro_rules! serializable {
             $(#[$meta1])*
             $key1: T1,
         }
+        #[allow(clippy::redundant_field_names)]
         Serializable {
             $key1: $value1,
         }
@@ -52,6 +53,7 @@ macro_rules! serializable {
             $(#[$meta2])*
             $key2: T2,
         }
+        #[allow(clippy::redundant_field_names)]
         Serializable {
             $key1: $value1,
             $key2: $value2,
@@ -78,6 +80,7 @@ macro_rules! serializable {
             $(#[$meta3])*
             $key3: T3,
         }
+        #[allow(clippy::redundant_field_names)]
         Serializable {
             $key1: $value1,
             $key2: $value2,
@@ -109,6 +112,7 @@ macro_rules! serializable {
             $(#[$meta4])*
             $key4: T4,
         }
+        #[allow(clippy::redundant_field_names)]
         Serializable {
             $key1: $value1,
             $key2: $value2,
@@ -145,6 +149,7 @@ macro_rules! serializable {
             $(#[$meta5])*
             $key5: T5,
         }
+        #[allow(clippy::redundant_field_names)]
         Serializable {
             $key1: $value1,
             $key2: $value2,
@@ -186,6 +191,7 @@ macro_rules! serializable {
             $(#[$meta6])*
             $key6: T6,
         }
+        #[allow(clippy::redundant_field_names)]
         Serializable {
             $key1: $value1,
             $key2: $value2,
@@ -232,6 +238,7 @@ macro_rules! serializable {
             $(#[$meta7])*
             $key7: T7,
         }
+        #[allow(clippy::redundant_field_names)]
         Serializable {
             $key1: $value1,
             $key2: $value2,
@@ -283,6 +290,7 @@ macro_rules! serializable {
             $(#[$meta8])*
             $key8: T8,
         }
+        #[allow(clippy::redundant_field_names)]
         Serializable {
             $key1: $value1,
             $key2: $value2,
@@ -339,6 +347,7 @@ macro_rules! serializable {
             $(#[$meta9])*
             $key9: T9,
         }
+        #[allow(clippy::redundant_field_names)]
         Serializable {
             $key1: $value1,
             $key2: $value2,
@@ -400,6 +409,7 @@ macro_rules! serializable {
             $(#[$meta10])*
             $key10: T10,
         }
+        #[allow(clippy::redundant_field_names)]
         Serializable {
             $key1: $value1,
             $key2: $value2,
@@ -466,6 +476,7 @@ macro_rules! serializable {
             $(#[$meta11])*
             $key11: T11,
         }
+        #[allow(clippy::redundant_field_names)]
         Serializable {
             $key1: $value1,
             $key2: $value2,
@@ -537,6 +548,7 @@ macro_rules! serializable {
             $(#[$meta12])*
             $key12: T12,
         }
+        #[allow(clippy::redundant_field_names)]
         Serializable {
             $key1: $value1,
             $key2: $value2,
@@ -613,6 +625,7 @@ macro_rules! serializable {
             $(#[$meta13])*
             $key13: T13,
         }
+        #[allow(clippy::redundant_field_names)]
         Serializable {
             $key1: $value1,
             $key2: $value2,
@@ -694,6 +707,7 @@ macro_rules! serializable {
             $(#[$meta14])*
             $key14: T14,
         }
+        #[allow(clippy::redundant_field_names)]
         Serializable {
             $key1: $value1,
             $key2: $value2,
@@ -780,6 +794,7 @@ macro_rules! serializable {
             $(#[$meta15])*
             $key15: T15,
         }
+        #[allow(clippy::redundant_field_names)]
         Serializable {
             $key1: $value1,
             $key2: $value2,
@@ -871,6 +886,7 @@ macro_rules! serializable {
             $(#[$meta16])*
             $key16: T16,
         }
+        #[allow(clippy::redundant_field_names)]
         Serializable {
             $key1: $value1,
             $key2: $value2,
@@ -967,6 +983,7 @@ macro_rules! serializable {
             $(#[$meta17])*
             $key17: T17,
         }
+        #[allow(clippy::redundant_field_names)]
         Serializable {
             $key1: $value1,
             $key2: $value2,
@@ -1068,6 +1085,7 @@ macro_rules! serializable {
             $(#[$meta18])*
             $key18: T18,
         }
+        #[allow(clippy::redundant_field_names)]
         Serializable {
             $key1: $value1,
             $key2: $value2,
@@ -1174,6 +1192,7 @@ macro_rules! serializable {
             $(#[$meta19])*
             $key19: T19,
         }
+        #[allow(clippy::redundant_field_names)]
         Serializable {
             $key1: $value1,
             $key2: $value2,
@@ -1285,6 +1304,7 @@ macro_rules! serializable {
             $(#[$meta20])*
             $key20: T20,
         }
+        #[allow(clippy::redundant_field_names)]
         Serializable {
             $key1: $value1,
             $key2: $value2,
@@ -1401,6 +1421,7 @@ macro_rules! serializable {
             $(#[$meta21])*
             $key21: T21,
         }
+        #[allow(clippy::redundant_field_names)]
         Serializable {
             $key1: $value1,
             $key2: $value2,
@@ -1522,6 +1543,7 @@ macro_rules! serializable {
             $(#[$meta22])*
             $key22: T22,
         }
+        #[allow(clippy::redundant_field_names)]
         Serializable {
             $key1: $value1,
             $key2: $value2,
@@ -1648,6 +1670,7 @@ macro_rules! serializable {
             $(#[$meta23])*
             $key23: T23,
         }
+        #[allow(clippy::redundant_field_names)]
         Serializable {
             $key1: $value1,
             $key2: $value2,
@@ -1779,6 +1802,7 @@ macro_rules! serializable {
             $(#[$meta24])*
             $key24: T24,
         }
+        #[allow(clippy::redundant_field_names)]
         Serializable {
             $key1: $value1,
             $key2: $value2,
@@ -1915,6 +1939,7 @@ macro_rules! serializable {
             $(#[$meta25])*
             $key25: T25,
         }
+        #[allow(clippy::redundant_field_names)]
         Serializable {
             $key1: $value1,
             $key2: $value2,
@@ -2056,6 +2081,7 @@ macro_rules! serializable {
             $(#[$meta26])*
             $key26: T26,
         }
+        #[allow(clippy::redundant_field_names)]
         Serializable {
             $key1: $value1,
             $key2: $value2,
@@ -2202,6 +2228,7 @@ macro_rules! serializable {
             $(#[$meta27])*
             $key27: T27,
         }
+        #[allow(clippy::redundant_field_names)]
         Serializable {
             $key1: $value1,
             $key2: $value2,
@@ -2353,6 +2380,7 @@ macro_rules! serializable {
             $(#[$meta28])*
             $key28: T28,
         }
+        #[allow(clippy::redundant_field_names)]
         Serializable {
             $key1: $value1,
             $key2: $value2,
@@ -2509,6 +2537,7 @@ macro_rules! serializable {
             $(#[$meta29])*
             $key29: T29,
         }
+        #[allow(clippy::redundant_field_names)]
         Serializable {
             $key1: $value1,
             $key2: $value2,
@@ -2670,6 +2699,7 @@ macro_rules! serializable {
             $(#[$meta30])*
             $key30: T30,
         }
+        #[allow(clippy::redundant_field_names)]
         Serializable {
             $key1: $value1,
             $key2: $value2,
@@ -2836,6 +2866,7 @@ macro_rules! serializable {
             $(#[$meta31])*
             $key31: T31,
         }
+        #[allow(clippy::redundant_field_names)]
         Serializable {
             $key1: $value1,
             $key2: $value2,
@@ -3007,6 +3038,7 @@ macro_rules! serializable {
             $(#[$meta32])*
             $key32: T32,
         }
+        #[allow(clippy::redundant_field_names)]
         Serializable {
             $key1: $value1,
             $key2: $value2,

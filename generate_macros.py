@@ -30,6 +30,7 @@ for i in range(33):
 
     inner += "        }\n"
 
+    inner += "        #[allow(clippy::redundant_field_names)]\n"
     inner += "        Serializable {\n"
 
     for j in range(1, i + 1):
