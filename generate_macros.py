@@ -7,7 +7,7 @@ for i in range(33):
             inner += f"        $(#[$meta{j}:meta])*\n"
         else:
             inner += f"        ,$(#[$meta{j}:meta])*\n"
-        inner += f"        $key{j}:ident: $value{j}:expr\n"
+        inner += f"        $key{j}:ident$(: $value{j}:expr)?\n"
 
     if i != 0:
         inner += "        $(,)?\n"
@@ -34,7 +34,7 @@ for i in range(33):
     inner += "        Serializable {\n"
 
     for j in range(1, i + 1):
-        inner += f"            $key{j}: $value{j},\n"
+        inner += f"            $key{j}$(: $value{j})?,\n"
 
     inner += "        }\n"
 

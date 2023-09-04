@@ -21,7 +21,7 @@ macro_rules! serializable {
 
     (
         $(#[$meta1:meta])*
-        $key1:ident: $value1:expr
+        $key1:ident$(: $value1:expr)?
         $(,)?
     ) => {{
         use $crate::__private::serde;
@@ -33,15 +33,15 @@ macro_rules! serializable {
         }
         #[allow(clippy::redundant_field_names)]
         Serializable {
-            $key1: $value1,
+            $key1$(: $value1)?,
         }
     }};
 
     (
         $(#[$meta1:meta])*
-        $key1:ident: $value1:expr
+        $key1:ident$(: $value1:expr)?
         ,$(#[$meta2:meta])*
-        $key2:ident: $value2:expr
+        $key2:ident$(: $value2:expr)?
         $(,)?
     ) => {{
         use $crate::__private::serde;
@@ -55,18 +55,18 @@ macro_rules! serializable {
         }
         #[allow(clippy::redundant_field_names)]
         Serializable {
-            $key1: $value1,
-            $key2: $value2,
+            $key1$(: $value1)?,
+            $key2$(: $value2)?,
         }
     }};
 
     (
         $(#[$meta1:meta])*
-        $key1:ident: $value1:expr
+        $key1:ident$(: $value1:expr)?
         ,$(#[$meta2:meta])*
-        $key2:ident: $value2:expr
+        $key2:ident$(: $value2:expr)?
         ,$(#[$meta3:meta])*
-        $key3:ident: $value3:expr
+        $key3:ident$(: $value3:expr)?
         $(,)?
     ) => {{
         use $crate::__private::serde;
@@ -82,21 +82,21 @@ macro_rules! serializable {
         }
         #[allow(clippy::redundant_field_names)]
         Serializable {
-            $key1: $value1,
-            $key2: $value2,
-            $key3: $value3,
+            $key1$(: $value1)?,
+            $key2$(: $value2)?,
+            $key3$(: $value3)?,
         }
     }};
 
     (
         $(#[$meta1:meta])*
-        $key1:ident: $value1:expr
+        $key1:ident$(: $value1:expr)?
         ,$(#[$meta2:meta])*
-        $key2:ident: $value2:expr
+        $key2:ident$(: $value2:expr)?
         ,$(#[$meta3:meta])*
-        $key3:ident: $value3:expr
+        $key3:ident$(: $value3:expr)?
         ,$(#[$meta4:meta])*
-        $key4:ident: $value4:expr
+        $key4:ident$(: $value4:expr)?
         $(,)?
     ) => {{
         use $crate::__private::serde;
@@ -114,24 +114,24 @@ macro_rules! serializable {
         }
         #[allow(clippy::redundant_field_names)]
         Serializable {
-            $key1: $value1,
-            $key2: $value2,
-            $key3: $value3,
-            $key4: $value4,
+            $key1$(: $value1)?,
+            $key2$(: $value2)?,
+            $key3$(: $value3)?,
+            $key4$(: $value4)?,
         }
     }};
 
     (
         $(#[$meta1:meta])*
-        $key1:ident: $value1:expr
+        $key1:ident$(: $value1:expr)?
         ,$(#[$meta2:meta])*
-        $key2:ident: $value2:expr
+        $key2:ident$(: $value2:expr)?
         ,$(#[$meta3:meta])*
-        $key3:ident: $value3:expr
+        $key3:ident$(: $value3:expr)?
         ,$(#[$meta4:meta])*
-        $key4:ident: $value4:expr
+        $key4:ident$(: $value4:expr)?
         ,$(#[$meta5:meta])*
-        $key5:ident: $value5:expr
+        $key5:ident$(: $value5:expr)?
         $(,)?
     ) => {{
         use $crate::__private::serde;
@@ -151,27 +151,27 @@ macro_rules! serializable {
         }
         #[allow(clippy::redundant_field_names)]
         Serializable {
-            $key1: $value1,
-            $key2: $value2,
-            $key3: $value3,
-            $key4: $value4,
-            $key5: $value5,
+            $key1$(: $value1)?,
+            $key2$(: $value2)?,
+            $key3$(: $value3)?,
+            $key4$(: $value4)?,
+            $key5$(: $value5)?,
         }
     }};
 
     (
         $(#[$meta1:meta])*
-        $key1:ident: $value1:expr
+        $key1:ident$(: $value1:expr)?
         ,$(#[$meta2:meta])*
-        $key2:ident: $value2:expr
+        $key2:ident$(: $value2:expr)?
         ,$(#[$meta3:meta])*
-        $key3:ident: $value3:expr
+        $key3:ident$(: $value3:expr)?
         ,$(#[$meta4:meta])*
-        $key4:ident: $value4:expr
+        $key4:ident$(: $value4:expr)?
         ,$(#[$meta5:meta])*
-        $key5:ident: $value5:expr
+        $key5:ident$(: $value5:expr)?
         ,$(#[$meta6:meta])*
-        $key6:ident: $value6:expr
+        $key6:ident$(: $value6:expr)?
         $(,)?
     ) => {{
         use $crate::__private::serde;
@@ -193,30 +193,30 @@ macro_rules! serializable {
         }
         #[allow(clippy::redundant_field_names)]
         Serializable {
-            $key1: $value1,
-            $key2: $value2,
-            $key3: $value3,
-            $key4: $value4,
-            $key5: $value5,
-            $key6: $value6,
+            $key1$(: $value1)?,
+            $key2$(: $value2)?,
+            $key3$(: $value3)?,
+            $key4$(: $value4)?,
+            $key5$(: $value5)?,
+            $key6$(: $value6)?,
         }
     }};
 
     (
         $(#[$meta1:meta])*
-        $key1:ident: $value1:expr
+        $key1:ident$(: $value1:expr)?
         ,$(#[$meta2:meta])*
-        $key2:ident: $value2:expr
+        $key2:ident$(: $value2:expr)?
         ,$(#[$meta3:meta])*
-        $key3:ident: $value3:expr
+        $key3:ident$(: $value3:expr)?
         ,$(#[$meta4:meta])*
-        $key4:ident: $value4:expr
+        $key4:ident$(: $value4:expr)?
         ,$(#[$meta5:meta])*
-        $key5:ident: $value5:expr
+        $key5:ident$(: $value5:expr)?
         ,$(#[$meta6:meta])*
-        $key6:ident: $value6:expr
+        $key6:ident$(: $value6:expr)?
         ,$(#[$meta7:meta])*
-        $key7:ident: $value7:expr
+        $key7:ident$(: $value7:expr)?
         $(,)?
     ) => {{
         use $crate::__private::serde;
@@ -240,33 +240,33 @@ macro_rules! serializable {
         }
         #[allow(clippy::redundant_field_names)]
         Serializable {
-            $key1: $value1,
-            $key2: $value2,
-            $key3: $value3,
-            $key4: $value4,
-            $key5: $value5,
-            $key6: $value6,
-            $key7: $value7,
+            $key1$(: $value1)?,
+            $key2$(: $value2)?,
+            $key3$(: $value3)?,
+            $key4$(: $value4)?,
+            $key5$(: $value5)?,
+            $key6$(: $value6)?,
+            $key7$(: $value7)?,
         }
     }};
 
     (
         $(#[$meta1:meta])*
-        $key1:ident: $value1:expr
+        $key1:ident$(: $value1:expr)?
         ,$(#[$meta2:meta])*
-        $key2:ident: $value2:expr
+        $key2:ident$(: $value2:expr)?
         ,$(#[$meta3:meta])*
-        $key3:ident: $value3:expr
+        $key3:ident$(: $value3:expr)?
         ,$(#[$meta4:meta])*
-        $key4:ident: $value4:expr
+        $key4:ident$(: $value4:expr)?
         ,$(#[$meta5:meta])*
-        $key5:ident: $value5:expr
+        $key5:ident$(: $value5:expr)?
         ,$(#[$meta6:meta])*
-        $key6:ident: $value6:expr
+        $key6:ident$(: $value6:expr)?
         ,$(#[$meta7:meta])*
-        $key7:ident: $value7:expr
+        $key7:ident$(: $value7:expr)?
         ,$(#[$meta8:meta])*
-        $key8:ident: $value8:expr
+        $key8:ident$(: $value8:expr)?
         $(,)?
     ) => {{
         use $crate::__private::serde;
@@ -292,36 +292,36 @@ macro_rules! serializable {
         }
         #[allow(clippy::redundant_field_names)]
         Serializable {
-            $key1: $value1,
-            $key2: $value2,
-            $key3: $value3,
-            $key4: $value4,
-            $key5: $value5,
-            $key6: $value6,
-            $key7: $value7,
-            $key8: $value8,
+            $key1$(: $value1)?,
+            $key2$(: $value2)?,
+            $key3$(: $value3)?,
+            $key4$(: $value4)?,
+            $key5$(: $value5)?,
+            $key6$(: $value6)?,
+            $key7$(: $value7)?,
+            $key8$(: $value8)?,
         }
     }};
 
     (
         $(#[$meta1:meta])*
-        $key1:ident: $value1:expr
+        $key1:ident$(: $value1:expr)?
         ,$(#[$meta2:meta])*
-        $key2:ident: $value2:expr
+        $key2:ident$(: $value2:expr)?
         ,$(#[$meta3:meta])*
-        $key3:ident: $value3:expr
+        $key3:ident$(: $value3:expr)?
         ,$(#[$meta4:meta])*
-        $key4:ident: $value4:expr
+        $key4:ident$(: $value4:expr)?
         ,$(#[$meta5:meta])*
-        $key5:ident: $value5:expr
+        $key5:ident$(: $value5:expr)?
         ,$(#[$meta6:meta])*
-        $key6:ident: $value6:expr
+        $key6:ident$(: $value6:expr)?
         ,$(#[$meta7:meta])*
-        $key7:ident: $value7:expr
+        $key7:ident$(: $value7:expr)?
         ,$(#[$meta8:meta])*
-        $key8:ident: $value8:expr
+        $key8:ident$(: $value8:expr)?
         ,$(#[$meta9:meta])*
-        $key9:ident: $value9:expr
+        $key9:ident$(: $value9:expr)?
         $(,)?
     ) => {{
         use $crate::__private::serde;
@@ -349,39 +349,39 @@ macro_rules! serializable {
         }
         #[allow(clippy::redundant_field_names)]
         Serializable {
-            $key1: $value1,
-            $key2: $value2,
-            $key3: $value3,
-            $key4: $value4,
-            $key5: $value5,
-            $key6: $value6,
-            $key7: $value7,
-            $key8: $value8,
-            $key9: $value9,
+            $key1$(: $value1)?,
+            $key2$(: $value2)?,
+            $key3$(: $value3)?,
+            $key4$(: $value4)?,
+            $key5$(: $value5)?,
+            $key6$(: $value6)?,
+            $key7$(: $value7)?,
+            $key8$(: $value8)?,
+            $key9$(: $value9)?,
         }
     }};
 
     (
         $(#[$meta1:meta])*
-        $key1:ident: $value1:expr
+        $key1:ident$(: $value1:expr)?
         ,$(#[$meta2:meta])*
-        $key2:ident: $value2:expr
+        $key2:ident$(: $value2:expr)?
         ,$(#[$meta3:meta])*
-        $key3:ident: $value3:expr
+        $key3:ident$(: $value3:expr)?
         ,$(#[$meta4:meta])*
-        $key4:ident: $value4:expr
+        $key4:ident$(: $value4:expr)?
         ,$(#[$meta5:meta])*
-        $key5:ident: $value5:expr
+        $key5:ident$(: $value5:expr)?
         ,$(#[$meta6:meta])*
-        $key6:ident: $value6:expr
+        $key6:ident$(: $value6:expr)?
         ,$(#[$meta7:meta])*
-        $key7:ident: $value7:expr
+        $key7:ident$(: $value7:expr)?
         ,$(#[$meta8:meta])*
-        $key8:ident: $value8:expr
+        $key8:ident$(: $value8:expr)?
         ,$(#[$meta9:meta])*
-        $key9:ident: $value9:expr
+        $key9:ident$(: $value9:expr)?
         ,$(#[$meta10:meta])*
-        $key10:ident: $value10:expr
+        $key10:ident$(: $value10:expr)?
         $(,)?
     ) => {{
         use $crate::__private::serde;
@@ -411,42 +411,42 @@ macro_rules! serializable {
         }
         #[allow(clippy::redundant_field_names)]
         Serializable {
-            $key1: $value1,
-            $key2: $value2,
-            $key3: $value3,
-            $key4: $value4,
-            $key5: $value5,
-            $key6: $value6,
-            $key7: $value7,
-            $key8: $value8,
-            $key9: $value9,
-            $key10: $value10,
+            $key1$(: $value1)?,
+            $key2$(: $value2)?,
+            $key3$(: $value3)?,
+            $key4$(: $value4)?,
+            $key5$(: $value5)?,
+            $key6$(: $value6)?,
+            $key7$(: $value7)?,
+            $key8$(: $value8)?,
+            $key9$(: $value9)?,
+            $key10$(: $value10)?,
         }
     }};
 
     (
         $(#[$meta1:meta])*
-        $key1:ident: $value1:expr
+        $key1:ident$(: $value1:expr)?
         ,$(#[$meta2:meta])*
-        $key2:ident: $value2:expr
+        $key2:ident$(: $value2:expr)?
         ,$(#[$meta3:meta])*
-        $key3:ident: $value3:expr
+        $key3:ident$(: $value3:expr)?
         ,$(#[$meta4:meta])*
-        $key4:ident: $value4:expr
+        $key4:ident$(: $value4:expr)?
         ,$(#[$meta5:meta])*
-        $key5:ident: $value5:expr
+        $key5:ident$(: $value5:expr)?
         ,$(#[$meta6:meta])*
-        $key6:ident: $value6:expr
+        $key6:ident$(: $value6:expr)?
         ,$(#[$meta7:meta])*
-        $key7:ident: $value7:expr
+        $key7:ident$(: $value7:expr)?
         ,$(#[$meta8:meta])*
-        $key8:ident: $value8:expr
+        $key8:ident$(: $value8:expr)?
         ,$(#[$meta9:meta])*
-        $key9:ident: $value9:expr
+        $key9:ident$(: $value9:expr)?
         ,$(#[$meta10:meta])*
-        $key10:ident: $value10:expr
+        $key10:ident$(: $value10:expr)?
         ,$(#[$meta11:meta])*
-        $key11:ident: $value11:expr
+        $key11:ident$(: $value11:expr)?
         $(,)?
     ) => {{
         use $crate::__private::serde;
@@ -478,45 +478,45 @@ macro_rules! serializable {
         }
         #[allow(clippy::redundant_field_names)]
         Serializable {
-            $key1: $value1,
-            $key2: $value2,
-            $key3: $value3,
-            $key4: $value4,
-            $key5: $value5,
-            $key6: $value6,
-            $key7: $value7,
-            $key8: $value8,
-            $key9: $value9,
-            $key10: $value10,
-            $key11: $value11,
+            $key1$(: $value1)?,
+            $key2$(: $value2)?,
+            $key3$(: $value3)?,
+            $key4$(: $value4)?,
+            $key5$(: $value5)?,
+            $key6$(: $value6)?,
+            $key7$(: $value7)?,
+            $key8$(: $value8)?,
+            $key9$(: $value9)?,
+            $key10$(: $value10)?,
+            $key11$(: $value11)?,
         }
     }};
 
     (
         $(#[$meta1:meta])*
-        $key1:ident: $value1:expr
+        $key1:ident$(: $value1:expr)?
         ,$(#[$meta2:meta])*
-        $key2:ident: $value2:expr
+        $key2:ident$(: $value2:expr)?
         ,$(#[$meta3:meta])*
-        $key3:ident: $value3:expr
+        $key3:ident$(: $value3:expr)?
         ,$(#[$meta4:meta])*
-        $key4:ident: $value4:expr
+        $key4:ident$(: $value4:expr)?
         ,$(#[$meta5:meta])*
-        $key5:ident: $value5:expr
+        $key5:ident$(: $value5:expr)?
         ,$(#[$meta6:meta])*
-        $key6:ident: $value6:expr
+        $key6:ident$(: $value6:expr)?
         ,$(#[$meta7:meta])*
-        $key7:ident: $value7:expr
+        $key7:ident$(: $value7:expr)?
         ,$(#[$meta8:meta])*
-        $key8:ident: $value8:expr
+        $key8:ident$(: $value8:expr)?
         ,$(#[$meta9:meta])*
-        $key9:ident: $value9:expr
+        $key9:ident$(: $value9:expr)?
         ,$(#[$meta10:meta])*
-        $key10:ident: $value10:expr
+        $key10:ident$(: $value10:expr)?
         ,$(#[$meta11:meta])*
-        $key11:ident: $value11:expr
+        $key11:ident$(: $value11:expr)?
         ,$(#[$meta12:meta])*
-        $key12:ident: $value12:expr
+        $key12:ident$(: $value12:expr)?
         $(,)?
     ) => {{
         use $crate::__private::serde;
@@ -550,48 +550,48 @@ macro_rules! serializable {
         }
         #[allow(clippy::redundant_field_names)]
         Serializable {
-            $key1: $value1,
-            $key2: $value2,
-            $key3: $value3,
-            $key4: $value4,
-            $key5: $value5,
-            $key6: $value6,
-            $key7: $value7,
-            $key8: $value8,
-            $key9: $value9,
-            $key10: $value10,
-            $key11: $value11,
-            $key12: $value12,
+            $key1$(: $value1)?,
+            $key2$(: $value2)?,
+            $key3$(: $value3)?,
+            $key4$(: $value4)?,
+            $key5$(: $value5)?,
+            $key6$(: $value6)?,
+            $key7$(: $value7)?,
+            $key8$(: $value8)?,
+            $key9$(: $value9)?,
+            $key10$(: $value10)?,
+            $key11$(: $value11)?,
+            $key12$(: $value12)?,
         }
     }};
 
     (
         $(#[$meta1:meta])*
-        $key1:ident: $value1:expr
+        $key1:ident$(: $value1:expr)?
         ,$(#[$meta2:meta])*
-        $key2:ident: $value2:expr
+        $key2:ident$(: $value2:expr)?
         ,$(#[$meta3:meta])*
-        $key3:ident: $value3:expr
+        $key3:ident$(: $value3:expr)?
         ,$(#[$meta4:meta])*
-        $key4:ident: $value4:expr
+        $key4:ident$(: $value4:expr)?
         ,$(#[$meta5:meta])*
-        $key5:ident: $value5:expr
+        $key5:ident$(: $value5:expr)?
         ,$(#[$meta6:meta])*
-        $key6:ident: $value6:expr
+        $key6:ident$(: $value6:expr)?
         ,$(#[$meta7:meta])*
-        $key7:ident: $value7:expr
+        $key7:ident$(: $value7:expr)?
         ,$(#[$meta8:meta])*
-        $key8:ident: $value8:expr
+        $key8:ident$(: $value8:expr)?
         ,$(#[$meta9:meta])*
-        $key9:ident: $value9:expr
+        $key9:ident$(: $value9:expr)?
         ,$(#[$meta10:meta])*
-        $key10:ident: $value10:expr
+        $key10:ident$(: $value10:expr)?
         ,$(#[$meta11:meta])*
-        $key11:ident: $value11:expr
+        $key11:ident$(: $value11:expr)?
         ,$(#[$meta12:meta])*
-        $key12:ident: $value12:expr
+        $key12:ident$(: $value12:expr)?
         ,$(#[$meta13:meta])*
-        $key13:ident: $value13:expr
+        $key13:ident$(: $value13:expr)?
         $(,)?
     ) => {{
         use $crate::__private::serde;
@@ -627,51 +627,51 @@ macro_rules! serializable {
         }
         #[allow(clippy::redundant_field_names)]
         Serializable {
-            $key1: $value1,
-            $key2: $value2,
-            $key3: $value3,
-            $key4: $value4,
-            $key5: $value5,
-            $key6: $value6,
-            $key7: $value7,
-            $key8: $value8,
-            $key9: $value9,
-            $key10: $value10,
-            $key11: $value11,
-            $key12: $value12,
-            $key13: $value13,
+            $key1$(: $value1)?,
+            $key2$(: $value2)?,
+            $key3$(: $value3)?,
+            $key4$(: $value4)?,
+            $key5$(: $value5)?,
+            $key6$(: $value6)?,
+            $key7$(: $value7)?,
+            $key8$(: $value8)?,
+            $key9$(: $value9)?,
+            $key10$(: $value10)?,
+            $key11$(: $value11)?,
+            $key12$(: $value12)?,
+            $key13$(: $value13)?,
         }
     }};
 
     (
         $(#[$meta1:meta])*
-        $key1:ident: $value1:expr
+        $key1:ident$(: $value1:expr)?
         ,$(#[$meta2:meta])*
-        $key2:ident: $value2:expr
+        $key2:ident$(: $value2:expr)?
         ,$(#[$meta3:meta])*
-        $key3:ident: $value3:expr
+        $key3:ident$(: $value3:expr)?
         ,$(#[$meta4:meta])*
-        $key4:ident: $value4:expr
+        $key4:ident$(: $value4:expr)?
         ,$(#[$meta5:meta])*
-        $key5:ident: $value5:expr
+        $key5:ident$(: $value5:expr)?
         ,$(#[$meta6:meta])*
-        $key6:ident: $value6:expr
+        $key6:ident$(: $value6:expr)?
         ,$(#[$meta7:meta])*
-        $key7:ident: $value7:expr
+        $key7:ident$(: $value7:expr)?
         ,$(#[$meta8:meta])*
-        $key8:ident: $value8:expr
+        $key8:ident$(: $value8:expr)?
         ,$(#[$meta9:meta])*
-        $key9:ident: $value9:expr
+        $key9:ident$(: $value9:expr)?
         ,$(#[$meta10:meta])*
-        $key10:ident: $value10:expr
+        $key10:ident$(: $value10:expr)?
         ,$(#[$meta11:meta])*
-        $key11:ident: $value11:expr
+        $key11:ident$(: $value11:expr)?
         ,$(#[$meta12:meta])*
-        $key12:ident: $value12:expr
+        $key12:ident$(: $value12:expr)?
         ,$(#[$meta13:meta])*
-        $key13:ident: $value13:expr
+        $key13:ident$(: $value13:expr)?
         ,$(#[$meta14:meta])*
-        $key14:ident: $value14:expr
+        $key14:ident$(: $value14:expr)?
         $(,)?
     ) => {{
         use $crate::__private::serde;
@@ -709,54 +709,54 @@ macro_rules! serializable {
         }
         #[allow(clippy::redundant_field_names)]
         Serializable {
-            $key1: $value1,
-            $key2: $value2,
-            $key3: $value3,
-            $key4: $value4,
-            $key5: $value5,
-            $key6: $value6,
-            $key7: $value7,
-            $key8: $value8,
-            $key9: $value9,
-            $key10: $value10,
-            $key11: $value11,
-            $key12: $value12,
-            $key13: $value13,
-            $key14: $value14,
+            $key1$(: $value1)?,
+            $key2$(: $value2)?,
+            $key3$(: $value3)?,
+            $key4$(: $value4)?,
+            $key5$(: $value5)?,
+            $key6$(: $value6)?,
+            $key7$(: $value7)?,
+            $key8$(: $value8)?,
+            $key9$(: $value9)?,
+            $key10$(: $value10)?,
+            $key11$(: $value11)?,
+            $key12$(: $value12)?,
+            $key13$(: $value13)?,
+            $key14$(: $value14)?,
         }
     }};
 
     (
         $(#[$meta1:meta])*
-        $key1:ident: $value1:expr
+        $key1:ident$(: $value1:expr)?
         ,$(#[$meta2:meta])*
-        $key2:ident: $value2:expr
+        $key2:ident$(: $value2:expr)?
         ,$(#[$meta3:meta])*
-        $key3:ident: $value3:expr
+        $key3:ident$(: $value3:expr)?
         ,$(#[$meta4:meta])*
-        $key4:ident: $value4:expr
+        $key4:ident$(: $value4:expr)?
         ,$(#[$meta5:meta])*
-        $key5:ident: $value5:expr
+        $key5:ident$(: $value5:expr)?
         ,$(#[$meta6:meta])*
-        $key6:ident: $value6:expr
+        $key6:ident$(: $value6:expr)?
         ,$(#[$meta7:meta])*
-        $key7:ident: $value7:expr
+        $key7:ident$(: $value7:expr)?
         ,$(#[$meta8:meta])*
-        $key8:ident: $value8:expr
+        $key8:ident$(: $value8:expr)?
         ,$(#[$meta9:meta])*
-        $key9:ident: $value9:expr
+        $key9:ident$(: $value9:expr)?
         ,$(#[$meta10:meta])*
-        $key10:ident: $value10:expr
+        $key10:ident$(: $value10:expr)?
         ,$(#[$meta11:meta])*
-        $key11:ident: $value11:expr
+        $key11:ident$(: $value11:expr)?
         ,$(#[$meta12:meta])*
-        $key12:ident: $value12:expr
+        $key12:ident$(: $value12:expr)?
         ,$(#[$meta13:meta])*
-        $key13:ident: $value13:expr
+        $key13:ident$(: $value13:expr)?
         ,$(#[$meta14:meta])*
-        $key14:ident: $value14:expr
+        $key14:ident$(: $value14:expr)?
         ,$(#[$meta15:meta])*
-        $key15:ident: $value15:expr
+        $key15:ident$(: $value15:expr)?
         $(,)?
     ) => {{
         use $crate::__private::serde;
@@ -796,57 +796,57 @@ macro_rules! serializable {
         }
         #[allow(clippy::redundant_field_names)]
         Serializable {
-            $key1: $value1,
-            $key2: $value2,
-            $key3: $value3,
-            $key4: $value4,
-            $key5: $value5,
-            $key6: $value6,
-            $key7: $value7,
-            $key8: $value8,
-            $key9: $value9,
-            $key10: $value10,
-            $key11: $value11,
-            $key12: $value12,
-            $key13: $value13,
-            $key14: $value14,
-            $key15: $value15,
+            $key1$(: $value1)?,
+            $key2$(: $value2)?,
+            $key3$(: $value3)?,
+            $key4$(: $value4)?,
+            $key5$(: $value5)?,
+            $key6$(: $value6)?,
+            $key7$(: $value7)?,
+            $key8$(: $value8)?,
+            $key9$(: $value9)?,
+            $key10$(: $value10)?,
+            $key11$(: $value11)?,
+            $key12$(: $value12)?,
+            $key13$(: $value13)?,
+            $key14$(: $value14)?,
+            $key15$(: $value15)?,
         }
     }};
 
     (
         $(#[$meta1:meta])*
-        $key1:ident: $value1:expr
+        $key1:ident$(: $value1:expr)?
         ,$(#[$meta2:meta])*
-        $key2:ident: $value2:expr
+        $key2:ident$(: $value2:expr)?
         ,$(#[$meta3:meta])*
-        $key3:ident: $value3:expr
+        $key3:ident$(: $value3:expr)?
         ,$(#[$meta4:meta])*
-        $key4:ident: $value4:expr
+        $key4:ident$(: $value4:expr)?
         ,$(#[$meta5:meta])*
-        $key5:ident: $value5:expr
+        $key5:ident$(: $value5:expr)?
         ,$(#[$meta6:meta])*
-        $key6:ident: $value6:expr
+        $key6:ident$(: $value6:expr)?
         ,$(#[$meta7:meta])*
-        $key7:ident: $value7:expr
+        $key7:ident$(: $value7:expr)?
         ,$(#[$meta8:meta])*
-        $key8:ident: $value8:expr
+        $key8:ident$(: $value8:expr)?
         ,$(#[$meta9:meta])*
-        $key9:ident: $value9:expr
+        $key9:ident$(: $value9:expr)?
         ,$(#[$meta10:meta])*
-        $key10:ident: $value10:expr
+        $key10:ident$(: $value10:expr)?
         ,$(#[$meta11:meta])*
-        $key11:ident: $value11:expr
+        $key11:ident$(: $value11:expr)?
         ,$(#[$meta12:meta])*
-        $key12:ident: $value12:expr
+        $key12:ident$(: $value12:expr)?
         ,$(#[$meta13:meta])*
-        $key13:ident: $value13:expr
+        $key13:ident$(: $value13:expr)?
         ,$(#[$meta14:meta])*
-        $key14:ident: $value14:expr
+        $key14:ident$(: $value14:expr)?
         ,$(#[$meta15:meta])*
-        $key15:ident: $value15:expr
+        $key15:ident$(: $value15:expr)?
         ,$(#[$meta16:meta])*
-        $key16:ident: $value16:expr
+        $key16:ident$(: $value16:expr)?
         $(,)?
     ) => {{
         use $crate::__private::serde;
@@ -888,60 +888,60 @@ macro_rules! serializable {
         }
         #[allow(clippy::redundant_field_names)]
         Serializable {
-            $key1: $value1,
-            $key2: $value2,
-            $key3: $value3,
-            $key4: $value4,
-            $key5: $value5,
-            $key6: $value6,
-            $key7: $value7,
-            $key8: $value8,
-            $key9: $value9,
-            $key10: $value10,
-            $key11: $value11,
-            $key12: $value12,
-            $key13: $value13,
-            $key14: $value14,
-            $key15: $value15,
-            $key16: $value16,
+            $key1$(: $value1)?,
+            $key2$(: $value2)?,
+            $key3$(: $value3)?,
+            $key4$(: $value4)?,
+            $key5$(: $value5)?,
+            $key6$(: $value6)?,
+            $key7$(: $value7)?,
+            $key8$(: $value8)?,
+            $key9$(: $value9)?,
+            $key10$(: $value10)?,
+            $key11$(: $value11)?,
+            $key12$(: $value12)?,
+            $key13$(: $value13)?,
+            $key14$(: $value14)?,
+            $key15$(: $value15)?,
+            $key16$(: $value16)?,
         }
     }};
 
     (
         $(#[$meta1:meta])*
-        $key1:ident: $value1:expr
+        $key1:ident$(: $value1:expr)?
         ,$(#[$meta2:meta])*
-        $key2:ident: $value2:expr
+        $key2:ident$(: $value2:expr)?
         ,$(#[$meta3:meta])*
-        $key3:ident: $value3:expr
+        $key3:ident$(: $value3:expr)?
         ,$(#[$meta4:meta])*
-        $key4:ident: $value4:expr
+        $key4:ident$(: $value4:expr)?
         ,$(#[$meta5:meta])*
-        $key5:ident: $value5:expr
+        $key5:ident$(: $value5:expr)?
         ,$(#[$meta6:meta])*
-        $key6:ident: $value6:expr
+        $key6:ident$(: $value6:expr)?
         ,$(#[$meta7:meta])*
-        $key7:ident: $value7:expr
+        $key7:ident$(: $value7:expr)?
         ,$(#[$meta8:meta])*
-        $key8:ident: $value8:expr
+        $key8:ident$(: $value8:expr)?
         ,$(#[$meta9:meta])*
-        $key9:ident: $value9:expr
+        $key9:ident$(: $value9:expr)?
         ,$(#[$meta10:meta])*
-        $key10:ident: $value10:expr
+        $key10:ident$(: $value10:expr)?
         ,$(#[$meta11:meta])*
-        $key11:ident: $value11:expr
+        $key11:ident$(: $value11:expr)?
         ,$(#[$meta12:meta])*
-        $key12:ident: $value12:expr
+        $key12:ident$(: $value12:expr)?
         ,$(#[$meta13:meta])*
-        $key13:ident: $value13:expr
+        $key13:ident$(: $value13:expr)?
         ,$(#[$meta14:meta])*
-        $key14:ident: $value14:expr
+        $key14:ident$(: $value14:expr)?
         ,$(#[$meta15:meta])*
-        $key15:ident: $value15:expr
+        $key15:ident$(: $value15:expr)?
         ,$(#[$meta16:meta])*
-        $key16:ident: $value16:expr
+        $key16:ident$(: $value16:expr)?
         ,$(#[$meta17:meta])*
-        $key17:ident: $value17:expr
+        $key17:ident$(: $value17:expr)?
         $(,)?
     ) => {{
         use $crate::__private::serde;
@@ -985,63 +985,63 @@ macro_rules! serializable {
         }
         #[allow(clippy::redundant_field_names)]
         Serializable {
-            $key1: $value1,
-            $key2: $value2,
-            $key3: $value3,
-            $key4: $value4,
-            $key5: $value5,
-            $key6: $value6,
-            $key7: $value7,
-            $key8: $value8,
-            $key9: $value9,
-            $key10: $value10,
-            $key11: $value11,
-            $key12: $value12,
-            $key13: $value13,
-            $key14: $value14,
-            $key15: $value15,
-            $key16: $value16,
-            $key17: $value17,
+            $key1$(: $value1)?,
+            $key2$(: $value2)?,
+            $key3$(: $value3)?,
+            $key4$(: $value4)?,
+            $key5$(: $value5)?,
+            $key6$(: $value6)?,
+            $key7$(: $value7)?,
+            $key8$(: $value8)?,
+            $key9$(: $value9)?,
+            $key10$(: $value10)?,
+            $key11$(: $value11)?,
+            $key12$(: $value12)?,
+            $key13$(: $value13)?,
+            $key14$(: $value14)?,
+            $key15$(: $value15)?,
+            $key16$(: $value16)?,
+            $key17$(: $value17)?,
         }
     }};
 
     (
         $(#[$meta1:meta])*
-        $key1:ident: $value1:expr
+        $key1:ident$(: $value1:expr)?
         ,$(#[$meta2:meta])*
-        $key2:ident: $value2:expr
+        $key2:ident$(: $value2:expr)?
         ,$(#[$meta3:meta])*
-        $key3:ident: $value3:expr
+        $key3:ident$(: $value3:expr)?
         ,$(#[$meta4:meta])*
-        $key4:ident: $value4:expr
+        $key4:ident$(: $value4:expr)?
         ,$(#[$meta5:meta])*
-        $key5:ident: $value5:expr
+        $key5:ident$(: $value5:expr)?
         ,$(#[$meta6:meta])*
-        $key6:ident: $value6:expr
+        $key6:ident$(: $value6:expr)?
         ,$(#[$meta7:meta])*
-        $key7:ident: $value7:expr
+        $key7:ident$(: $value7:expr)?
         ,$(#[$meta8:meta])*
-        $key8:ident: $value8:expr
+        $key8:ident$(: $value8:expr)?
         ,$(#[$meta9:meta])*
-        $key9:ident: $value9:expr
+        $key9:ident$(: $value9:expr)?
         ,$(#[$meta10:meta])*
-        $key10:ident: $value10:expr
+        $key10:ident$(: $value10:expr)?
         ,$(#[$meta11:meta])*
-        $key11:ident: $value11:expr
+        $key11:ident$(: $value11:expr)?
         ,$(#[$meta12:meta])*
-        $key12:ident: $value12:expr
+        $key12:ident$(: $value12:expr)?
         ,$(#[$meta13:meta])*
-        $key13:ident: $value13:expr
+        $key13:ident$(: $value13:expr)?
         ,$(#[$meta14:meta])*
-        $key14:ident: $value14:expr
+        $key14:ident$(: $value14:expr)?
         ,$(#[$meta15:meta])*
-        $key15:ident: $value15:expr
+        $key15:ident$(: $value15:expr)?
         ,$(#[$meta16:meta])*
-        $key16:ident: $value16:expr
+        $key16:ident$(: $value16:expr)?
         ,$(#[$meta17:meta])*
-        $key17:ident: $value17:expr
+        $key17:ident$(: $value17:expr)?
         ,$(#[$meta18:meta])*
-        $key18:ident: $value18:expr
+        $key18:ident$(: $value18:expr)?
         $(,)?
     ) => {{
         use $crate::__private::serde;
@@ -1087,66 +1087,66 @@ macro_rules! serializable {
         }
         #[allow(clippy::redundant_field_names)]
         Serializable {
-            $key1: $value1,
-            $key2: $value2,
-            $key3: $value3,
-            $key4: $value4,
-            $key5: $value5,
-            $key6: $value6,
-            $key7: $value7,
-            $key8: $value8,
-            $key9: $value9,
-            $key10: $value10,
-            $key11: $value11,
-            $key12: $value12,
-            $key13: $value13,
-            $key14: $value14,
-            $key15: $value15,
-            $key16: $value16,
-            $key17: $value17,
-            $key18: $value18,
+            $key1$(: $value1)?,
+            $key2$(: $value2)?,
+            $key3$(: $value3)?,
+            $key4$(: $value4)?,
+            $key5$(: $value5)?,
+            $key6$(: $value6)?,
+            $key7$(: $value7)?,
+            $key8$(: $value8)?,
+            $key9$(: $value9)?,
+            $key10$(: $value10)?,
+            $key11$(: $value11)?,
+            $key12$(: $value12)?,
+            $key13$(: $value13)?,
+            $key14$(: $value14)?,
+            $key15$(: $value15)?,
+            $key16$(: $value16)?,
+            $key17$(: $value17)?,
+            $key18$(: $value18)?,
         }
     }};
 
     (
         $(#[$meta1:meta])*
-        $key1:ident: $value1:expr
+        $key1:ident$(: $value1:expr)?
         ,$(#[$meta2:meta])*
-        $key2:ident: $value2:expr
+        $key2:ident$(: $value2:expr)?
         ,$(#[$meta3:meta])*
-        $key3:ident: $value3:expr
+        $key3:ident$(: $value3:expr)?
         ,$(#[$meta4:meta])*
-        $key4:ident: $value4:expr
+        $key4:ident$(: $value4:expr)?
         ,$(#[$meta5:meta])*
-        $key5:ident: $value5:expr
+        $key5:ident$(: $value5:expr)?
         ,$(#[$meta6:meta])*
-        $key6:ident: $value6:expr
+        $key6:ident$(: $value6:expr)?
         ,$(#[$meta7:meta])*
-        $key7:ident: $value7:expr
+        $key7:ident$(: $value7:expr)?
         ,$(#[$meta8:meta])*
-        $key8:ident: $value8:expr
+        $key8:ident$(: $value8:expr)?
         ,$(#[$meta9:meta])*
-        $key9:ident: $value9:expr
+        $key9:ident$(: $value9:expr)?
         ,$(#[$meta10:meta])*
-        $key10:ident: $value10:expr
+        $key10:ident$(: $value10:expr)?
         ,$(#[$meta11:meta])*
-        $key11:ident: $value11:expr
+        $key11:ident$(: $value11:expr)?
         ,$(#[$meta12:meta])*
-        $key12:ident: $value12:expr
+        $key12:ident$(: $value12:expr)?
         ,$(#[$meta13:meta])*
-        $key13:ident: $value13:expr
+        $key13:ident$(: $value13:expr)?
         ,$(#[$meta14:meta])*
-        $key14:ident: $value14:expr
+        $key14:ident$(: $value14:expr)?
         ,$(#[$meta15:meta])*
-        $key15:ident: $value15:expr
+        $key15:ident$(: $value15:expr)?
         ,$(#[$meta16:meta])*
-        $key16:ident: $value16:expr
+        $key16:ident$(: $value16:expr)?
         ,$(#[$meta17:meta])*
-        $key17:ident: $value17:expr
+        $key17:ident$(: $value17:expr)?
         ,$(#[$meta18:meta])*
-        $key18:ident: $value18:expr
+        $key18:ident$(: $value18:expr)?
         ,$(#[$meta19:meta])*
-        $key19:ident: $value19:expr
+        $key19:ident$(: $value19:expr)?
         $(,)?
     ) => {{
         use $crate::__private::serde;
@@ -1194,69 +1194,69 @@ macro_rules! serializable {
         }
         #[allow(clippy::redundant_field_names)]
         Serializable {
-            $key1: $value1,
-            $key2: $value2,
-            $key3: $value3,
-            $key4: $value4,
-            $key5: $value5,
-            $key6: $value6,
-            $key7: $value7,
-            $key8: $value8,
-            $key9: $value9,
-            $key10: $value10,
-            $key11: $value11,
-            $key12: $value12,
-            $key13: $value13,
-            $key14: $value14,
-            $key15: $value15,
-            $key16: $value16,
-            $key17: $value17,
-            $key18: $value18,
-            $key19: $value19,
+            $key1$(: $value1)?,
+            $key2$(: $value2)?,
+            $key3$(: $value3)?,
+            $key4$(: $value4)?,
+            $key5$(: $value5)?,
+            $key6$(: $value6)?,
+            $key7$(: $value7)?,
+            $key8$(: $value8)?,
+            $key9$(: $value9)?,
+            $key10$(: $value10)?,
+            $key11$(: $value11)?,
+            $key12$(: $value12)?,
+            $key13$(: $value13)?,
+            $key14$(: $value14)?,
+            $key15$(: $value15)?,
+            $key16$(: $value16)?,
+            $key17$(: $value17)?,
+            $key18$(: $value18)?,
+            $key19$(: $value19)?,
         }
     }};
 
     (
         $(#[$meta1:meta])*
-        $key1:ident: $value1:expr
+        $key1:ident$(: $value1:expr)?
         ,$(#[$meta2:meta])*
-        $key2:ident: $value2:expr
+        $key2:ident$(: $value2:expr)?
         ,$(#[$meta3:meta])*
-        $key3:ident: $value3:expr
+        $key3:ident$(: $value3:expr)?
         ,$(#[$meta4:meta])*
-        $key4:ident: $value4:expr
+        $key4:ident$(: $value4:expr)?
         ,$(#[$meta5:meta])*
-        $key5:ident: $value5:expr
+        $key5:ident$(: $value5:expr)?
         ,$(#[$meta6:meta])*
-        $key6:ident: $value6:expr
+        $key6:ident$(: $value6:expr)?
         ,$(#[$meta7:meta])*
-        $key7:ident: $value7:expr
+        $key7:ident$(: $value7:expr)?
         ,$(#[$meta8:meta])*
-        $key8:ident: $value8:expr
+        $key8:ident$(: $value8:expr)?
         ,$(#[$meta9:meta])*
-        $key9:ident: $value9:expr
+        $key9:ident$(: $value9:expr)?
         ,$(#[$meta10:meta])*
-        $key10:ident: $value10:expr
+        $key10:ident$(: $value10:expr)?
         ,$(#[$meta11:meta])*
-        $key11:ident: $value11:expr
+        $key11:ident$(: $value11:expr)?
         ,$(#[$meta12:meta])*
-        $key12:ident: $value12:expr
+        $key12:ident$(: $value12:expr)?
         ,$(#[$meta13:meta])*
-        $key13:ident: $value13:expr
+        $key13:ident$(: $value13:expr)?
         ,$(#[$meta14:meta])*
-        $key14:ident: $value14:expr
+        $key14:ident$(: $value14:expr)?
         ,$(#[$meta15:meta])*
-        $key15:ident: $value15:expr
+        $key15:ident$(: $value15:expr)?
         ,$(#[$meta16:meta])*
-        $key16:ident: $value16:expr
+        $key16:ident$(: $value16:expr)?
         ,$(#[$meta17:meta])*
-        $key17:ident: $value17:expr
+        $key17:ident$(: $value17:expr)?
         ,$(#[$meta18:meta])*
-        $key18:ident: $value18:expr
+        $key18:ident$(: $value18:expr)?
         ,$(#[$meta19:meta])*
-        $key19:ident: $value19:expr
+        $key19:ident$(: $value19:expr)?
         ,$(#[$meta20:meta])*
-        $key20:ident: $value20:expr
+        $key20:ident$(: $value20:expr)?
         $(,)?
     ) => {{
         use $crate::__private::serde;
@@ -1306,72 +1306,72 @@ macro_rules! serializable {
         }
         #[allow(clippy::redundant_field_names)]
         Serializable {
-            $key1: $value1,
-            $key2: $value2,
-            $key3: $value3,
-            $key4: $value4,
-            $key5: $value5,
-            $key6: $value6,
-            $key7: $value7,
-            $key8: $value8,
-            $key9: $value9,
-            $key10: $value10,
-            $key11: $value11,
-            $key12: $value12,
-            $key13: $value13,
-            $key14: $value14,
-            $key15: $value15,
-            $key16: $value16,
-            $key17: $value17,
-            $key18: $value18,
-            $key19: $value19,
-            $key20: $value20,
+            $key1$(: $value1)?,
+            $key2$(: $value2)?,
+            $key3$(: $value3)?,
+            $key4$(: $value4)?,
+            $key5$(: $value5)?,
+            $key6$(: $value6)?,
+            $key7$(: $value7)?,
+            $key8$(: $value8)?,
+            $key9$(: $value9)?,
+            $key10$(: $value10)?,
+            $key11$(: $value11)?,
+            $key12$(: $value12)?,
+            $key13$(: $value13)?,
+            $key14$(: $value14)?,
+            $key15$(: $value15)?,
+            $key16$(: $value16)?,
+            $key17$(: $value17)?,
+            $key18$(: $value18)?,
+            $key19$(: $value19)?,
+            $key20$(: $value20)?,
         }
     }};
 
     (
         $(#[$meta1:meta])*
-        $key1:ident: $value1:expr
+        $key1:ident$(: $value1:expr)?
         ,$(#[$meta2:meta])*
-        $key2:ident: $value2:expr
+        $key2:ident$(: $value2:expr)?
         ,$(#[$meta3:meta])*
-        $key3:ident: $value3:expr
+        $key3:ident$(: $value3:expr)?
         ,$(#[$meta4:meta])*
-        $key4:ident: $value4:expr
+        $key4:ident$(: $value4:expr)?
         ,$(#[$meta5:meta])*
-        $key5:ident: $value5:expr
+        $key5:ident$(: $value5:expr)?
         ,$(#[$meta6:meta])*
-        $key6:ident: $value6:expr
+        $key6:ident$(: $value6:expr)?
         ,$(#[$meta7:meta])*
-        $key7:ident: $value7:expr
+        $key7:ident$(: $value7:expr)?
         ,$(#[$meta8:meta])*
-        $key8:ident: $value8:expr
+        $key8:ident$(: $value8:expr)?
         ,$(#[$meta9:meta])*
-        $key9:ident: $value9:expr
+        $key9:ident$(: $value9:expr)?
         ,$(#[$meta10:meta])*
-        $key10:ident: $value10:expr
+        $key10:ident$(: $value10:expr)?
         ,$(#[$meta11:meta])*
-        $key11:ident: $value11:expr
+        $key11:ident$(: $value11:expr)?
         ,$(#[$meta12:meta])*
-        $key12:ident: $value12:expr
+        $key12:ident$(: $value12:expr)?
         ,$(#[$meta13:meta])*
-        $key13:ident: $value13:expr
+        $key13:ident$(: $value13:expr)?
         ,$(#[$meta14:meta])*
-        $key14:ident: $value14:expr
+        $key14:ident$(: $value14:expr)?
         ,$(#[$meta15:meta])*
-        $key15:ident: $value15:expr
+        $key15:ident$(: $value15:expr)?
         ,$(#[$meta16:meta])*
-        $key16:ident: $value16:expr
+        $key16:ident$(: $value16:expr)?
         ,$(#[$meta17:meta])*
-        $key17:ident: $value17:expr
+        $key17:ident$(: $value17:expr)?
         ,$(#[$meta18:meta])*
-        $key18:ident: $value18:expr
+        $key18:ident$(: $value18:expr)?
         ,$(#[$meta19:meta])*
-        $key19:ident: $value19:expr
+        $key19:ident$(: $value19:expr)?
         ,$(#[$meta20:meta])*
-        $key20:ident: $value20:expr
+        $key20:ident$(: $value20:expr)?
         ,$(#[$meta21:meta])*
-        $key21:ident: $value21:expr
+        $key21:ident$(: $value21:expr)?
         $(,)?
     ) => {{
         use $crate::__private::serde;
@@ -1423,75 +1423,75 @@ macro_rules! serializable {
         }
         #[allow(clippy::redundant_field_names)]
         Serializable {
-            $key1: $value1,
-            $key2: $value2,
-            $key3: $value3,
-            $key4: $value4,
-            $key5: $value5,
-            $key6: $value6,
-            $key7: $value7,
-            $key8: $value8,
-            $key9: $value9,
-            $key10: $value10,
-            $key11: $value11,
-            $key12: $value12,
-            $key13: $value13,
-            $key14: $value14,
-            $key15: $value15,
-            $key16: $value16,
-            $key17: $value17,
-            $key18: $value18,
-            $key19: $value19,
-            $key20: $value20,
-            $key21: $value21,
+            $key1$(: $value1)?,
+            $key2$(: $value2)?,
+            $key3$(: $value3)?,
+            $key4$(: $value4)?,
+            $key5$(: $value5)?,
+            $key6$(: $value6)?,
+            $key7$(: $value7)?,
+            $key8$(: $value8)?,
+            $key9$(: $value9)?,
+            $key10$(: $value10)?,
+            $key11$(: $value11)?,
+            $key12$(: $value12)?,
+            $key13$(: $value13)?,
+            $key14$(: $value14)?,
+            $key15$(: $value15)?,
+            $key16$(: $value16)?,
+            $key17$(: $value17)?,
+            $key18$(: $value18)?,
+            $key19$(: $value19)?,
+            $key20$(: $value20)?,
+            $key21$(: $value21)?,
         }
     }};
 
     (
         $(#[$meta1:meta])*
-        $key1:ident: $value1:expr
+        $key1:ident$(: $value1:expr)?
         ,$(#[$meta2:meta])*
-        $key2:ident: $value2:expr
+        $key2:ident$(: $value2:expr)?
         ,$(#[$meta3:meta])*
-        $key3:ident: $value3:expr
+        $key3:ident$(: $value3:expr)?
         ,$(#[$meta4:meta])*
-        $key4:ident: $value4:expr
+        $key4:ident$(: $value4:expr)?
         ,$(#[$meta5:meta])*
-        $key5:ident: $value5:expr
+        $key5:ident$(: $value5:expr)?
         ,$(#[$meta6:meta])*
-        $key6:ident: $value6:expr
+        $key6:ident$(: $value6:expr)?
         ,$(#[$meta7:meta])*
-        $key7:ident: $value7:expr
+        $key7:ident$(: $value7:expr)?
         ,$(#[$meta8:meta])*
-        $key8:ident: $value8:expr
+        $key8:ident$(: $value8:expr)?
         ,$(#[$meta9:meta])*
-        $key9:ident: $value9:expr
+        $key9:ident$(: $value9:expr)?
         ,$(#[$meta10:meta])*
-        $key10:ident: $value10:expr
+        $key10:ident$(: $value10:expr)?
         ,$(#[$meta11:meta])*
-        $key11:ident: $value11:expr
+        $key11:ident$(: $value11:expr)?
         ,$(#[$meta12:meta])*
-        $key12:ident: $value12:expr
+        $key12:ident$(: $value12:expr)?
         ,$(#[$meta13:meta])*
-        $key13:ident: $value13:expr
+        $key13:ident$(: $value13:expr)?
         ,$(#[$meta14:meta])*
-        $key14:ident: $value14:expr
+        $key14:ident$(: $value14:expr)?
         ,$(#[$meta15:meta])*
-        $key15:ident: $value15:expr
+        $key15:ident$(: $value15:expr)?
         ,$(#[$meta16:meta])*
-        $key16:ident: $value16:expr
+        $key16:ident$(: $value16:expr)?
         ,$(#[$meta17:meta])*
-        $key17:ident: $value17:expr
+        $key17:ident$(: $value17:expr)?
         ,$(#[$meta18:meta])*
-        $key18:ident: $value18:expr
+        $key18:ident$(: $value18:expr)?
         ,$(#[$meta19:meta])*
-        $key19:ident: $value19:expr
+        $key19:ident$(: $value19:expr)?
         ,$(#[$meta20:meta])*
-        $key20:ident: $value20:expr
+        $key20:ident$(: $value20:expr)?
         ,$(#[$meta21:meta])*
-        $key21:ident: $value21:expr
+        $key21:ident$(: $value21:expr)?
         ,$(#[$meta22:meta])*
-        $key22:ident: $value22:expr
+        $key22:ident$(: $value22:expr)?
         $(,)?
     ) => {{
         use $crate::__private::serde;
@@ -1545,78 +1545,78 @@ macro_rules! serializable {
         }
         #[allow(clippy::redundant_field_names)]
         Serializable {
-            $key1: $value1,
-            $key2: $value2,
-            $key3: $value3,
-            $key4: $value4,
-            $key5: $value5,
-            $key6: $value6,
-            $key7: $value7,
-            $key8: $value8,
-            $key9: $value9,
-            $key10: $value10,
-            $key11: $value11,
-            $key12: $value12,
-            $key13: $value13,
-            $key14: $value14,
-            $key15: $value15,
-            $key16: $value16,
-            $key17: $value17,
-            $key18: $value18,
-            $key19: $value19,
-            $key20: $value20,
-            $key21: $value21,
-            $key22: $value22,
+            $key1$(: $value1)?,
+            $key2$(: $value2)?,
+            $key3$(: $value3)?,
+            $key4$(: $value4)?,
+            $key5$(: $value5)?,
+            $key6$(: $value6)?,
+            $key7$(: $value7)?,
+            $key8$(: $value8)?,
+            $key9$(: $value9)?,
+            $key10$(: $value10)?,
+            $key11$(: $value11)?,
+            $key12$(: $value12)?,
+            $key13$(: $value13)?,
+            $key14$(: $value14)?,
+            $key15$(: $value15)?,
+            $key16$(: $value16)?,
+            $key17$(: $value17)?,
+            $key18$(: $value18)?,
+            $key19$(: $value19)?,
+            $key20$(: $value20)?,
+            $key21$(: $value21)?,
+            $key22$(: $value22)?,
         }
     }};
 
     (
         $(#[$meta1:meta])*
-        $key1:ident: $value1:expr
+        $key1:ident$(: $value1:expr)?
         ,$(#[$meta2:meta])*
-        $key2:ident: $value2:expr
+        $key2:ident$(: $value2:expr)?
         ,$(#[$meta3:meta])*
-        $key3:ident: $value3:expr
+        $key3:ident$(: $value3:expr)?
         ,$(#[$meta4:meta])*
-        $key4:ident: $value4:expr
+        $key4:ident$(: $value4:expr)?
         ,$(#[$meta5:meta])*
-        $key5:ident: $value5:expr
+        $key5:ident$(: $value5:expr)?
         ,$(#[$meta6:meta])*
-        $key6:ident: $value6:expr
+        $key6:ident$(: $value6:expr)?
         ,$(#[$meta7:meta])*
-        $key7:ident: $value7:expr
+        $key7:ident$(: $value7:expr)?
         ,$(#[$meta8:meta])*
-        $key8:ident: $value8:expr
+        $key8:ident$(: $value8:expr)?
         ,$(#[$meta9:meta])*
-        $key9:ident: $value9:expr
+        $key9:ident$(: $value9:expr)?
         ,$(#[$meta10:meta])*
-        $key10:ident: $value10:expr
+        $key10:ident$(: $value10:expr)?
         ,$(#[$meta11:meta])*
-        $key11:ident: $value11:expr
+        $key11:ident$(: $value11:expr)?
         ,$(#[$meta12:meta])*
-        $key12:ident: $value12:expr
+        $key12:ident$(: $value12:expr)?
         ,$(#[$meta13:meta])*
-        $key13:ident: $value13:expr
+        $key13:ident$(: $value13:expr)?
         ,$(#[$meta14:meta])*
-        $key14:ident: $value14:expr
+        $key14:ident$(: $value14:expr)?
         ,$(#[$meta15:meta])*
-        $key15:ident: $value15:expr
+        $key15:ident$(: $value15:expr)?
         ,$(#[$meta16:meta])*
-        $key16:ident: $value16:expr
+        $key16:ident$(: $value16:expr)?
         ,$(#[$meta17:meta])*
-        $key17:ident: $value17:expr
+        $key17:ident$(: $value17:expr)?
         ,$(#[$meta18:meta])*
-        $key18:ident: $value18:expr
+        $key18:ident$(: $value18:expr)?
         ,$(#[$meta19:meta])*
-        $key19:ident: $value19:expr
+        $key19:ident$(: $value19:expr)?
         ,$(#[$meta20:meta])*
-        $key20:ident: $value20:expr
+        $key20:ident$(: $value20:expr)?
         ,$(#[$meta21:meta])*
-        $key21:ident: $value21:expr
+        $key21:ident$(: $value21:expr)?
         ,$(#[$meta22:meta])*
-        $key22:ident: $value22:expr
+        $key22:ident$(: $value22:expr)?
         ,$(#[$meta23:meta])*
-        $key23:ident: $value23:expr
+        $key23:ident$(: $value23:expr)?
         $(,)?
     ) => {{
         use $crate::__private::serde;
@@ -1672,81 +1672,81 @@ macro_rules! serializable {
         }
         #[allow(clippy::redundant_field_names)]
         Serializable {
-            $key1: $value1,
-            $key2: $value2,
-            $key3: $value3,
-            $key4: $value4,
-            $key5: $value5,
-            $key6: $value6,
-            $key7: $value7,
-            $key8: $value8,
-            $key9: $value9,
-            $key10: $value10,
-            $key11: $value11,
-            $key12: $value12,
-            $key13: $value13,
-            $key14: $value14,
-            $key15: $value15,
-            $key16: $value16,
-            $key17: $value17,
-            $key18: $value18,
-            $key19: $value19,
-            $key20: $value20,
-            $key21: $value21,
-            $key22: $value22,
-            $key23: $value23,
+            $key1$(: $value1)?,
+            $key2$(: $value2)?,
+            $key3$(: $value3)?,
+            $key4$(: $value4)?,
+            $key5$(: $value5)?,
+            $key6$(: $value6)?,
+            $key7$(: $value7)?,
+            $key8$(: $value8)?,
+            $key9$(: $value9)?,
+            $key10$(: $value10)?,
+            $key11$(: $value11)?,
+            $key12$(: $value12)?,
+            $key13$(: $value13)?,
+            $key14$(: $value14)?,
+            $key15$(: $value15)?,
+            $key16$(: $value16)?,
+            $key17$(: $value17)?,
+            $key18$(: $value18)?,
+            $key19$(: $value19)?,
+            $key20$(: $value20)?,
+            $key21$(: $value21)?,
+            $key22$(: $value22)?,
+            $key23$(: $value23)?,
         }
     }};
 
     (
         $(#[$meta1:meta])*
-        $key1:ident: $value1:expr
+        $key1:ident$(: $value1:expr)?
         ,$(#[$meta2:meta])*
-        $key2:ident: $value2:expr
+        $key2:ident$(: $value2:expr)?
         ,$(#[$meta3:meta])*
-        $key3:ident: $value3:expr
+        $key3:ident$(: $value3:expr)?
         ,$(#[$meta4:meta])*
-        $key4:ident: $value4:expr
+        $key4:ident$(: $value4:expr)?
         ,$(#[$meta5:meta])*
-        $key5:ident: $value5:expr
+        $key5:ident$(: $value5:expr)?
         ,$(#[$meta6:meta])*
-        $key6:ident: $value6:expr
+        $key6:ident$(: $value6:expr)?
         ,$(#[$meta7:meta])*
-        $key7:ident: $value7:expr
+        $key7:ident$(: $value7:expr)?
         ,$(#[$meta8:meta])*
-        $key8:ident: $value8:expr
+        $key8:ident$(: $value8:expr)?
         ,$(#[$meta9:meta])*
-        $key9:ident: $value9:expr
+        $key9:ident$(: $value9:expr)?
         ,$(#[$meta10:meta])*
-        $key10:ident: $value10:expr
+        $key10:ident$(: $value10:expr)?
         ,$(#[$meta11:meta])*
-        $key11:ident: $value11:expr
+        $key11:ident$(: $value11:expr)?
         ,$(#[$meta12:meta])*
-        $key12:ident: $value12:expr
+        $key12:ident$(: $value12:expr)?
         ,$(#[$meta13:meta])*
-        $key13:ident: $value13:expr
+        $key13:ident$(: $value13:expr)?
         ,$(#[$meta14:meta])*
-        $key14:ident: $value14:expr
+        $key14:ident$(: $value14:expr)?
         ,$(#[$meta15:meta])*
-        $key15:ident: $value15:expr
+        $key15:ident$(: $value15:expr)?
         ,$(#[$meta16:meta])*
-        $key16:ident: $value16:expr
+        $key16:ident$(: $value16:expr)?
         ,$(#[$meta17:meta])*
-        $key17:ident: $value17:expr
+        $key17:ident$(: $value17:expr)?
         ,$(#[$meta18:meta])*
-        $key18:ident: $value18:expr
+        $key18:ident$(: $value18:expr)?
         ,$(#[$meta19:meta])*
-        $key19:ident: $value19:expr
+        $key19:ident$(: $value19:expr)?
         ,$(#[$meta20:meta])*
-        $key20:ident: $value20:expr
+        $key20:ident$(: $value20:expr)?
         ,$(#[$meta21:meta])*
-        $key21:ident: $value21:expr
+        $key21:ident$(: $value21:expr)?
         ,$(#[$meta22:meta])*
-        $key22:ident: $value22:expr
+        $key22:ident$(: $value22:expr)?
         ,$(#[$meta23:meta])*
-        $key23:ident: $value23:expr
+        $key23:ident$(: $value23:expr)?
         ,$(#[$meta24:meta])*
-        $key24:ident: $value24:expr
+        $key24:ident$(: $value24:expr)?
         $(,)?
     ) => {{
         use $crate::__private::serde;
@@ -1804,84 +1804,84 @@ macro_rules! serializable {
         }
         #[allow(clippy::redundant_field_names)]
         Serializable {
-            $key1: $value1,
-            $key2: $value2,
-            $key3: $value3,
-            $key4: $value4,
-            $key5: $value5,
-            $key6: $value6,
-            $key7: $value7,
-            $key8: $value8,
-            $key9: $value9,
-            $key10: $value10,
-            $key11: $value11,
-            $key12: $value12,
-            $key13: $value13,
-            $key14: $value14,
-            $key15: $value15,
-            $key16: $value16,
-            $key17: $value17,
-            $key18: $value18,
-            $key19: $value19,
-            $key20: $value20,
-            $key21: $value21,
-            $key22: $value22,
-            $key23: $value23,
-            $key24: $value24,
+            $key1$(: $value1)?,
+            $key2$(: $value2)?,
+            $key3$(: $value3)?,
+            $key4$(: $value4)?,
+            $key5$(: $value5)?,
+            $key6$(: $value6)?,
+            $key7$(: $value7)?,
+            $key8$(: $value8)?,
+            $key9$(: $value9)?,
+            $key10$(: $value10)?,
+            $key11$(: $value11)?,
+            $key12$(: $value12)?,
+            $key13$(: $value13)?,
+            $key14$(: $value14)?,
+            $key15$(: $value15)?,
+            $key16$(: $value16)?,
+            $key17$(: $value17)?,
+            $key18$(: $value18)?,
+            $key19$(: $value19)?,
+            $key20$(: $value20)?,
+            $key21$(: $value21)?,
+            $key22$(: $value22)?,
+            $key23$(: $value23)?,
+            $key24$(: $value24)?,
         }
     }};
 
     (
         $(#[$meta1:meta])*
-        $key1:ident: $value1:expr
+        $key1:ident$(: $value1:expr)?
         ,$(#[$meta2:meta])*
-        $key2:ident: $value2:expr
+        $key2:ident$(: $value2:expr)?
         ,$(#[$meta3:meta])*
-        $key3:ident: $value3:expr
+        $key3:ident$(: $value3:expr)?
         ,$(#[$meta4:meta])*
-        $key4:ident: $value4:expr
+        $key4:ident$(: $value4:expr)?
         ,$(#[$meta5:meta])*
-        $key5:ident: $value5:expr
+        $key5:ident$(: $value5:expr)?
         ,$(#[$meta6:meta])*
-        $key6:ident: $value6:expr
+        $key6:ident$(: $value6:expr)?
         ,$(#[$meta7:meta])*
-        $key7:ident: $value7:expr
+        $key7:ident$(: $value7:expr)?
         ,$(#[$meta8:meta])*
-        $key8:ident: $value8:expr
+        $key8:ident$(: $value8:expr)?
         ,$(#[$meta9:meta])*
-        $key9:ident: $value9:expr
+        $key9:ident$(: $value9:expr)?
         ,$(#[$meta10:meta])*
-        $key10:ident: $value10:expr
+        $key10:ident$(: $value10:expr)?
         ,$(#[$meta11:meta])*
-        $key11:ident: $value11:expr
+        $key11:ident$(: $value11:expr)?
         ,$(#[$meta12:meta])*
-        $key12:ident: $value12:expr
+        $key12:ident$(: $value12:expr)?
         ,$(#[$meta13:meta])*
-        $key13:ident: $value13:expr
+        $key13:ident$(: $value13:expr)?
         ,$(#[$meta14:meta])*
-        $key14:ident: $value14:expr
+        $key14:ident$(: $value14:expr)?
         ,$(#[$meta15:meta])*
-        $key15:ident: $value15:expr
+        $key15:ident$(: $value15:expr)?
         ,$(#[$meta16:meta])*
-        $key16:ident: $value16:expr
+        $key16:ident$(: $value16:expr)?
         ,$(#[$meta17:meta])*
-        $key17:ident: $value17:expr
+        $key17:ident$(: $value17:expr)?
         ,$(#[$meta18:meta])*
-        $key18:ident: $value18:expr
+        $key18:ident$(: $value18:expr)?
         ,$(#[$meta19:meta])*
-        $key19:ident: $value19:expr
+        $key19:ident$(: $value19:expr)?
         ,$(#[$meta20:meta])*
-        $key20:ident: $value20:expr
+        $key20:ident$(: $value20:expr)?
         ,$(#[$meta21:meta])*
-        $key21:ident: $value21:expr
+        $key21:ident$(: $value21:expr)?
         ,$(#[$meta22:meta])*
-        $key22:ident: $value22:expr
+        $key22:ident$(: $value22:expr)?
         ,$(#[$meta23:meta])*
-        $key23:ident: $value23:expr
+        $key23:ident$(: $value23:expr)?
         ,$(#[$meta24:meta])*
-        $key24:ident: $value24:expr
+        $key24:ident$(: $value24:expr)?
         ,$(#[$meta25:meta])*
-        $key25:ident: $value25:expr
+        $key25:ident$(: $value25:expr)?
         $(,)?
     ) => {{
         use $crate::__private::serde;
@@ -1941,87 +1941,87 @@ macro_rules! serializable {
         }
         #[allow(clippy::redundant_field_names)]
         Serializable {
-            $key1: $value1,
-            $key2: $value2,
-            $key3: $value3,
-            $key4: $value4,
-            $key5: $value5,
-            $key6: $value6,
-            $key7: $value7,
-            $key8: $value8,
-            $key9: $value9,
-            $key10: $value10,
-            $key11: $value11,
-            $key12: $value12,
-            $key13: $value13,
-            $key14: $value14,
-            $key15: $value15,
-            $key16: $value16,
-            $key17: $value17,
-            $key18: $value18,
-            $key19: $value19,
-            $key20: $value20,
-            $key21: $value21,
-            $key22: $value22,
-            $key23: $value23,
-            $key24: $value24,
-            $key25: $value25,
+            $key1$(: $value1)?,
+            $key2$(: $value2)?,
+            $key3$(: $value3)?,
+            $key4$(: $value4)?,
+            $key5$(: $value5)?,
+            $key6$(: $value6)?,
+            $key7$(: $value7)?,
+            $key8$(: $value8)?,
+            $key9$(: $value9)?,
+            $key10$(: $value10)?,
+            $key11$(: $value11)?,
+            $key12$(: $value12)?,
+            $key13$(: $value13)?,
+            $key14$(: $value14)?,
+            $key15$(: $value15)?,
+            $key16$(: $value16)?,
+            $key17$(: $value17)?,
+            $key18$(: $value18)?,
+            $key19$(: $value19)?,
+            $key20$(: $value20)?,
+            $key21$(: $value21)?,
+            $key22$(: $value22)?,
+            $key23$(: $value23)?,
+            $key24$(: $value24)?,
+            $key25$(: $value25)?,
         }
     }};
 
     (
         $(#[$meta1:meta])*
-        $key1:ident: $value1:expr
+        $key1:ident$(: $value1:expr)?
         ,$(#[$meta2:meta])*
-        $key2:ident: $value2:expr
+        $key2:ident$(: $value2:expr)?
         ,$(#[$meta3:meta])*
-        $key3:ident: $value3:expr
+        $key3:ident$(: $value3:expr)?
         ,$(#[$meta4:meta])*
-        $key4:ident: $value4:expr
+        $key4:ident$(: $value4:expr)?
         ,$(#[$meta5:meta])*
-        $key5:ident: $value5:expr
+        $key5:ident$(: $value5:expr)?
         ,$(#[$meta6:meta])*
-        $key6:ident: $value6:expr
+        $key6:ident$(: $value6:expr)?
         ,$(#[$meta7:meta])*
-        $key7:ident: $value7:expr
+        $key7:ident$(: $value7:expr)?
         ,$(#[$meta8:meta])*
-        $key8:ident: $value8:expr
+        $key8:ident$(: $value8:expr)?
         ,$(#[$meta9:meta])*
-        $key9:ident: $value9:expr
+        $key9:ident$(: $value9:expr)?
         ,$(#[$meta10:meta])*
-        $key10:ident: $value10:expr
+        $key10:ident$(: $value10:expr)?
         ,$(#[$meta11:meta])*
-        $key11:ident: $value11:expr
+        $key11:ident$(: $value11:expr)?
         ,$(#[$meta12:meta])*
-        $key12:ident: $value12:expr
+        $key12:ident$(: $value12:expr)?
         ,$(#[$meta13:meta])*
-        $key13:ident: $value13:expr
+        $key13:ident$(: $value13:expr)?
         ,$(#[$meta14:meta])*
-        $key14:ident: $value14:expr
+        $key14:ident$(: $value14:expr)?
         ,$(#[$meta15:meta])*
-        $key15:ident: $value15:expr
+        $key15:ident$(: $value15:expr)?
         ,$(#[$meta16:meta])*
-        $key16:ident: $value16:expr
+        $key16:ident$(: $value16:expr)?
         ,$(#[$meta17:meta])*
-        $key17:ident: $value17:expr
+        $key17:ident$(: $value17:expr)?
         ,$(#[$meta18:meta])*
-        $key18:ident: $value18:expr
+        $key18:ident$(: $value18:expr)?
         ,$(#[$meta19:meta])*
-        $key19:ident: $value19:expr
+        $key19:ident$(: $value19:expr)?
         ,$(#[$meta20:meta])*
-        $key20:ident: $value20:expr
+        $key20:ident$(: $value20:expr)?
         ,$(#[$meta21:meta])*
-        $key21:ident: $value21:expr
+        $key21:ident$(: $value21:expr)?
         ,$(#[$meta22:meta])*
-        $key22:ident: $value22:expr
+        $key22:ident$(: $value22:expr)?
         ,$(#[$meta23:meta])*
-        $key23:ident: $value23:expr
+        $key23:ident$(: $value23:expr)?
         ,$(#[$meta24:meta])*
-        $key24:ident: $value24:expr
+        $key24:ident$(: $value24:expr)?
         ,$(#[$meta25:meta])*
-        $key25:ident: $value25:expr
+        $key25:ident$(: $value25:expr)?
         ,$(#[$meta26:meta])*
-        $key26:ident: $value26:expr
+        $key26:ident$(: $value26:expr)?
         $(,)?
     ) => {{
         use $crate::__private::serde;
@@ -2083,90 +2083,90 @@ macro_rules! serializable {
         }
         #[allow(clippy::redundant_field_names)]
         Serializable {
-            $key1: $value1,
-            $key2: $value2,
-            $key3: $value3,
-            $key4: $value4,
-            $key5: $value5,
-            $key6: $value6,
-            $key7: $value7,
-            $key8: $value8,
-            $key9: $value9,
-            $key10: $value10,
-            $key11: $value11,
-            $key12: $value12,
-            $key13: $value13,
-            $key14: $value14,
-            $key15: $value15,
-            $key16: $value16,
-            $key17: $value17,
-            $key18: $value18,
-            $key19: $value19,
-            $key20: $value20,
-            $key21: $value21,
-            $key22: $value22,
-            $key23: $value23,
-            $key24: $value24,
-            $key25: $value25,
-            $key26: $value26,
+            $key1$(: $value1)?,
+            $key2$(: $value2)?,
+            $key3$(: $value3)?,
+            $key4$(: $value4)?,
+            $key5$(: $value5)?,
+            $key6$(: $value6)?,
+            $key7$(: $value7)?,
+            $key8$(: $value8)?,
+            $key9$(: $value9)?,
+            $key10$(: $value10)?,
+            $key11$(: $value11)?,
+            $key12$(: $value12)?,
+            $key13$(: $value13)?,
+            $key14$(: $value14)?,
+            $key15$(: $value15)?,
+            $key16$(: $value16)?,
+            $key17$(: $value17)?,
+            $key18$(: $value18)?,
+            $key19$(: $value19)?,
+            $key20$(: $value20)?,
+            $key21$(: $value21)?,
+            $key22$(: $value22)?,
+            $key23$(: $value23)?,
+            $key24$(: $value24)?,
+            $key25$(: $value25)?,
+            $key26$(: $value26)?,
         }
     }};
 
     (
         $(#[$meta1:meta])*
-        $key1:ident: $value1:expr
+        $key1:ident$(: $value1:expr)?
         ,$(#[$meta2:meta])*
-        $key2:ident: $value2:expr
+        $key2:ident$(: $value2:expr)?
         ,$(#[$meta3:meta])*
-        $key3:ident: $value3:expr
+        $key3:ident$(: $value3:expr)?
         ,$(#[$meta4:meta])*
-        $key4:ident: $value4:expr
+        $key4:ident$(: $value4:expr)?
         ,$(#[$meta5:meta])*
-        $key5:ident: $value5:expr
+        $key5:ident$(: $value5:expr)?
         ,$(#[$meta6:meta])*
-        $key6:ident: $value6:expr
+        $key6:ident$(: $value6:expr)?
         ,$(#[$meta7:meta])*
-        $key7:ident: $value7:expr
+        $key7:ident$(: $value7:expr)?
         ,$(#[$meta8:meta])*
-        $key8:ident: $value8:expr
+        $key8:ident$(: $value8:expr)?
         ,$(#[$meta9:meta])*
-        $key9:ident: $value9:expr
+        $key9:ident$(: $value9:expr)?
         ,$(#[$meta10:meta])*
-        $key10:ident: $value10:expr
+        $key10:ident$(: $value10:expr)?
         ,$(#[$meta11:meta])*
-        $key11:ident: $value11:expr
+        $key11:ident$(: $value11:expr)?
         ,$(#[$meta12:meta])*
-        $key12:ident: $value12:expr
+        $key12:ident$(: $value12:expr)?
         ,$(#[$meta13:meta])*
-        $key13:ident: $value13:expr
+        $key13:ident$(: $value13:expr)?
         ,$(#[$meta14:meta])*
-        $key14:ident: $value14:expr
+        $key14:ident$(: $value14:expr)?
         ,$(#[$meta15:meta])*
-        $key15:ident: $value15:expr
+        $key15:ident$(: $value15:expr)?
         ,$(#[$meta16:meta])*
-        $key16:ident: $value16:expr
+        $key16:ident$(: $value16:expr)?
         ,$(#[$meta17:meta])*
-        $key17:ident: $value17:expr
+        $key17:ident$(: $value17:expr)?
         ,$(#[$meta18:meta])*
-        $key18:ident: $value18:expr
+        $key18:ident$(: $value18:expr)?
         ,$(#[$meta19:meta])*
-        $key19:ident: $value19:expr
+        $key19:ident$(: $value19:expr)?
         ,$(#[$meta20:meta])*
-        $key20:ident: $value20:expr
+        $key20:ident$(: $value20:expr)?
         ,$(#[$meta21:meta])*
-        $key21:ident: $value21:expr
+        $key21:ident$(: $value21:expr)?
         ,$(#[$meta22:meta])*
-        $key22:ident: $value22:expr
+        $key22:ident$(: $value22:expr)?
         ,$(#[$meta23:meta])*
-        $key23:ident: $value23:expr
+        $key23:ident$(: $value23:expr)?
         ,$(#[$meta24:meta])*
-        $key24:ident: $value24:expr
+        $key24:ident$(: $value24:expr)?
         ,$(#[$meta25:meta])*
-        $key25:ident: $value25:expr
+        $key25:ident$(: $value25:expr)?
         ,$(#[$meta26:meta])*
-        $key26:ident: $value26:expr
+        $key26:ident$(: $value26:expr)?
         ,$(#[$meta27:meta])*
-        $key27:ident: $value27:expr
+        $key27:ident$(: $value27:expr)?
         $(,)?
     ) => {{
         use $crate::__private::serde;
@@ -2230,93 +2230,93 @@ macro_rules! serializable {
         }
         #[allow(clippy::redundant_field_names)]
         Serializable {
-            $key1: $value1,
-            $key2: $value2,
-            $key3: $value3,
-            $key4: $value4,
-            $key5: $value5,
-            $key6: $value6,
-            $key7: $value7,
-            $key8: $value8,
-            $key9: $value9,
-            $key10: $value10,
-            $key11: $value11,
-            $key12: $value12,
-            $key13: $value13,
-            $key14: $value14,
-            $key15: $value15,
-            $key16: $value16,
-            $key17: $value17,
-            $key18: $value18,
-            $key19: $value19,
-            $key20: $value20,
-            $key21: $value21,
-            $key22: $value22,
-            $key23: $value23,
-            $key24: $value24,
-            $key25: $value25,
-            $key26: $value26,
-            $key27: $value27,
+            $key1$(: $value1)?,
+            $key2$(: $value2)?,
+            $key3$(: $value3)?,
+            $key4$(: $value4)?,
+            $key5$(: $value5)?,
+            $key6$(: $value6)?,
+            $key7$(: $value7)?,
+            $key8$(: $value8)?,
+            $key9$(: $value9)?,
+            $key10$(: $value10)?,
+            $key11$(: $value11)?,
+            $key12$(: $value12)?,
+            $key13$(: $value13)?,
+            $key14$(: $value14)?,
+            $key15$(: $value15)?,
+            $key16$(: $value16)?,
+            $key17$(: $value17)?,
+            $key18$(: $value18)?,
+            $key19$(: $value19)?,
+            $key20$(: $value20)?,
+            $key21$(: $value21)?,
+            $key22$(: $value22)?,
+            $key23$(: $value23)?,
+            $key24$(: $value24)?,
+            $key25$(: $value25)?,
+            $key26$(: $value26)?,
+            $key27$(: $value27)?,
         }
     }};
 
     (
         $(#[$meta1:meta])*
-        $key1:ident: $value1:expr
+        $key1:ident$(: $value1:expr)?
         ,$(#[$meta2:meta])*
-        $key2:ident: $value2:expr
+        $key2:ident$(: $value2:expr)?
         ,$(#[$meta3:meta])*
-        $key3:ident: $value3:expr
+        $key3:ident$(: $value3:expr)?
         ,$(#[$meta4:meta])*
-        $key4:ident: $value4:expr
+        $key4:ident$(: $value4:expr)?
         ,$(#[$meta5:meta])*
-        $key5:ident: $value5:expr
+        $key5:ident$(: $value5:expr)?
         ,$(#[$meta6:meta])*
-        $key6:ident: $value6:expr
+        $key6:ident$(: $value6:expr)?
         ,$(#[$meta7:meta])*
-        $key7:ident: $value7:expr
+        $key7:ident$(: $value7:expr)?
         ,$(#[$meta8:meta])*
-        $key8:ident: $value8:expr
+        $key8:ident$(: $value8:expr)?
         ,$(#[$meta9:meta])*
-        $key9:ident: $value9:expr
+        $key9:ident$(: $value9:expr)?
         ,$(#[$meta10:meta])*
-        $key10:ident: $value10:expr
+        $key10:ident$(: $value10:expr)?
         ,$(#[$meta11:meta])*
-        $key11:ident: $value11:expr
+        $key11:ident$(: $value11:expr)?
         ,$(#[$meta12:meta])*
-        $key12:ident: $value12:expr
+        $key12:ident$(: $value12:expr)?
         ,$(#[$meta13:meta])*
-        $key13:ident: $value13:expr
+        $key13:ident$(: $value13:expr)?
         ,$(#[$meta14:meta])*
-        $key14:ident: $value14:expr
+        $key14:ident$(: $value14:expr)?
         ,$(#[$meta15:meta])*
-        $key15:ident: $value15:expr
+        $key15:ident$(: $value15:expr)?
         ,$(#[$meta16:meta])*
-        $key16:ident: $value16:expr
+        $key16:ident$(: $value16:expr)?
         ,$(#[$meta17:meta])*
-        $key17:ident: $value17:expr
+        $key17:ident$(: $value17:expr)?
         ,$(#[$meta18:meta])*
-        $key18:ident: $value18:expr
+        $key18:ident$(: $value18:expr)?
         ,$(#[$meta19:meta])*
-        $key19:ident: $value19:expr
+        $key19:ident$(: $value19:expr)?
         ,$(#[$meta20:meta])*
-        $key20:ident: $value20:expr
+        $key20:ident$(: $value20:expr)?
         ,$(#[$meta21:meta])*
-        $key21:ident: $value21:expr
+        $key21:ident$(: $value21:expr)?
         ,$(#[$meta22:meta])*
-        $key22:ident: $value22:expr
+        $key22:ident$(: $value22:expr)?
         ,$(#[$meta23:meta])*
-        $key23:ident: $value23:expr
+        $key23:ident$(: $value23:expr)?
         ,$(#[$meta24:meta])*
-        $key24:ident: $value24:expr
+        $key24:ident$(: $value24:expr)?
         ,$(#[$meta25:meta])*
-        $key25:ident: $value25:expr
+        $key25:ident$(: $value25:expr)?
         ,$(#[$meta26:meta])*
-        $key26:ident: $value26:expr
+        $key26:ident$(: $value26:expr)?
         ,$(#[$meta27:meta])*
-        $key27:ident: $value27:expr
+        $key27:ident$(: $value27:expr)?
         ,$(#[$meta28:meta])*
-        $key28:ident: $value28:expr
+        $key28:ident$(: $value28:expr)?
         $(,)?
     ) => {{
         use $crate::__private::serde;
@@ -2382,96 +2382,96 @@ macro_rules! serializable {
         }
         #[allow(clippy::redundant_field_names)]
         Serializable {
-            $key1: $value1,
-            $key2: $value2,
-            $key3: $value3,
-            $key4: $value4,
-            $key5: $value5,
-            $key6: $value6,
-            $key7: $value7,
-            $key8: $value8,
-            $key9: $value9,
-            $key10: $value10,
-            $key11: $value11,
-            $key12: $value12,
-            $key13: $value13,
-            $key14: $value14,
-            $key15: $value15,
-            $key16: $value16,
-            $key17: $value17,
-            $key18: $value18,
-            $key19: $value19,
-            $key20: $value20,
-            $key21: $value21,
-            $key22: $value22,
-            $key23: $value23,
-            $key24: $value24,
-            $key25: $value25,
-            $key26: $value26,
-            $key27: $value27,
-            $key28: $value28,
+            $key1$(: $value1)?,
+            $key2$(: $value2)?,
+            $key3$(: $value3)?,
+            $key4$(: $value4)?,
+            $key5$(: $value5)?,
+            $key6$(: $value6)?,
+            $key7$(: $value7)?,
+            $key8$(: $value8)?,
+            $key9$(: $value9)?,
+            $key10$(: $value10)?,
+            $key11$(: $value11)?,
+            $key12$(: $value12)?,
+            $key13$(: $value13)?,
+            $key14$(: $value14)?,
+            $key15$(: $value15)?,
+            $key16$(: $value16)?,
+            $key17$(: $value17)?,
+            $key18$(: $value18)?,
+            $key19$(: $value19)?,
+            $key20$(: $value20)?,
+            $key21$(: $value21)?,
+            $key22$(: $value22)?,
+            $key23$(: $value23)?,
+            $key24$(: $value24)?,
+            $key25$(: $value25)?,
+            $key26$(: $value26)?,
+            $key27$(: $value27)?,
+            $key28$(: $value28)?,
         }
     }};
 
     (
         $(#[$meta1:meta])*
-        $key1:ident: $value1:expr
+        $key1:ident$(: $value1:expr)?
         ,$(#[$meta2:meta])*
-        $key2:ident: $value2:expr
+        $key2:ident$(: $value2:expr)?
         ,$(#[$meta3:meta])*
-        $key3:ident: $value3:expr
+        $key3:ident$(: $value3:expr)?
         ,$(#[$meta4:meta])*
-        $key4:ident: $value4:expr
+        $key4:ident$(: $value4:expr)?
         ,$(#[$meta5:meta])*
-        $key5:ident: $value5:expr
+        $key5:ident$(: $value5:expr)?
         ,$(#[$meta6:meta])*
-        $key6:ident: $value6:expr
+        $key6:ident$(: $value6:expr)?
         ,$(#[$meta7:meta])*
-        $key7:ident: $value7:expr
+        $key7:ident$(: $value7:expr)?
         ,$(#[$meta8:meta])*
-        $key8:ident: $value8:expr
+        $key8:ident$(: $value8:expr)?
         ,$(#[$meta9:meta])*
-        $key9:ident: $value9:expr
+        $key9:ident$(: $value9:expr)?
         ,$(#[$meta10:meta])*
-        $key10:ident: $value10:expr
+        $key10:ident$(: $value10:expr)?
         ,$(#[$meta11:meta])*
-        $key11:ident: $value11:expr
+        $key11:ident$(: $value11:expr)?
         ,$(#[$meta12:meta])*
-        $key12:ident: $value12:expr
+        $key12:ident$(: $value12:expr)?
         ,$(#[$meta13:meta])*
-        $key13:ident: $value13:expr
+        $key13:ident$(: $value13:expr)?
         ,$(#[$meta14:meta])*
-        $key14:ident: $value14:expr
+        $key14:ident$(: $value14:expr)?
         ,$(#[$meta15:meta])*
-        $key15:ident: $value15:expr
+        $key15:ident$(: $value15:expr)?
         ,$(#[$meta16:meta])*
-        $key16:ident: $value16:expr
+        $key16:ident$(: $value16:expr)?
         ,$(#[$meta17:meta])*
-        $key17:ident: $value17:expr
+        $key17:ident$(: $value17:expr)?
         ,$(#[$meta18:meta])*
-        $key18:ident: $value18:expr
+        $key18:ident$(: $value18:expr)?
         ,$(#[$meta19:meta])*
-        $key19:ident: $value19:expr
+        $key19:ident$(: $value19:expr)?
         ,$(#[$meta20:meta])*
-        $key20:ident: $value20:expr
+        $key20:ident$(: $value20:expr)?
         ,$(#[$meta21:meta])*
-        $key21:ident: $value21:expr
+        $key21:ident$(: $value21:expr)?
         ,$(#[$meta22:meta])*
-        $key22:ident: $value22:expr
+        $key22:ident$(: $value22:expr)?
         ,$(#[$meta23:meta])*
-        $key23:ident: $value23:expr
+        $key23:ident$(: $value23:expr)?
         ,$(#[$meta24:meta])*
-        $key24:ident: $value24:expr
+        $key24:ident$(: $value24:expr)?
         ,$(#[$meta25:meta])*
-        $key25:ident: $value25:expr
+        $key25:ident$(: $value25:expr)?
         ,$(#[$meta26:meta])*
-        $key26:ident: $value26:expr
+        $key26:ident$(: $value26:expr)?
         ,$(#[$meta27:meta])*
-        $key27:ident: $value27:expr
+        $key27:ident$(: $value27:expr)?
         ,$(#[$meta28:meta])*
-        $key28:ident: $value28:expr
+        $key28:ident$(: $value28:expr)?
         ,$(#[$meta29:meta])*
-        $key29:ident: $value29:expr
+        $key29:ident$(: $value29:expr)?
         $(,)?
     ) => {{
         use $crate::__private::serde;
@@ -2539,99 +2539,99 @@ macro_rules! serializable {
         }
         #[allow(clippy::redundant_field_names)]
         Serializable {
-            $key1: $value1,
-            $key2: $value2,
-            $key3: $value3,
-            $key4: $value4,
-            $key5: $value5,
-            $key6: $value6,
-            $key7: $value7,
-            $key8: $value8,
-            $key9: $value9,
-            $key10: $value10,
-            $key11: $value11,
-            $key12: $value12,
-            $key13: $value13,
-            $key14: $value14,
-            $key15: $value15,
-            $key16: $value16,
-            $key17: $value17,
-            $key18: $value18,
-            $key19: $value19,
-            $key20: $value20,
-            $key21: $value21,
-            $key22: $value22,
-            $key23: $value23,
-            $key24: $value24,
-            $key25: $value25,
-            $key26: $value26,
-            $key27: $value27,
-            $key28: $value28,
-            $key29: $value29,
+            $key1$(: $value1)?,
+            $key2$(: $value2)?,
+            $key3$(: $value3)?,
+            $key4$(: $value4)?,
+            $key5$(: $value5)?,
+            $key6$(: $value6)?,
+            $key7$(: $value7)?,
+            $key8$(: $value8)?,
+            $key9$(: $value9)?,
+            $key10$(: $value10)?,
+            $key11$(: $value11)?,
+            $key12$(: $value12)?,
+            $key13$(: $value13)?,
+            $key14$(: $value14)?,
+            $key15$(: $value15)?,
+            $key16$(: $value16)?,
+            $key17$(: $value17)?,
+            $key18$(: $value18)?,
+            $key19$(: $value19)?,
+            $key20$(: $value20)?,
+            $key21$(: $value21)?,
+            $key22$(: $value22)?,
+            $key23$(: $value23)?,
+            $key24$(: $value24)?,
+            $key25$(: $value25)?,
+            $key26$(: $value26)?,
+            $key27$(: $value27)?,
+            $key28$(: $value28)?,
+            $key29$(: $value29)?,
         }
     }};
 
     (
         $(#[$meta1:meta])*
-        $key1:ident: $value1:expr
+        $key1:ident$(: $value1:expr)?
         ,$(#[$meta2:meta])*
-        $key2:ident: $value2:expr
+        $key2:ident$(: $value2:expr)?
         ,$(#[$meta3:meta])*
-        $key3:ident: $value3:expr
+        $key3:ident$(: $value3:expr)?
         ,$(#[$meta4:meta])*
-        $key4:ident: $value4:expr
+        $key4:ident$(: $value4:expr)?
         ,$(#[$meta5:meta])*
-        $key5:ident: $value5:expr
+        $key5:ident$(: $value5:expr)?
         ,$(#[$meta6:meta])*
-        $key6:ident: $value6:expr
+        $key6:ident$(: $value6:expr)?
         ,$(#[$meta7:meta])*
-        $key7:ident: $value7:expr
+        $key7:ident$(: $value7:expr)?
         ,$(#[$meta8:meta])*
-        $key8:ident: $value8:expr
+        $key8:ident$(: $value8:expr)?
         ,$(#[$meta9:meta])*
-        $key9:ident: $value9:expr
+        $key9:ident$(: $value9:expr)?
         ,$(#[$meta10:meta])*
-        $key10:ident: $value10:expr
+        $key10:ident$(: $value10:expr)?
         ,$(#[$meta11:meta])*
-        $key11:ident: $value11:expr
+        $key11:ident$(: $value11:expr)?
         ,$(#[$meta12:meta])*
-        $key12:ident: $value12:expr
+        $key12:ident$(: $value12:expr)?
         ,$(#[$meta13:meta])*
-        $key13:ident: $value13:expr
+        $key13:ident$(: $value13:expr)?
         ,$(#[$meta14:meta])*
-        $key14:ident: $value14:expr
+        $key14:ident$(: $value14:expr)?
         ,$(#[$meta15:meta])*
-        $key15:ident: $value15:expr
+        $key15:ident$(: $value15:expr)?
         ,$(#[$meta16:meta])*
-        $key16:ident: $value16:expr
+        $key16:ident$(: $value16:expr)?
         ,$(#[$meta17:meta])*
-        $key17:ident: $value17:expr
+        $key17:ident$(: $value17:expr)?
         ,$(#[$meta18:meta])*
-        $key18:ident: $value18:expr
+        $key18:ident$(: $value18:expr)?
         ,$(#[$meta19:meta])*
-        $key19:ident: $value19:expr
+        $key19:ident$(: $value19:expr)?
         ,$(#[$meta20:meta])*
-        $key20:ident: $value20:expr
+        $key20:ident$(: $value20:expr)?
         ,$(#[$meta21:meta])*
-        $key21:ident: $value21:expr
+        $key21:ident$(: $value21:expr)?
         ,$(#[$meta22:meta])*
-        $key22:ident: $value22:expr
+        $key22:ident$(: $value22:expr)?
         ,$(#[$meta23:meta])*
-        $key23:ident: $value23:expr
+        $key23:ident$(: $value23:expr)?
         ,$(#[$meta24:meta])*
-        $key24:ident: $value24:expr
+        $key24:ident$(: $value24:expr)?
         ,$(#[$meta25:meta])*
-        $key25:ident: $value25:expr
+        $key25:ident$(: $value25:expr)?
         ,$(#[$meta26:meta])*
-        $key26:ident: $value26:expr
+        $key26:ident$(: $value26:expr)?
         ,$(#[$meta27:meta])*
-        $key27:ident: $value27:expr
+        $key27:ident$(: $value27:expr)?
         ,$(#[$meta28:meta])*
-        $key28:ident: $value28:expr
+        $key28:ident$(: $value28:expr)?
         ,$(#[$meta29:meta])*
-        $key29:ident: $value29:expr
+        $key29:ident$(: $value29:expr)?
         ,$(#[$meta30:meta])*
-        $key30:ident: $value30:expr
+        $key30:ident$(: $value30:expr)?
         $(,)?
     ) => {{
         use $crate::__private::serde;
@@ -2701,102 +2701,102 @@ macro_rules! serializable {
         }
         #[allow(clippy::redundant_field_names)]
         Serializable {
-            $key1: $value1,
-            $key2: $value2,
-            $key3: $value3,
-            $key4: $value4,
-            $key5: $value5,
-            $key6: $value6,
-            $key7: $value7,
-            $key8: $value8,
-            $key9: $value9,
-            $key10: $value10,
-            $key11: $value11,
-            $key12: $value12,
-            $key13: $value13,
-            $key14: $value14,
-            $key15: $value15,
-            $key16: $value16,
-            $key17: $value17,
-            $key18: $value18,
-            $key19: $value19,
-            $key20: $value20,
-            $key21: $value21,
-            $key22: $value22,
-            $key23: $value23,
-            $key24: $value24,
-            $key25: $value25,
-            $key26: $value26,
-            $key27: $value27,
-            $key28: $value28,
-            $key29: $value29,
-            $key30: $value30,
+            $key1$(: $value1)?,
+            $key2$(: $value2)?,
+            $key3$(: $value3)?,
+            $key4$(: $value4)?,
+            $key5$(: $value5)?,
+            $key6$(: $value6)?,
+            $key7$(: $value7)?,
+            $key8$(: $value8)?,
+            $key9$(: $value9)?,
+            $key10$(: $value10)?,
+            $key11$(: $value11)?,
+            $key12$(: $value12)?,
+            $key13$(: $value13)?,
+            $key14$(: $value14)?,
+            $key15$(: $value15)?,
+            $key16$(: $value16)?,
+            $key17$(: $value17)?,
+            $key18$(: $value18)?,
+            $key19$(: $value19)?,
+            $key20$(: $value20)?,
+            $key21$(: $value21)?,
+            $key22$(: $value22)?,
+            $key23$(: $value23)?,
+            $key24$(: $value24)?,
+            $key25$(: $value25)?,
+            $key26$(: $value26)?,
+            $key27$(: $value27)?,
+            $key28$(: $value28)?,
+            $key29$(: $value29)?,
+            $key30$(: $value30)?,
         }
     }};
 
     (
         $(#[$meta1:meta])*
-        $key1:ident: $value1:expr
+        $key1:ident$(: $value1:expr)?
         ,$(#[$meta2:meta])*
-        $key2:ident: $value2:expr
+        $key2:ident$(: $value2:expr)?
         ,$(#[$meta3:meta])*
-        $key3:ident: $value3:expr
+        $key3:ident$(: $value3:expr)?
         ,$(#[$meta4:meta])*
-        $key4:ident: $value4:expr
+        $key4:ident$(: $value4:expr)?
         ,$(#[$meta5:meta])*
-        $key5:ident: $value5:expr
+        $key5:ident$(: $value5:expr)?
         ,$(#[$meta6:meta])*
-        $key6:ident: $value6:expr
+        $key6:ident$(: $value6:expr)?
         ,$(#[$meta7:meta])*
-        $key7:ident: $value7:expr
+        $key7:ident$(: $value7:expr)?
         ,$(#[$meta8:meta])*
-        $key8:ident: $value8:expr
+        $key8:ident$(: $value8:expr)?
         ,$(#[$meta9:meta])*
-        $key9:ident: $value9:expr
+        $key9:ident$(: $value9:expr)?
         ,$(#[$meta10:meta])*
-        $key10:ident: $value10:expr
+        $key10:ident$(: $value10:expr)?
         ,$(#[$meta11:meta])*
-        $key11:ident: $value11:expr
+        $key11:ident$(: $value11:expr)?
         ,$(#[$meta12:meta])*
-        $key12:ident: $value12:expr
+        $key12:ident$(: $value12:expr)?
         ,$(#[$meta13:meta])*
-        $key13:ident: $value13:expr
+        $key13:ident$(: $value13:expr)?
         ,$(#[$meta14:meta])*
-        $key14:ident: $value14:expr
+        $key14:ident$(: $value14:expr)?
         ,$(#[$meta15:meta])*
-        $key15:ident: $value15:expr
+        $key15:ident$(: $value15:expr)?
         ,$(#[$meta16:meta])*
-        $key16:ident: $value16:expr
+        $key16:ident$(: $value16:expr)?
         ,$(#[$meta17:meta])*
-        $key17:ident: $value17:expr
+        $key17:ident$(: $value17:expr)?
         ,$(#[$meta18:meta])*
-        $key18:ident: $value18:expr
+        $key18:ident$(: $value18:expr)?
         ,$(#[$meta19:meta])*
-        $key19:ident: $value19:expr
+        $key19:ident$(: $value19:expr)?
         ,$(#[$meta20:meta])*
-        $key20:ident: $value20:expr
+        $key20:ident$(: $value20:expr)?
         ,$(#[$meta21:meta])*
-        $key21:ident: $value21:expr
+        $key21:ident$(: $value21:expr)?
         ,$(#[$meta22:meta])*
-        $key22:ident: $value22:expr
+        $key22:ident$(: $value22:expr)?
         ,$(#[$meta23:meta])*
-        $key23:ident: $value23:expr
+        $key23:ident$(: $value23:expr)?
         ,$(#[$meta24:meta])*
-        $key24:ident: $value24:expr
+        $key24:ident$(: $value24:expr)?
         ,$(#[$meta25:meta])*
-        $key25:ident: $value25:expr
+        $key25:ident$(: $value25:expr)?
         ,$(#[$meta26:meta])*
-        $key26:ident: $value26:expr
+        $key26:ident$(: $value26:expr)?
         ,$(#[$meta27:meta])*
-        $key27:ident: $value27:expr
+        $key27:ident$(: $value27:expr)?
         ,$(#[$meta28:meta])*
-        $key28:ident: $value28:expr
+        $key28:ident$(: $value28:expr)?
         ,$(#[$meta29:meta])*
-        $key29:ident: $value29:expr
+        $key29:ident$(: $value29:expr)?
         ,$(#[$meta30:meta])*
-        $key30:ident: $value30:expr
+        $key30:ident$(: $value30:expr)?
         ,$(#[$meta31:meta])*
-        $key31:ident: $value31:expr
+        $key31:ident$(: $value31:expr)?
         $(,)?
     ) => {{
         use $crate::__private::serde;
@@ -2868,105 +2868,105 @@ macro_rules! serializable {
         }
         #[allow(clippy::redundant_field_names)]
         Serializable {
-            $key1: $value1,
-            $key2: $value2,
-            $key3: $value3,
-            $key4: $value4,
-            $key5: $value5,
-            $key6: $value6,
-            $key7: $value7,
-            $key8: $value8,
-            $key9: $value9,
-            $key10: $value10,
-            $key11: $value11,
-            $key12: $value12,
-            $key13: $value13,
-            $key14: $value14,
-            $key15: $value15,
-            $key16: $value16,
-            $key17: $value17,
-            $key18: $value18,
-            $key19: $value19,
-            $key20: $value20,
-            $key21: $value21,
-            $key22: $value22,
-            $key23: $value23,
-            $key24: $value24,
-            $key25: $value25,
-            $key26: $value26,
-            $key27: $value27,
-            $key28: $value28,
-            $key29: $value29,
-            $key30: $value30,
-            $key31: $value31,
+            $key1$(: $value1)?,
+            $key2$(: $value2)?,
+            $key3$(: $value3)?,
+            $key4$(: $value4)?,
+            $key5$(: $value5)?,
+            $key6$(: $value6)?,
+            $key7$(: $value7)?,
+            $key8$(: $value8)?,
+            $key9$(: $value9)?,
+            $key10$(: $value10)?,
+            $key11$(: $value11)?,
+            $key12$(: $value12)?,
+            $key13$(: $value13)?,
+            $key14$(: $value14)?,
+            $key15$(: $value15)?,
+            $key16$(: $value16)?,
+            $key17$(: $value17)?,
+            $key18$(: $value18)?,
+            $key19$(: $value19)?,
+            $key20$(: $value20)?,
+            $key21$(: $value21)?,
+            $key22$(: $value22)?,
+            $key23$(: $value23)?,
+            $key24$(: $value24)?,
+            $key25$(: $value25)?,
+            $key26$(: $value26)?,
+            $key27$(: $value27)?,
+            $key28$(: $value28)?,
+            $key29$(: $value29)?,
+            $key30$(: $value30)?,
+            $key31$(: $value31)?,
         }
     }};
 
     (
         $(#[$meta1:meta])*
-        $key1:ident: $value1:expr
+        $key1:ident$(: $value1:expr)?
         ,$(#[$meta2:meta])*
-        $key2:ident: $value2:expr
+        $key2:ident$(: $value2:expr)?
         ,$(#[$meta3:meta])*
-        $key3:ident: $value3:expr
+        $key3:ident$(: $value3:expr)?
         ,$(#[$meta4:meta])*
-        $key4:ident: $value4:expr
+        $key4:ident$(: $value4:expr)?
         ,$(#[$meta5:meta])*
-        $key5:ident: $value5:expr
+        $key5:ident$(: $value5:expr)?
         ,$(#[$meta6:meta])*
-        $key6:ident: $value6:expr
+        $key6:ident$(: $value6:expr)?
         ,$(#[$meta7:meta])*
-        $key7:ident: $value7:expr
+        $key7:ident$(: $value7:expr)?
         ,$(#[$meta8:meta])*
-        $key8:ident: $value8:expr
+        $key8:ident$(: $value8:expr)?
         ,$(#[$meta9:meta])*
-        $key9:ident: $value9:expr
+        $key9:ident$(: $value9:expr)?
         ,$(#[$meta10:meta])*
-        $key10:ident: $value10:expr
+        $key10:ident$(: $value10:expr)?
         ,$(#[$meta11:meta])*
-        $key11:ident: $value11:expr
+        $key11:ident$(: $value11:expr)?
         ,$(#[$meta12:meta])*
-        $key12:ident: $value12:expr
+        $key12:ident$(: $value12:expr)?
         ,$(#[$meta13:meta])*
-        $key13:ident: $value13:expr
+        $key13:ident$(: $value13:expr)?
         ,$(#[$meta14:meta])*
-        $key14:ident: $value14:expr
+        $key14:ident$(: $value14:expr)?
         ,$(#[$meta15:meta])*
-        $key15:ident: $value15:expr
+        $key15:ident$(: $value15:expr)?
         ,$(#[$meta16:meta])*
-        $key16:ident: $value16:expr
+        $key16:ident$(: $value16:expr)?
         ,$(#[$meta17:meta])*
-        $key17:ident: $value17:expr
+        $key17:ident$(: $value17:expr)?
         ,$(#[$meta18:meta])*
-        $key18:ident: $value18:expr
+        $key18:ident$(: $value18:expr)?
         ,$(#[$meta19:meta])*
-        $key19:ident: $value19:expr
+        $key19:ident$(: $value19:expr)?
         ,$(#[$meta20:meta])*
-        $key20:ident: $value20:expr
+        $key20:ident$(: $value20:expr)?
         ,$(#[$meta21:meta])*
-        $key21:ident: $value21:expr
+        $key21:ident$(: $value21:expr)?
         ,$(#[$meta22:meta])*
-        $key22:ident: $value22:expr
+        $key22:ident$(: $value22:expr)?
         ,$(#[$meta23:meta])*
-        $key23:ident: $value23:expr
+        $key23:ident$(: $value23:expr)?
         ,$(#[$meta24:meta])*
-        $key24:ident: $value24:expr
+        $key24:ident$(: $value24:expr)?
         ,$(#[$meta25:meta])*
-        $key25:ident: $value25:expr
+        $key25:ident$(: $value25:expr)?
         ,$(#[$meta26:meta])*
-        $key26:ident: $value26:expr
+        $key26:ident$(: $value26:expr)?
         ,$(#[$meta27:meta])*
-        $key27:ident: $value27:expr
+        $key27:ident$(: $value27:expr)?
         ,$(#[$meta28:meta])*
-        $key28:ident: $value28:expr
+        $key28:ident$(: $value28:expr)?
         ,$(#[$meta29:meta])*
-        $key29:ident: $value29:expr
+        $key29:ident$(: $value29:expr)?
         ,$(#[$meta30:meta])*
-        $key30:ident: $value30:expr
+        $key30:ident$(: $value30:expr)?
         ,$(#[$meta31:meta])*
-        $key31:ident: $value31:expr
+        $key31:ident$(: $value31:expr)?
         ,$(#[$meta32:meta])*
-        $key32:ident: $value32:expr
+        $key32:ident$(: $value32:expr)?
         $(,)?
     ) => {{
         use $crate::__private::serde;
@@ -3040,38 +3040,38 @@ macro_rules! serializable {
         }
         #[allow(clippy::redundant_field_names)]
         Serializable {
-            $key1: $value1,
-            $key2: $value2,
-            $key3: $value3,
-            $key4: $value4,
-            $key5: $value5,
-            $key6: $value6,
-            $key7: $value7,
-            $key8: $value8,
-            $key9: $value9,
-            $key10: $value10,
-            $key11: $value11,
-            $key12: $value12,
-            $key13: $value13,
-            $key14: $value14,
-            $key15: $value15,
-            $key16: $value16,
-            $key17: $value17,
-            $key18: $value18,
-            $key19: $value19,
-            $key20: $value20,
-            $key21: $value21,
-            $key22: $value22,
-            $key23: $value23,
-            $key24: $value24,
-            $key25: $value25,
-            $key26: $value26,
-            $key27: $value27,
-            $key28: $value28,
-            $key29: $value29,
-            $key30: $value30,
-            $key31: $value31,
-            $key32: $value32,
+            $key1$(: $value1)?,
+            $key2$(: $value2)?,
+            $key3$(: $value3)?,
+            $key4$(: $value4)?,
+            $key5$(: $value5)?,
+            $key6$(: $value6)?,
+            $key7$(: $value7)?,
+            $key8$(: $value8)?,
+            $key9$(: $value9)?,
+            $key10$(: $value10)?,
+            $key11$(: $value11)?,
+            $key12$(: $value12)?,
+            $key13$(: $value13)?,
+            $key14$(: $value14)?,
+            $key15$(: $value15)?,
+            $key16$(: $value16)?,
+            $key17$(: $value17)?,
+            $key18$(: $value18)?,
+            $key19$(: $value19)?,
+            $key20$(: $value20)?,
+            $key21$(: $value21)?,
+            $key22$(: $value22)?,
+            $key23$(: $value23)?,
+            $key24$(: $value24)?,
+            $key25$(: $value25)?,
+            $key26$(: $value26)?,
+            $key27$(: $value27)?,
+            $key28$(: $value28)?,
+            $key29$(: $value29)?,
+            $key30$(: $value30)?,
+            $key31$(: $value31)?,
+            $key32$(: $value32)?,
         }
     }};
 }
