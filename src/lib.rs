@@ -884,11 +884,11 @@ fn sign_kraken(req: &mut Request) -> Result<(), Error> {
 /// ````
 #[macro_export]
 macro_rules! json {
-    ($($key:ident: $value:expr)? $(,$keys:ident: $values:expr)* $(,)?) => {
+    ($($key:ident: $value:expr)? $(,$keys:ident$(: $values:expr)?)* $(,)?) => {
         {
             use $crate::__private::serde_json;
             serde_json::to_string(&$crate::serializable! {
-                $($key: $value)? $(,$keys: $values)*
+                $($key: $value)? $(,$keys$(: $values)?)*
             })
         }
     };
@@ -904,11 +904,11 @@ macro_rules! json {
 /// ````
 #[macro_export]
 macro_rules! urlencoded {
-    ($($key:ident: $value:expr)? $(,$keys:ident: $values:expr)* $(,)?) => {
+    ($($key:ident: $value:expr)? $(,$keys:ident$(: $values:expr)?)* $(,)?) => {
         {
             use $crate::__private::serde_urlencoded;
             serde_urlencoded::to_string(&$crate::serializable! {
-                $($key: $value)? $(,$keys: $values)*
+                $($key: $value)? $(,$keys$(: $values)?)*
             })
         }
     };
