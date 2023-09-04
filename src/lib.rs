@@ -506,7 +506,7 @@ pub enum Error {
 
 fn sign_request(req: &mut Request) -> Result<(), Error> {
     match req.url().host_str().expect("no host for request URL") {
-        "api.binance.com" | "fapi.binance.com" => sign_binance(req),
+        "api.binance.com" | "fapi.binance.com" | "papi.binance.com" => sign_binance(req),
         "api.bithumb.com" => sign_bithumb(req),
         "api.bybit.com" => sign_bybit(req),
         "api.gateio.ws" => sign_gateio(req),
