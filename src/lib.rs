@@ -504,7 +504,7 @@ pub enum Error {
     DeserializeUrlencoded(#[from] serde_urlencoded::de::Error),
 }
 
-fn sign_request(req: &mut Request) -> Result<(), Error> {
+pub fn sign_request(req: &mut Request) -> Result<(), Error> {
     match req.url().host_str().expect("no host for request URL") {
         "api.binance.com" | "fapi.binance.com" | "papi.binance.com" => sign_binance(req),
         "api.bithumb.com" => sign_bithumb(req),
