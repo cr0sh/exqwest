@@ -1,5 +1,5 @@
 use std::{
-    collections::HashMap,
+    collections::{BTreeMap, HashMap},
     env::var,
     fmt::{Debug, Display},
     future::Future,
@@ -758,7 +758,20 @@ fn sign_upbit(req: &mut Request) -> Result<(), Error> {
         .get("UPBIT")
         .expect("no credential for UPbit");
 
-    let auth = if req.method() == Method::GET {
+    let params = if req.method() == Method::GET {
+        req.url()
+            .query_pairs()
+            .map(|(x, y)| (x.to_string(), serde_json::Value::String(y.to_string())))
+            .collect::<BTreeMap<_, _>>()
+    } else if let Some(body) = req.body() {
+        serde_json::from_slice::<BTreeMap<String, serde_json::Value>>(
+            body.as_bytes().expect("body is a stream"),
+        )?
+    } else {
+        BTreeMap::new()
+    };
+
+    let auth = if params.is_empty() {
         #[derive(Serialize)]
         struct JwtPayload {
             access_key: String,
@@ -785,12 +798,9 @@ fn sign_upbit(req: &mut Request) -> Result<(), Error> {
         }
         let mut hasher = Sha512::new();
         hasher.update(
-            serde_urlencoded::to_string(
-                serde_json::from_str::<Value>(req.body().into_str())
-                    .expect("expected a JSON string"),
-            )
-            .expect("cannot url-encode payload")
-            .as_bytes(),
+            serde_urlencoded::to_string(&params)
+                .expect("cannot url-encode payload")
+                .as_bytes(),
         );
         let hash = hasher
             .finalize()
