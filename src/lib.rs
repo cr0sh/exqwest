@@ -12,7 +12,8 @@ use std::{
 };
 
 use async_trait::async_trait;
-use base64::Engine;
+use base64::{prelude::BASE64_STANDARD, Engine};
+use ed25519_dalek::{SecretKey, Signature, Signer, SigningKey};
 use hmac::{digest::Digest, Hmac, Mac};
 use jwt::SignWithKey;
 use reqwest::{
@@ -70,8 +71,8 @@ impl Debug for OkxCredential {
 }
 
 pub fn initialize_credentials() {
-    const EXCHANGES: [&str; 7] = [
-        "BINANCE", "BITHUMB", "BYBIT", "GATEIO", "OKX", "UPBIT", "KRAKEN",
+    const EXCHANGES: [&str; 8] = [
+        "BINANCE", "BITHUMB", "BYBIT", "GATEIO", "OKX", "UPBIT", "KRAKEN", "BACKPACK",
     ];
 
     let mut creds = HashMap::new();
@@ -513,6 +514,7 @@ pub fn sign_request(req: &mut Request) -> Result<(), Error> {
         "aws.okx.com" | "www.okx.com" => sign_okx(req),
         "api.upbit.com" => sign_upbit(req),
         "api.kraken.com" => sign_kraken(req),
+        "api.backpack.exchange" => sign_backpack(req),
         _ => Err(Error::NotImplemented),
     }
 }
@@ -880,6 +882,74 @@ fn sign_kraken(req: &mut Request) -> Result<(), Error> {
         CONTENT_TYPE,
         "application/x-www-form-urlencoded".parse().unwrap(),
     );
+
+    Ok(())
+}
+
+fn sign_backpack(req: &mut Request) -> Result<(), Error> {
+    const WINDOW: u32 = 3000;
+
+    let credential = CREDENTIALS
+        .get()
+        .expect("credentials not loaded")
+        .get("BACKPACK")
+        .expect("no credential for Backpack");
+
+    let sk = BASE64_STANDARD
+        .decode(&credential.secret)
+        .expect("cannot parse secret as Base64");
+    let sk = SecretKey::try_from(sk).expect("invalid secret key");
+
+    let timestamp = timestamp_millis();
+
+    let instruction = match req.url().path() {
+        "/api/v1/order" if req.method() == Method::GET => "orderQuery",
+        "/api/v1/order" if req.method() == Method::POST => "orderExecute",
+        "/api/v1/order" if req.method() == Method::DELETE => "orderCancel",
+        "/api/v1/orders" if req.method() == Method::GET => "orderQueryAll",
+        "/api/v1/orders" if req.method() == Method::DELETE => "orderCancelAll",
+        "/api/v1/capital" if req.method() == Method::GET => "balanceQuery",
+        other => unimplemented!("{other}"),
+    };
+
+    let params: BTreeMap<String, String> = match req.method() {
+        &Method::POST | &Method::DELETE => serde_json::from_str(req.body().into_str())?,
+        _ => req
+            .url()
+            .query_pairs()
+            .map(|(x, y)| (x.into_owned(), y.into_owned()))
+            .collect(),
+    };
+
+    let mut signee = format!("instruction={instruction}");
+    for (k, v) in params {
+        signee.push_str(&format!("&{k}={v}"));
+    }
+    signee.push_str(&format!("&timestamp={timestamp}&window={WINDOW}"));
+
+    let signature: Signature = SigningKey::from_bytes(&sk).sign(signee.as_bytes());
+    let signature = BASE64_STANDARD.encode(signature.to_bytes());
+
+    req.url_mut()
+        .query_pairs_mut()
+        .append_pair("timestamp", &timestamp.to_string())
+        .append_pair("window", &WINDOW.to_string());
+
+    req.headers_mut()
+        .insert("X-Timestamp", timestamp.to_string().parse().unwrap());
+    req.headers_mut()
+        .insert("X-Window", WINDOW.to_string().parse().unwrap());
+    req.headers_mut()
+        .insert("X-API-Key", credential.key.parse().unwrap());
+    req.headers_mut()
+        .insert("X-Signature", signature.parse().unwrap());
+
+    if matches!(req.method(), &Method::POST | &Method::DELETE) {
+        req.headers_mut().insert(
+            CONTENT_TYPE,
+            "application/json; charset=utf-8".parse().unwrap(),
+        );
+    }
 
     Ok(())
 }
