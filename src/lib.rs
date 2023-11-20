@@ -922,8 +922,18 @@ fn sign_backpack(req: &mut Request) -> Result<(), Error> {
     };
 
     let mut signee = format!("instruction={instruction}");
-    for (k, v) in params {
+    for (k, v) in &params {
         signee.push_str(&format!("&{k}={v}"));
+    }
+    if req.method() == Method::GET {
+        req.url_mut().set_query(Some(
+            params
+                .into_iter()
+                .map(|(k, v)| format!("{k}={v}"))
+                .collect::<Vec<_>>()
+                .join("&")
+                .as_str(),
+        ))
     }
     signee.push_str(&format!("&timestamp={timestamp}&window={WINDOW}"));
 
