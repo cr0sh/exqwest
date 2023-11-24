@@ -1,6 +1,6 @@
 [package]
 name = "exqwest"
-version = "0.2.1"
+version = "0.3.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -9,6 +9,7 @@ edition = "2021"
 async-trait = "0.1.72"
 base64 = "0.21.2"
 chrono = "0.4.26"
+dashmap = "5.5.3"
 ed25519-dalek = "2.1.0"
 hmac = "0.12.1"
 jwt = "0.16.0"

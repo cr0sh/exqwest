@@ -13,6 +13,7 @@ use std::{
 
 use async_trait::async_trait;
 use base64::{prelude::BASE64_STANDARD, Engine};
+use dashmap::DashMap;
 use ed25519_dalek::{SecretKey, Signature, Signer, SigningKey};
 use hmac::{digest::Digest, Hmac, Mac};
 use jwt::SignWithKey;
@@ -38,8 +39,12 @@ pub mod __private {
 }
 
 static CREDENTIALS: OnceLock<HashMap<&'static str, Credential>> = OnceLock::new();
+static CREDENTIALS_WITH_SUFFIX: OnceLock<DashMap<String, HashMap<&'static str, Credential>>> =
+    OnceLock::new();
 static OKX_CREDENTIAL: OnceLock<OkxCredential> = OnceLock::new();
+static OKX_CREDENTIAL_WITH_SUFFIX: OnceLock<DashMap<String, OkxCredential>> = OnceLock::new();
 
+#[derive(Clone)]
 struct Credential {
     key: String,
     secret: String,
@@ -54,6 +59,7 @@ impl Debug for Credential {
     }
 }
 
+#[derive(Clone)]
 struct OkxCredential {
     key: String,
     secret: String,
@@ -70,11 +76,11 @@ impl Debug for OkxCredential {
     }
 }
 
-pub fn initialize_credentials() {
-    const EXCHANGES: [&str; 8] = [
-        "BINANCE", "BITHUMB", "BYBIT", "GATEIO", "OKX", "UPBIT", "KRAKEN", "BACKPACK",
-    ];
+const EXCHANGES: [&str; 8] = [
+    "BINANCE", "BITHUMB", "BYBIT", "GATEIO", "OKX", "UPBIT", "KRAKEN", "BACKPACK",
+];
 
+pub fn initialize_credentials() {
     let mut creds = HashMap::new();
 
     for exchange in EXCHANGES {
@@ -109,6 +115,48 @@ pub fn initialize_credentials() {
     }
 
     CREDENTIALS.set(creds).expect("credentials already set");
+}
+
+pub fn initialize_credentials_with_suffix(env_suffix: &str) {
+    let mut creds = HashMap::new();
+
+    for exchange in EXCHANGES {
+        if exchange == "OKX" {
+            let cred = (
+                var(format!("{exchange}_API_KEY_{env_suffix}")),
+                var(format!("{exchange}_API_SECRET_{env_suffix}")),
+                var(format!("{exchange}_API_PASSPHRASE_{env_suffix}")),
+            );
+            if let (Ok(key), Ok(secret), Ok(passphrase)) = cred {
+                let old = OKX_CREDENTIAL_WITH_SUFFIX.get_or_init(DashMap::new).insert(
+                    env_suffix.to_string(),
+                    OkxCredential {
+                        key,
+                        secret,
+                        passphrase,
+                    },
+                );
+                assert!(old.is_none(), "OKX credential already set");
+            }
+        } else {
+            let cred = var(format!("{exchange}_API_KEY_{env_suffix}"))
+                .and_then(|x| var(format!("{exchange}_API_SECRET_{env_suffix}")).map(|y| (x, y)));
+            if let Ok(cred) = cred {
+                creds.insert(
+                    exchange,
+                    Credential {
+                        key: cred.0,
+                        secret: cred.1,
+                    },
+                );
+            }
+        }
+    }
+
+    let old = CREDENTIALS_WITH_SUFFIX
+        .get_or_init(DashMap::new)
+        .insert(env_suffix.to_string(), creds);
+    assert!(old.is_none(), "credentials already set");
 }
 
 #[async_trait]
@@ -222,7 +270,7 @@ macro_rules! request {
             .body($payload.as_ref().to_string())
             .build_split();
         let mut req = req?;
-        if let Err(e) = sign_request(&mut req) {
+        if let Err(e) = sign_request(&mut req, None) {
             let error = Box::new(e) as Box<dyn std::error::Error + Send + Sync + 'static>;
             error!(error, "cannot sign request");
             panic!("cannot sign request: {error}");
@@ -505,16 +553,18 @@ pub enum Error {
     DeserializeUrlencoded(#[from] serde_urlencoded::de::Error),
 }
 
-pub fn sign_request(req: &mut Request) -> Result<(), Error> {
+pub fn sign_request(req: &mut Request, env_suffix: Option<String>) -> Result<(), Error> {
     match req.url().host_str().expect("no host for request URL") {
-        "api.binance.com" | "fapi.binance.com" | "papi.binance.com" => sign_binance(req),
-        "api.bithumb.com" => sign_bithumb(req),
-        "api.bybit.com" => sign_bybit(req),
-        "api.gateio.ws" => sign_gateio(req),
-        "aws.okx.com" | "www.okx.com" => sign_okx(req),
-        "api.upbit.com" => sign_upbit(req),
-        "api.kraken.com" => sign_kraken(req),
-        "api.backpack.exchange" => sign_backpack(req),
+        "api.binance.com" | "fapi.binance.com" | "papi.binance.com" => {
+            sign_binance(req, env_suffix)
+        }
+        "api.bithumb.com" => sign_bithumb(req, env_suffix),
+        "api.bybit.com" => sign_bybit(req, env_suffix),
+        "api.gateio.ws" => sign_gateio(req, env_suffix),
+        "aws.okx.com" | "www.okx.com" => sign_okx(req, env_suffix),
+        "api.upbit.com" => sign_upbit(req, env_suffix),
+        "api.kraken.com" => sign_kraken(req, env_suffix),
+        "api.backpack.exchange" => sign_backpack(req, env_suffix),
         _ => Err(Error::NotImplemented),
     }
 }
@@ -539,12 +589,24 @@ impl<'a> OptionBodyExt<'a> for Option<&'a Body> {
     }
 }
 
-fn sign_bithumb(req: &mut Request) -> Result<(), Error> {
-    let credential = CREDENTIALS
-        .get()
-        .expect("credentials not loaded")
-        .get("BITHUMB")
-        .expect("no credential for Bithumb");
+fn sign_bithumb(req: &mut Request, env_suffix: Option<String>) -> Result<(), Error> {
+    let credential = if let Some(env_suffix) = env_suffix {
+        CREDENTIALS_WITH_SUFFIX
+            .get()
+            .expect("credentials not loaded")
+            .get(&env_suffix)
+            .expect("suffix not loaded")
+            .get("BITHUMB")
+            .expect("no credential for Bithumb")
+            .clone()
+    } else {
+        CREDENTIALS
+            .get()
+            .expect("credentials not loaded")
+            .get("BITHUMB")
+            .expect("no credential for Bithumb")
+            .clone()
+    };
     let nonce = timestamp_millis();
     let endpoint = req.url().path();
     let query_string = req.body().into_str().replace('/', "%2F");
@@ -576,14 +638,26 @@ fn sign_bithumb(req: &mut Request) -> Result<(), Error> {
     Ok(())
 }
 
-fn sign_bybit(req: &mut Request) -> Result<(), Error> {
+fn sign_bybit(req: &mut Request, env_suffix: Option<String>) -> Result<(), Error> {
     const RECV_WINDOW: u32 = 5000;
 
-    let credential = CREDENTIALS
-        .get()
-        .expect("credentials not loaded")
-        .get("BYBIT")
-        .expect("no credential for Bybit");
+    let credential = if let Some(env_suffix) = env_suffix {
+        CREDENTIALS_WITH_SUFFIX
+            .get()
+            .expect("credentials not loaded")
+            .get(&env_suffix)
+            .expect("suffix not loaded")
+            .get("BYBIT")
+            .expect("no credential for Bybit")
+            .clone()
+    } else {
+        CREDENTIALS
+            .get()
+            .expect("credentials not loaded")
+            .get("BYBIT")
+            .expect("no credential for Bybit")
+            .clone()
+    };
 
     let url = req.url();
     let timestamp = timestamp_millis();
@@ -625,14 +699,26 @@ fn sign_bybit(req: &mut Request) -> Result<(), Error> {
     Ok(())
 }
 
-fn sign_binance(req: &mut Request) -> Result<(), Error> {
+fn sign_binance(req: &mut Request, env_suffix: Option<String>) -> Result<(), Error> {
     const RECV_WINDOW: u32 = 3000;
 
-    let credential = CREDENTIALS
-        .get()
-        .expect("credentials not loaded")
-        .get("BINANCE")
-        .expect("no credential for Binance");
+    let credential = if let Some(env_suffix) = env_suffix {
+        CREDENTIALS_WITH_SUFFIX
+            .get()
+            .expect("credentials not loaded")
+            .get(&env_suffix)
+            .expect("suffix not loaded")
+            .get("BINANCE")
+            .expect("no credential for Binance")
+            .clone()
+    } else {
+        CREDENTIALS
+            .get()
+            .expect("credentials not loaded")
+            .get("BINANCE")
+            .expect("no credential for Binance")
+            .clone()
+    };
 
     let timestamp = timestamp_millis();
 
@@ -658,12 +744,24 @@ fn sign_binance(req: &mut Request) -> Result<(), Error> {
     Ok(())
 }
 
-fn sign_gateio(req: &mut Request) -> Result<(), Error> {
-    let credential = CREDENTIALS
-        .get()
-        .expect("credentials not loaded")
-        .get("GATEIO")
-        .expect("no credential for Gate.io");
+fn sign_gateio(req: &mut Request, env_suffix: Option<String>) -> Result<(), Error> {
+    let credential = if let Some(env_suffix) = env_suffix {
+        CREDENTIALS_WITH_SUFFIX
+            .get()
+            .expect("credentials not loaded")
+            .get(&env_suffix)
+            .expect("suffix not loaded")
+            .get("GATEIO")
+            .expect("no credential for Gate.io")
+            .clone()
+    } else {
+        CREDENTIALS
+            .get()
+            .expect("credentials not loaded")
+            .get("GATEIO")
+            .expect("no credential for Gate.io")
+            .clone()
+    };
 
     let now = timestamp_millis() / 1000;
 
@@ -699,10 +797,20 @@ fn sign_gateio(req: &mut Request) -> Result<(), Error> {
     Ok(())
 }
 
-fn sign_okx(req: &mut Request) -> Result<(), Error> {
+fn sign_okx(req: &mut Request, env_suffix: Option<String>) -> Result<(), Error> {
     const RECV_WINDOW: u32 = 3000;
 
-    let credential = OKX_CREDENTIAL.get().expect("no credential for OKX");
+    let credential = if let Some(env_suffix) = env_suffix {
+        OKX_CREDENTIAL_WITH_SUFFIX
+            .get()
+            .expect("credentials not loaded")
+            .get(&env_suffix)
+            .expect("no credential for OKX")
+            .value()
+            .clone()
+    } else {
+        OKX_CREDENTIAL.get().expect("no credential for OKX").clone()
+    };
 
     let now = chrono::Utc::now();
     let timestamp = now.to_rfc3339_opts(chrono::SecondsFormat::Millis, true);
@@ -744,12 +852,24 @@ fn sign_okx(req: &mut Request) -> Result<(), Error> {
     Ok(())
 }
 
-fn sign_upbit(req: &mut Request) -> Result<(), Error> {
-    let credential = CREDENTIALS
-        .get()
-        .expect("credentials not loaded")
-        .get("UPBIT")
-        .expect("no credential for UPbit");
+fn sign_upbit(req: &mut Request, env_suffix: Option<String>) -> Result<(), Error> {
+    let credential = if let Some(env_suffix) = env_suffix {
+        CREDENTIALS_WITH_SUFFIX
+            .get()
+            .expect("credentials not loaded")
+            .get(&env_suffix)
+            .expect("suffix not loaded")
+            .get("UPBIT")
+            .expect("no credential for UPbit")
+            .clone()
+    } else {
+        CREDENTIALS
+            .get()
+            .expect("credentials not loaded")
+            .get("UPBIT")
+            .expect("no credential for UPbit")
+            .clone()
+    };
 
     let params = if req.method() == Method::GET {
         req.url()
@@ -822,17 +942,29 @@ fn sign_upbit(req: &mut Request) -> Result<(), Error> {
     Ok(())
 }
 
-fn sign_kraken(req: &mut Request) -> Result<(), Error> {
+fn sign_kraken(req: &mut Request, env_suffix: Option<String>) -> Result<(), Error> {
     if req.method() != Method::POST {
         warn!(method = %req.method(), "Kraken requests can only be signed with POST method, ignoring");
         return Ok(());
     }
 
-    let credential = CREDENTIALS
-        .get()
-        .expect("credentials not loaded")
-        .get("KRAKEN")
-        .expect("no credential for Kraken");
+    let credential = if let Some(env_suffix) = env_suffix {
+        CREDENTIALS_WITH_SUFFIX
+            .get()
+            .expect("credentials not loaded")
+            .get(&env_suffix)
+            .expect("suffix not loaded")
+            .get("KRAKEN")
+            .expect("no credential for Kraken")
+            .clone()
+    } else {
+        CREDENTIALS
+            .get()
+            .expect("credentials not loaded")
+            .get("KRAKEN")
+            .expect("no credential for Kraken")
+            .clone()
+    };
     let raw_secret = base64::prelude::BASE64_STANDARD
         .decode(&credential.secret)
         .expect("Kraken API secret is not a valid base64 string");
@@ -875,14 +1007,26 @@ fn sign_kraken(req: &mut Request) -> Result<(), Error> {
     Ok(())
 }
 
-fn sign_backpack(req: &mut Request) -> Result<(), Error> {
+fn sign_backpack(req: &mut Request, env_suffix: Option<String>) -> Result<(), Error> {
     const WINDOW: u32 = 3000;
 
-    let credential = CREDENTIALS
-        .get()
-        .expect("credentials not loaded")
-        .get("BACKPACK")
-        .expect("no credential for Backpack");
+    let credential = if let Some(env_suffix) = env_suffix {
+        CREDENTIALS_WITH_SUFFIX
+            .get()
+            .expect("credentials not loaded")
+            .get(&env_suffix)
+            .expect("suffix not loaded")
+            .get("BACKPACK")
+            .expect("no credential for Backpack")
+            .clone()
+    } else {
+        CREDENTIALS
+            .get()
+            .expect("credentials not loaded")
+            .get("BACKPACK")
+            .expect("no credential for Backpack")
+            .clone()
+    };
 
     let sk = BASE64_STANDARD
         .decode(&credential.secret)
