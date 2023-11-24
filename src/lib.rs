@@ -1,7 +1,7 @@
 use std::{
     collections::{BTreeMap, HashMap},
     env::var,
-    fmt::{Debug, Display},
+    fmt::{Debug, Display, Write},
     future::Future,
     num::ParseIntError,
     pin::Pin,
@@ -553,12 +553,10 @@ fn sign_bithumb(req: &mut Request) -> Result<(), Error> {
     let mut mac = Hmac::<Sha512>::new_from_slice(credential.secret.as_bytes())
         .expect("cannot initialize HMAC");
     mac.update(encode_target.as_bytes());
-    let encrypted = mac
-        .finalize()
-        .into_bytes()
-        .iter()
-        .map(|x| format!("{x:02x}"))
-        .collect::<String>();
+    let mut encrypted = String::with_capacity(32);
+    for x in mac.finalize().into_bytes().iter() {
+        write!(&mut encrypted, "{x:02x}").unwrap();
+    }
 
     let base64 = base64::engine::general_purpose::STANDARD.encode(encrypted);
 
@@ -608,12 +606,10 @@ fn sign_bybit(req: &mut Request) -> Result<(), Error> {
     let mut mac = Hmac::<Sha256>::new_from_slice(credential.secret.as_bytes())
         .expect("cannot initialize HMAC");
     mac.update(param_str.as_bytes());
-    let encrypted = mac
-        .finalize()
-        .into_bytes()
-        .iter()
-        .map(|x| format!("{x:02x}"))
-        .collect::<String>();
+    let mut encrypted = String::with_capacity(32);
+    for x in mac.finalize().into_bytes().iter() {
+        write!(&mut encrypted, "{x:02x}").unwrap();
+    }
 
     req.headers_mut()
         .insert("X-BAPI-API-KEY", credential.key.parse().unwrap());
@@ -648,12 +644,10 @@ fn sign_binance(req: &mut Request) -> Result<(), Error> {
     let mut mac = Hmac::<Sha256>::new_from_slice(credential.secret.as_bytes())
         .expect("cannot intialize HMAC");
     mac.update(req.url().query().unwrap_or_default().as_bytes());
-    let encrypted = mac
-        .finalize()
-        .into_bytes()
-        .iter()
-        .map(|x| format!("{x:02x}"))
-        .collect::<String>();
+    let mut encrypted = String::with_capacity(32);
+    for x in mac.finalize().into_bytes().iter() {
+        write!(&mut encrypted, "{x:02x}").unwrap();
+    }
 
     req.url_mut()
         .query_pairs_mut()
@@ -675,11 +669,10 @@ fn sign_gateio(req: &mut Request) -> Result<(), Error> {
 
     let mut payload_hasher = Sha512::new();
     payload_hasher.update(req.body().into_str());
-    let payload_hash = payload_hasher
-        .finalize()
-        .iter()
-        .map(|x| format!("{x:02x}"))
-        .collect::<String>();
+    let mut payload_hash = String::with_capacity(32);
+    for x in payload_hasher.finalize().iter() {
+        write!(&mut payload_hash, "{x:02x}").unwrap();
+    }
 
     let hmac_payload = format!(
         "{}\n{}\n{}\n{}\n{}",
@@ -692,12 +685,10 @@ fn sign_gateio(req: &mut Request) -> Result<(), Error> {
     let mut mac = Hmac::<Sha512>::new_from_slice(credential.secret.as_bytes())
         .expect("cannot initialize HMAC");
     mac.update(hmac_payload.as_bytes());
-    let encrypted = mac
-        .finalize()
-        .into_bytes()
-        .iter()
-        .map(|x| format!("{x:02x}"))
-        .collect::<String>();
+    let mut encrypted = String::with_capacity(32);
+    for x in mac.finalize().into_bytes().iter() {
+        write!(&mut encrypted, "{x:02x}").unwrap();
+    }
 
     req.headers_mut()
         .insert("KEY", credential.key.parse().unwrap());
@@ -804,12 +795,10 @@ fn sign_upbit(req: &mut Request) -> Result<(), Error> {
                 .expect("cannot url-encode payload")
                 .as_bytes(),
         );
-        let hash = hasher
-            .finalize()
-            .as_slice()
-            .iter()
-            .map(|x| format!("{x:02x}"))
-            .collect::<String>();
+        let mut hash = String::with_capacity(32);
+        for x in hasher.finalize().iter() {
+            write!(&mut hash, "{x:02x}").unwrap();
+        }
 
         let jwt_payload = JwtPayload {
             access_key: credential.key.clone(),
