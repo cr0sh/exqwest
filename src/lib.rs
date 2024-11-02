@@ -14,7 +14,7 @@ use std::{
 use async_trait::async_trait;
 use base64::{prelude::BASE64_STANDARD, Engine};
 use dashmap::DashMap;
-use ed25519_dalek::{SecretKey, Signature, Signer, SigningKey};
+use ed25519_dalek::{Keypair, SecretKey, Signature, Signer};
 use hmac::{digest::Digest, Hmac, Mac};
 use jwt::SignWithKey;
 use reqwest::{
@@ -551,6 +551,8 @@ pub enum Error {
     SerializeUrlencoded(#[from] serde_urlencoded::ser::Error),
     #[error(transparent)]
     DeserializeUrlencoded(#[from] serde_urlencoded::de::Error),
+    #[error(transparent)]
+    Ed25519(#[from] ed25519_dalek::SignatureError),
 }
 
 pub fn sign_request(req: &mut Request, env_suffix: Option<String>) -> Result<(), Error> {
@@ -1031,7 +1033,11 @@ fn sign_backpack(req: &mut Request, env_suffix: Option<String>) -> Result<(), Er
     let sk = BASE64_STANDARD
         .decode(&credential.secret)
         .expect("cannot parse secret as Base64");
-    let sk = SecretKey::try_from(sk).expect("invalid secret key");
+    let sk = SecretKey::from_bytes(&sk).expect("invalid secret key");
+    let kp = Keypair {
+        public: (&sk).into(),
+        secret: sk,
+    };
 
     let timestamp = timestamp_millis();
 
@@ -1070,7 +1076,7 @@ fn sign_backpack(req: &mut Request, env_suffix: Option<String>) -> Result<(), Er
     }
     signee.push_str(&format!("&timestamp={timestamp}&window={WINDOW}"));
 
-    let signature: Signature = SigningKey::from_bytes(&sk).sign(signee.as_bytes());
+    let signature: Signature = kp.sign(signee.as_bytes());
     let signature = BASE64_STANDARD.encode(signature.to_bytes());
 
     req.url_mut()
