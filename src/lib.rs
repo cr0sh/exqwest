@@ -1052,12 +1052,34 @@ fn sign_backpack(req: &mut Request, env_suffix: Option<String>) -> Result<(), Er
         other => unimplemented!("{other}"),
     };
 
-    let params: BTreeMap<String, String> = match req.method() {
+    #[derive(Debug, Deserialize, Clone)]
+    #[serde(untagged)]
+    enum StringOrBool {
+        String(String),
+        Bool(bool),
+    }
+
+    impl From<String> for StringOrBool {
+        fn from(value: String) -> Self {
+            Self::String(value)
+        }
+    }
+
+    impl Display for StringOrBool {
+        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+            match self {
+                StringOrBool::String(x) => Display::fmt(&x, f),
+                StringOrBool::Bool(x) => Display::fmt(&x, f),
+            }
+        }
+    }
+
+    let params: BTreeMap<String, StringOrBool> = match req.method() {
         &Method::POST | &Method::DELETE => serde_json::from_str(req.body().into_str())?,
         _ => req
             .url()
             .query_pairs()
-            .map(|(x, y)| (x.into_owned(), y.into_owned()))
+            .map(|(x, y)| (x.into_owned(), y.into_owned().into()))
             .collect(),
     };
 
