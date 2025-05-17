@@ -1048,6 +1048,7 @@ fn sign_backpack(req: &mut Request, env_suffix: Option<String>) -> Result<(), Er
         "/api/v1/orders" if req.method() == Method::GET => "orderQueryAll",
         "/api/v1/orders" if req.method() == Method::DELETE => "orderCancelAll",
         "/api/v1/capital" if req.method() == Method::GET => "balanceQuery",
+        "/api/v1/capital/collateral" if req.method() == Method::GET => "collateralQuery",
         "/api/v1/position" if req.method() == Method::GET => "positionQuery",
         other => unimplemented!("{other}"),
     };
